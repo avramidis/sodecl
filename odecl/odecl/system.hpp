@@ -151,48 +151,48 @@ namespace odecl
 		// Destructor. Delete all objects, arrays, pointers, etc.
 		~system()
 		{
-			//delete m_output;
-			//delete m_source_str;
+			delete m_output;
+			delete m_source_str;
 
-			////delete[] m_ode_system_string;  // This is a string literals. That means it has static storage duration (not dynamically allocated).
-			//delete m_t0;
-			//delete m_y0;
-			//delete m_params;
-			//delete m_dts;
+			//delete[] m_ode_system_string;  // This is a string literals. That means it has static storage duration (not dynamically allocated).
+			delete m_t0;
+			delete m_y0;
+			delete m_params;
+			delete m_dts;
 
 			//// Clean OpenCL memory buffers.
-			//clReleaseMemObject(m_mem_t0);
-			//clReleaseMemObject(m_mem_y0);
-			//clReleaseMemObject(m_mem_params);
-			////clReleaseMemObject(m_mem_dt);
+			clReleaseMemObject(m_mem_t0);
+			clReleaseMemObject(m_mem_y0);
+			clReleaseMemObject(m_mem_params);
+			//clReleaseMemObject(m_mem_dt);
 
-			//// Clean OpenCL command queues.
-			//while (!m_command_queues.empty())
-			//{
-			//	clReleaseCommandQueue((cl_command_queue)(m_command_queues.back()));
-			//	m_command_queues.pop_back();
-			//}
-			//
-			//// Clean OpenCL kernels.
-			//while (!m_kernels.empty())
-			//{
-			//	clReleaseKernel((cl_kernel)(m_kernels.back()));
-			//	m_kernels.pop_back();
-			//}
+			// Clean OpenCL command queues.
+			while (!m_command_queues.empty())
+			{
+				clReleaseCommandQueue((cl_command_queue)(m_command_queues.back()));
+				m_command_queues.pop_back();
+			}
+			
+			// Clean OpenCL kernels.
+			while (!m_kernels.empty())
+			{
+				clReleaseKernel((cl_kernel)(m_kernels.back()));
+				m_kernels.pop_back();
+			}
 
-			//// Clean OpenCL programs.
-			//while (!m_programs.empty())
-			//{
-			//	clReleaseProgram((cl_program)(m_programs.back()));
-			//	m_programs.pop_back();
-			//}
+			// Clean OpenCL programs.
+			while (!m_programs.empty())
+			{
+				clReleaseProgram((cl_program)(m_programs.back()));
+				m_programs.pop_back();
+			}
 
-			//// Clean OpenCL contexts.
-			//while (!m_contexts.empty())
-			//{
-			//	clReleaseContext((cl_context)(m_contexts.back()));
-			//	m_contexts.pop_back();
-			//}
+			// Clean OpenCL contexts.
+			while (!m_contexts.empty())
+			{
+				clReleaseContext((cl_context)(m_contexts.back()));
+				m_contexts.pop_back();
+			}
 		}
 
 		/******************************************************************************************
@@ -431,11 +431,8 @@ namespace odecl
 			cout << "ODE system number of parameters" << endl;
 
 			// Read the ODE system functions
-			//read_kernel_file("ode_system.cl");
 			read_kernel_file(m_ode_system_string);
 			add_string_to_kernel_sources("\n");
-
-			cout << "ode_system.cl" << endl;
 
 			// Choose the solver.
 			switch (m_solver){
