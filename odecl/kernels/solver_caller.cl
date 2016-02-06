@@ -22,14 +22,12 @@ __kernel void solver_caller(__global double *t0,
 	for (int m = 0; m < _numeq_; m++)
 	{
 		y[m] = y0[k + m];
-		//printf("%f n \n", y[m]);
 	}
 
 	k = i * _numpar_;
 	for (int m = 0; m < _numpar_; m++)
 	{
 		params[m] = params_g[k + m];
-		//printf("%f n \n", params[m]);
 	}
 
 	int it;
@@ -42,7 +40,6 @@ __kernel void solver_caller(__global double *t0,
 		{
 			y[ieq] = detterm[ieq];
 		}
-		//barrier(CLK_LOCAL_MEM_FENCE | CLK_GLOBAL_MEM_FENCE);
 	}
 
 	t0[i] = t;
@@ -50,6 +47,5 @@ __kernel void solver_caller(__global double *t0,
 	for (int m = 0; m < _numeq_; m++)
 	{
 		y0[k + m] = y[m];
-		//printf("%f n \n", y[m]);
 	}
 }
