@@ -6,29 +6,6 @@
 //---------------------------------------------------------------------------//
 
 
-
-
-//static void first_step(double dt, double t, double y[_numeq_], double yout[_numeq_], double k1[_numeq_], double p[_numpar_], double x2[_numeq_])
-//{
-//	// k2
-//	//double x2[_numeq_];
-//
-//	for (int i = 0; i < _numeq_; i++)
-//	{
-//		x2[i] = y[i] + (dt * 0.50)*k1[i];
-//	}
-//
-//	ode_system(t + 0.50*dt, x2, k1, p);
-//
-//	for (int i = 0; i < _numeq_; i++)
-//	{
-//		yout[i] = yout[i] + 2.00 * k1[i];
-//	}
-//}
-
-
-
-
 /// <summary>
 /// Performs a single step for the fourth-order Runge-kutta method.
 /// </summary>
@@ -49,10 +26,6 @@ inline static void ode_solver(double dt, double t, double y[_numeq_], double you
 	{
 		k1[i] = yout[i];
 	}
-	//barrier(CLK_LOCAL_MEM_FENCE);
-
-	//double x2[_numeq_];
-	//first_step(dt, t, y, yout, k1, p, x2);
 
 	// k2
 	double x2[_numeq_];
@@ -75,7 +48,6 @@ inline static void ode_solver(double dt, double t, double y[_numeq_], double you
 	{
 		x2[i] = y[i] + (dt * 0.50)*k1[i];
 	}
-	//double k3[_numeq_];
 	ode_system(t + 0.50*dt, x2, k1, p);
 
 	for (i = 0; i < _numeq_; i++)
@@ -94,10 +66,4 @@ inline static void ode_solver(double dt, double t, double y[_numeq_], double you
 	{
 		yout[i] = y[i] + (yout[i] + k1[i]) * dt / 6.00;
 	}
-
-	////detterm[0] = y[0]; // it's the time variable
-	//for (int i = 0; i < _numeq_; i++)
-	//{
-	//	yout[i] = y[i] + (k1[i] + 2.00 * k2[i] + 2.00 * k3[i] + k4[i]) * dt / 6.00;
-	//}
 }
