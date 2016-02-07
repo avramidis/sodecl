@@ -835,10 +835,7 @@ namespace odecl
 			{
 				// Read buffer g into a local list
 				//err = clEnqueueReadBuffer(m_command_queues[0], m_mem_t0, CL_TRUE, 0, m_list_size * sizeof(cl_double), t_out, 0, NULL, NULL);
-				//if (count == 40)
-				//{
-					err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat, g, 0, NULL, NULL);
-				//}
+				err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat, g, 0, NULL, NULL);
 				//err = clEnqueueNDRangeKernel(m_command_queues[0], m_kernels[0], 1, NULL, &global, &local, 0, NULL, NULL);
 				err = clEnqueueNDRangeKernel(m_command_queues[0], m_kernels[0], 1, NULL, &global, NULL, 0, NULL, NULL);
 				if (err)
@@ -849,20 +846,17 @@ namespace odecl
 				clFlush(m_command_queues[0]);
 				//clFinish(m_command_queues[0]);
 
-				//if (count == 40)
-				//{
-					//int the_count = j*equat_num;
-					// Save data to disk or to data array - only first variable
-					for (int ji = 0; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
+				// Save data to disk or to data array - all variables
+				for (int jo = 1; jo <= 6; jo++)
+				{
+					for (int ji = jo - 1; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
 					{
 						g_stream.write((char *)(&g[ji]), sizeof(cl_double));
 						//output_data[count] = g[ji];
 						//count++;
 						//cout << g[ji] << endl;
 					}
-					//count = 0;
-				//}
-				//count = count + 1;
+				}
 			}
 			
 			// Save the data from the last kernel call.
