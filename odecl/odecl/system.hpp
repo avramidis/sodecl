@@ -72,6 +72,8 @@ namespace odecl
 
 		// OpenCL kernel string.
 		char *m_source_str;
+		// OpenCL kernels solvers path.
+		string m_kernel_path_str;
 		// OpenCL kernel string size.
 		size_t m_source_size;
 
@@ -121,9 +123,10 @@ namespace odecl
 	public:
 
 		// Default constructor that finds all platforms and devices
-		system(char *ode_system_string, solver_Type solver, double dt, double int_time, int kernel_steps, int num_equat, int num_params, int list_size)
+		system(string kernel_path_str, char *ode_system_string, solver_Type solver, double dt, double int_time, int kernel_steps, int num_equat, int num_params, int list_size)
 		{
 			// Set ODE Solver parameter values
+			kernel_path_str = m_kernel_path_str;
 			m_ode_system_string = ode_system_string;
 			m_solver = solver;							// Choose the ODE solver.
 			m_dt = dt;									// Solver (initial) time step in seconds.
@@ -434,23 +437,40 @@ namespace odecl
 			read_kernel_file(m_ode_system_string);
 			add_string_to_kernel_sources("\n");
 
+			std::vector<char> kernelpath_char;
+			string kernelpath = m_kernel_path_str;
+
 			// Choose the solver.
 			switch (m_solver){
 			case solver_Type::Euler:
 				cout << "Read the Euler solver" << endl;
-				read_kernel_file("euler.cl");	// Euler
+
+				kernelpath.append("\euler.cl");
+
+				//read_kernel_file("euler.cl");	// Euler
 				break;
 			case solver_Type::RungeKutta:
 				cout << "Read the Runge-Kutta solver" << endl;
-				read_kernel_file("rk4.cl");	// Runge-Kutta
+				kernelpath.append("\rk4.cl");
+				//read_kernel_file("rk4.cl");	// Runge-Kutta
 				break;
 			case solver_Type::ImplicitEuler:
 				cout << "Read the Implicit Euler solver" << endl;
-				read_kernel_file("ie.cl");	// Implicit Euler
+				kernelpath.append("\ie.cl");
+				//read_kernel_file("ie.cl");	// Implicit Euler
 				break;
 			default:
 				std::cout << "No valid solver chosen!" << std::endl;
 			}
+
+			for (int i = 0; i < kernelpath.size(); i++)
+			{
+				kernelpath_char.push_back(kernelpath[i]);
+			}
+			kernelpath_char.push_back('\0');
+
+			read_kernel_file(&*kernelpath_char.begin());	// Euler
+
 			add_string_to_kernel_sources("\n");
 
 			// Read the solver 
@@ -870,11 +890,6 @@ namespace odecl
 			}
 
 			//m_output = output_data;
-
-			//float secs = (float(clock() - begin_time) / CLOCKS_PER_SEC);
-			//float mins = secs / 60;
-			//std::cout << "Execution time so far " << secs << " secs"
-			//	<< " or " << mins << " mins" << std::endl;
 
 			start_timer.stop_timer();
 
