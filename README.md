@@ -11,7 +11,8 @@ int list_size = 256;		// Number of different model orbits to calculate
 int equat_num = 6;		// ODE system number of equations
 int param_num = 6;		// ODE system number of parameters
 
-odecl::system *mysystem = new odecl::system("odecl\odecl\kernels", "broomhead.cl", odecl::solver_Type::RungeKutta, 1e-6, 6, 400, equat_num, param_num, list_size);
+odecl::system *mysystem = new odecl::system("odecl\odecl\kernels", "broomhead.cl", 
+                    odecl::solver_Type::RungeKutta, 1e-6, 6, 400, equat_num, param_num, list_size);
 
 mysystem->choose_device(0, odecl::device_Type::CPU, 0);
 
