@@ -126,7 +126,7 @@ namespace odecl
 		system(string kernel_path_str, char *ode_system_string, solver_Type solver, double dt, double int_time, int kernel_steps, int num_equat, int num_params, int list_size)
 		{
 			// Set ODE Solver parameter values
-			kernel_path_str = m_kernel_path_str;
+			m_kernel_path_str = kernel_path_str;
 			m_ode_system_string = ode_system_string;
 			m_solver = solver;							// Choose the ODE solver.
 			m_dt = dt;									// Solver (initial) time step in seconds.
@@ -440,23 +440,23 @@ namespace odecl
 			std::vector<char> kernelpath_char;
 			string kernelpath = m_kernel_path_str;
 
+			std::cout << "The kernal path is: " << kernelpath << std::endl;
+
 			// Choose the solver.
 			switch (m_solver){
 			case solver_Type::Euler:
 				cout << "Read the Euler solver" << endl;
-
-				kernelpath.append("\euler.cl");
-
+				kernelpath.append("/euler.cl");
 				//read_kernel_file("euler.cl");	// Euler
 				break;
 			case solver_Type::RungeKutta:
 				cout << "Read the Runge-Kutta solver" << endl;
-				kernelpath.append("\rk4.cl");
+				kernelpath.append("/rk4.cl");
 				//read_kernel_file("rk4.cl");	// Runge-Kutta
 				break;
 			case solver_Type::ImplicitEuler:
 				cout << "Read the Implicit Euler solver" << endl;
-				kernelpath.append("\ie.cl");
+				kernelpath.append("/ie.cl");
 				//read_kernel_file("ie.cl");	// Implicit Euler
 				break;
 			default:
@@ -469,15 +469,17 @@ namespace odecl
 			}
 			kernelpath_char.push_back('\0');
 
-			read_kernel_file(&*kernelpath_char.begin());	// Euler
+			cout << &*kernelpath_char.begin() << endl;
+			
+			kernelpath_char.shrink_to_fit();
+
+			read_kernel_file(&*kernelpath_char.begin());
 
 			add_string_to_kernel_sources("\n");
 
 			// Read the solver 
 			read_kernel_file("solver_caller.cl");
 			add_string_to_kernel_sources("\n");
-
-			cout << "Read the Runge-Kutta solver" << endl;
 
 			// Print the string
 			// cout << m_kernel_sources.data() << endl;
@@ -561,22 +563,6 @@ namespace odecl
 				return 0;
 			}
 
-			//// Query binary (PTX file) size
-			//size_t bin_sz;
-			//err = clGetProgramInfo(m_programs[0], CL_PROGRAM_BINARY_SIZES, sizeof(size_t), &bin_sz, NULL);
-
-			//// Read binary (PTX file) to memory buffer
-			//unsigned char *bin = (unsigned char *)malloc(bin_sz);
-			//err = clGetProgramInfo(m_programs[0], CL_PROGRAM_BINARIES, sizeof(unsigned char *), &bin, NULL);
-			//
-			//// Loads
-			//FILE* fp;
-			//// Save PTX to add_vectors_ocl.ptx
-			//fp = fopen("add_vectors_ocl.ptx", "wb");
-			//fwrite(bin, sizeof(char), bin_sz, fp);
-			//fclose(fp);
-			//free(bin);
-
 			return 1;
 		}
 
@@ -596,7 +582,6 @@ namespace odecl
 
 			return 1;
 		}
-
 
 		/// <summary>
 		/// Creates the buffers for specific context and command queue.
