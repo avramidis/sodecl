@@ -28,7 +28,7 @@ using namespace std;
 namespace odecl
 {
 	/// <summary>
-	/// CLASS SYSTEM is the main class of the library.
+	/// CLASS SYSTEM is the main class of the ODECL library.
 	/// </summary>
 	class system
 	{
@@ -43,23 +43,25 @@ namespace odecl
 	private:
 
 		/********************************************************************************************
-		OPENCL HARDWARE SECTION
+		OPENCL HARDWARE SECTION VARIABLES
 		*/
-		// Number of platforms in the system
+		// Number of OPENCL platforms
 		cl_uint m_platform_count;
 
+		// Vector which stores the odecl::platform objects. One object for each OpenCL platform.
 		std::vector<odecl::platform*> m_platforms;
 
-		// The num of the selected platform in m_platforms vector.
+		// The index of the selected odecl::platform object in the m_platforms vector.
 		cl_uint m_selected_platform;
 
-		// The num of the selected device in m_devices vector of selected platform.
+		// The index of the selected odecl::device object in m_devices vector of selected platform.
 		cl_uint m_selected_device;
 
+		// Selected OpenCL device type.
 		device_Type m_selected_device_type;
 
 		/********************************************************************************************
-		OPENCL SOFTWARE SECTION
+		OPENCL SOFTWARE SECTION VARIABLES
 		*/
 
 		// OpenCL command contexts vector.
@@ -68,53 +70,51 @@ namespace odecl
 		// OpenCL command queues vector.
 		std::vector<cl_command_queue> m_command_queues;
 
+		// Char vector which stores the OpenCL kernel source string. TODO: store multiple kernel source strings.
 		std::vector<char> m_kernel_sources;
 
 		// OpenCL kernel string.
 		char *m_source_str;
+
 		// OpenCL kernels solvers path.
 		string m_kernel_path_str;
+		
 		// OpenCL kernel string size.
 		size_t m_source_size;
 
 		// OpenCL programs vector.
 		std::vector<cl_program> m_programs;
+
 		// OpenCL kernels vector.
 		std::vector<cl_kernel> m_kernels;
 
 		// ODE solvers OpenCL buffers.
-		cl_mem m_mem_t0;
-		cl_mem m_mem_y0;
-		cl_mem m_mem_params;
-		cl_mem m_mem_dt;
+		cl_mem m_mem_t0;				// OpenCL memory buffer which stores the time value of each integration output step.
+		cl_mem m_mem_y0;				// OpenCL memory buffer which stores the phase state of each integration output step.
+		cl_mem m_mem_params;			// OpenCL memory buffer which stores the parameter values of each integration orbit of the ODE system.
+		cl_mem m_mem_dt;				// OpenCL memory buffer which stores the time step for each integration orbit of the ODE system.
 
 		/********************************************************************************************
-		ODE SOLVERS SECTION
-		*/
-
-		// ODE Solver codes
-		/*
-		0: Euler
-		1: Runge-Kutta (RK4)
-		2: Implicit Euler
+		ODE SOLVERS SECTION VARIABLES
 		*/
 
 		char *m_ode_system_string;
 
-		solver_Type m_solver;		// ODE solver type.
-		double m_dt;		// Solver (initial) time step in seconds.
-		double m_int_time;	// Time units to integrate the ODE system.
-		int m_kernel_steps;	// Number of step the solver with perform in each kernel call.
-		int m_num_dt_steps; // Number of dt steps for the state of the ODE system to be saved.
-		int m_list_size;	// Number of ODE system parameter combinations.
-		int m_num_equat;	// Number of ODE system equations.
-		int m_num_params;	// Number of ODE system parameters.
+		solver_Type m_solver;			// ODE solver type.
+		double m_dt;					// Solver (initial) time step in seconds.
+		double m_int_time;				// Time units to integrate the ODE system.
+		int m_kernel_steps;				// Number of step the solver with perform in each kernel call.
+		int m_num_dt_steps;				// Number of dt steps for the state of the ODE system to be saved.
+		int m_list_size;				// Number of ODE system parameter combinations.
+		int m_num_equat;				// Number of ODE system equations.
+		int m_num_params;				// Number of ODE system parameters.
+		output_Type m_output_type;		// Type of output (binary file or array).
 
 		// arrays with the state of the system for each parameter combination
-		cl_double *m_t0;
-		cl_double *m_y0;
-		cl_double *m_params;
-		cl_double *m_dts;
+		cl_double *m_t0;				// Client memory buffer which stores the time value of each integration output step.
+		cl_double *m_y0;				// Client memory buffer which stores the phase state of each integration output step.
+		cl_double *m_params;			// Client memory buffer which stores the parameter values of each integration orbit of the ODE system.
+		cl_double *m_dts;				// Client memory buffer which stores the time step for each integration orbit of the ODE system.
 
 
 		/*********************************************************************************************
@@ -123,7 +123,7 @@ namespace odecl
 	public:
 
 		// Default constructor that finds all platforms and devices
-		system(string kernel_path_str, char *ode_system_string, solver_Type solver, double dt, double int_time, int kernel_steps, int num_equat, int num_params, int list_size)
+		system(string kernel_path_str, char *ode_system_string, solver_Type solver, double dt, double int_time, int kernel_steps, int num_equat, int num_params, int list_size, output_Type output_type)
 		{
 			// Set ODE Solver parameter values
 			m_kernel_path_str = kernel_path_str;
