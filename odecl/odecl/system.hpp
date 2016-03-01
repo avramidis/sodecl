@@ -163,7 +163,7 @@ namespace odecl
 			delete m_params;
 			delete m_dts;
 
-			//// Clean OpenCL memory buffers.
+			// Clean OpenCL memory buffers.
 			clReleaseMemObject(m_mem_t0);
 			clReleaseMemObject(m_mem_y0);
 			clReleaseMemObject(m_mem_params);
@@ -743,65 +743,6 @@ namespace odecl
 			}
 
 			return 1;
-		}
-
-		// This is test data for the Broomhead et al. (2000) model.
-		void create_test_data(int list_size, int equat_num, int param_num)
-		{
-			m_t0 = new cl_double[list_size];
-			m_y0 = new cl_double[list_size*equat_num];
-			m_params = new cl_double[list_size*param_num];
-
-			//initx = [0 0.3 0.6 0.7];
-
-			cl_double *initial_cond = new cl_double[equat_num + 1];
-
-			// The test data have 4 initial conditions
-			initial_cond[0] = 0;	// Time
-			initial_cond[1] = 0;
-			initial_cond[2] = 0;
-			initial_cond[3] = 0;
-			initial_cond[4] = 0;
-			initial_cond[5] = 0;
-			initial_cond[6] = 2;
-
-			for (int i = 0; i < list_size; i++)
-			{
-				m_t0[i] = initial_cond[0];
-			}
-
-			int count = 1;
-			for (int i = 0; i < list_size*equat_num; i++)
-			{
-				m_y0[i] = initial_cond[count];
-				count++;
-				if (count == equat_num + 1)
-				{
-					count = 1;
-				}
-			}
-
-			//kpar = [0.02 0 -0.5 0.5 0.25 0.22 1.58 -1.58 -1.553 -1.553];
-
-			cl_double *params = new cl_double[param_num];
-			params[0] = 120;
-			params[1] = 1.5;
-			params[2] = 0.0045;
-			params[3] = 0.05;
-			params[4] = 600;
-			params[5] = 9;
-
-			count = 0;
-			for (int i = 0; i < list_size*param_num; i++)
-			{
-				m_params[i] = params[count];
-				count++;
-				if (count == param_num)
-				{
-					count = 0;
-				}
-			}
-
 		}
 
 		void run_ode_solver()
