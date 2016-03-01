@@ -122,7 +122,19 @@ namespace odecl
 		*/
 	public:
 
-		// Default constructor that finds all platforms and devices
+		/// <summary>
+		/// Default constructor which initialises the odecl object. 
+		/// </summary>
+		/// <param name="kernel_path_str">Path to the OpenCL ODE solvers kernel source files.</param>
+		/// <param name="ode_system_string">Path to the OpenCL ODE system source file.</param>
+		/// <param name="solver">Type of the solver that will be used to integrate the ODE system.</param>
+		/// <param name="dt">ODE solver time step size.</param>
+		/// <param name="int_time">Length of time in seconds the the ODE system with be integrated.</param>
+		/// <param name="kernel_steps">Number of steps the ODE solver will perform in each OpenCL device call.</param>
+		/// <param name="num_equat">Number of equations of the ODE system.</param>
+		/// <param name="num_params">Number of parameters of the ODE system.</param>
+		/// <param name="list_size">Number of orbits to be integrated for the ODE system.</param>
+		/// <param name="output_type">Specifies the location where the output of the integration of the ODE system will be stored.</param>
 		system(string kernel_path_str, char *ode_system_string, solver_Type solver, double dt, double int_time, int kernel_steps, int num_equat, int num_params, int list_size, output_Type output_type)
 		{
 			// Set ODE Solver parameter values
@@ -151,7 +163,9 @@ namespace odecl
 			}
 		}
 
-		// Destructor. Delete all objects, arrays, pointers, etc.
+		/// <summary>
+		/// Destructor. Deletes all objects, arrays, pointers, etc. 
+		/// </summary>
 		~system()
 		{
 			delete m_output;
@@ -202,7 +216,12 @@ namespace odecl
 		HARDWARE SECTION
 		*/
 
-		// Choose a device by platform number, type and device number
+		/// <summary>
+		/// Sets the odecl object to use the selected OpenCL device for the integration of the ODE model.
+		/// </summary>
+		/// <param name="platform_num">Index of selected OpenCL platform.</param>
+		/// <param name="device_type">OpenCL device type.</param>
+		/// <param name="device_num">Index of selected OpenCL device in the selected OpenCL platform.</param>
 		void choose_device(int platform_num, device_Type device_type, int device_num)
 		{
 			// Check if selected platform exist
@@ -245,7 +264,9 @@ namespace odecl
 		HARDWARE SECTION
 		*/
 
-		// Create all odecl::platform objects
+		/// <summary>
+		/// Create all odecl::platform objects 
+		/// </summary>
 		void create_platforms()
 		{
 
@@ -279,7 +300,10 @@ namespace odecl
 			}
 		}
 
-		// Returns number of platforms
+		/// <summary>
+		/// Finds and returns the number of OpenCL platforms available.
+		/// </summary>
+		/// <returns>The number of OpenCL platforms available. Returns -1 if the operation fails.</returns>
 		cl_uint get_platform_count()
 		{
 			cl_uint platform_count;
@@ -295,6 +319,10 @@ namespace odecl
 			return platform_count;
 		}
 
+		/// <summary>
+		/// Sets the odecl object to use the CPU to integrate the ODE model. 
+		/// </summary>
+		/// <remarks>There could be an issue when selecting the OpenCL platform if there are more than one.</remarks>
 		void get_CPU_device()
 		{
 
@@ -304,7 +332,10 @@ namespace odecl
 		SOFTWARE SECTION
 		*/
 
-		// Create context
+		/// <summary>
+		/// Create OpenCL context for the selected OpenCL platform and OpenCL device.
+		/// </summary>
+		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
 		int create_context()
 		{
 			cl_int err;
@@ -321,7 +352,10 @@ namespace odecl
 
 		}
 
-		// Create command queue
+		/// <summary>
+		/// Create OpenCL command queue for the selected OpenCL platform and OpenCL device. 
+		/// </summary>
+		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
 		int create_command_queue()
 		{
 			cl_context context = m_contexts[0];
@@ -494,12 +528,10 @@ namespace odecl
 			return 1;
 		}
 
-		// Create program
-		// TODO: The create_program function will have parameters that set what file to read.
-		//       The files include the ode_system.cl and the cl files for the selected type of 
-		//		 ODE solver. Also, will set the #define in the cl files. These include the number
-		//		 of ode system parameters, number of equations and number of steps of the ode solver
-		//		 in each kernel call.
+		/// <summary>
+		/// Create OpenCL program for the selected OpenCL platform, OpenCL device and created OpenCL context.
+		/// </summary>
+		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
 		int create_program()
 		{
 			const char *srcptr[] = { m_kernel_sources.data() };
@@ -519,7 +551,10 @@ namespace odecl
 			return 1;
 		}
 
-		// Build the program executable
+		/// <summary>
+		/// Build OpenCL program for the selected OpenCL device.
+		/// </summary>
+		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
 		int build_program()
 		{
 			cl_device_id device_id = m_platforms[m_selected_platform]->m_devices[m_selected_device]->m_device_id;
@@ -566,7 +601,12 @@ namespace odecl
 			return 1;
 		}
 
-		// Create the compute kernel in the program
+		/// <summary>
+		/// Create the OpenCL kernel.
+		/// </summary>
+		/// <param name="kernelname">Name of the OpenCL kernel.</param>
+		/// <param name="program">OpenCL program.</param>
+		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
 		int create_kernel(char* kernelname, cl_program program)
 		{
 			cl_int err;
@@ -616,7 +656,13 @@ namespace odecl
 			return 1;
 		}
 
-		// Create OpenCL device memory buffer for the dt.
+		/// <summary>
+		/// Create OpenCL device memory buffer for the dt.
+		/// </summary>
+		/// <param name="context">OpenCL context.</param>
+		/// <param name="commands">OpenCL command queue.</param>
+		/// <param name="list_size">Number of orbits which the ODE system with be integrated for.</param>
+		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
 		int create_dt_buffer(cl_context context, cl_command_queue commands, int list_size)
 		{
 			cl_int errcode;
@@ -629,9 +675,16 @@ namespace odecl
 			return 1;
 		}
 
+		/// <summary>
+		/// Write data in the OpenCL memory buffers.
+		/// </summary>
+		/// <param name="commands">OpenCL command queue.</param>
+		/// <param name="list_size">Number of data points to be written in the OpenCL memory buffers.</param>
+		/// <param name="equat_num">Number of equations of the ODE system.</param>
+		/// <param name="param_num">Number of parameters of the ODE system.</param>
+		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
 		int write_buffers(cl_command_queue commands, int list_size, int equat_num, int param_num)
 		{
-			// Transfer the input vector into OpenCL device memory
 			int err = 0;
 			err |= clEnqueueWriteBuffer(commands, m_mem_t0, CL_TRUE, 0, list_size * sizeof(cl_double), m_t0, 0, NULL, NULL);
 			err |= clEnqueueWriteBuffer(commands, m_mem_y0, CL_TRUE, 0, list_size * sizeof(cl_double)*equat_num, m_y0, 0, NULL, NULL);
@@ -646,9 +699,14 @@ namespace odecl
 			return 1;
 		}
 
+		/// <summary>
+		/// Write the initial ODE solver time steps for each ODE system orbit.
+		/// </summary>
+		/// <param name="commands">OpenCL command queue.</param>
+		/// <param name="list_size">Number of data points to be written in the OpenCL memory buffers.</param>
+		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
 		int write_dt_buffer(cl_command_queue commands, int list_size)
 		{
-			// Transfer the input vector into OpenCL device memory
 			int err = 0;
 			err |= clEnqueueWriteBuffer(commands, m_mem_dt, CL_TRUE, 0, list_size * sizeof(cl_double), m_dts, 0, NULL, NULL);
 
@@ -666,6 +724,11 @@ namespace odecl
 
 		}
 
+		/// <summary>
+		/// Sets OpenCL kernel arguments.
+		/// </summary>
+		/// <param name="kernel">OpenCL kernel.</param>
+		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
 		int set_kernel_args(cl_kernel kernel)
 		{
 			// Set the arguments to the compute kernel
@@ -701,7 +764,12 @@ namespace odecl
 			m_params = params;
 		}
 
-		// Read data from file
+		/// <summary>
+		/// Reads data from a txt file and saves the data in an array.
+		/// </summary>
+		/// <param name="filename">Filename to read the data from.</param>
+		/// <param name="data">Pointer to cl_double array to store the read data to.</param>
+		/// <returns>Returns 1 if the read of the data is successful or 0 if unsuccessful.</returns>
 		int read_data_from_file(char *filename, cl_double *data)
 		{
 			// a string to store line of text
@@ -745,6 +813,9 @@ namespace odecl
 			return 1;
 		}
 
+		/// <summary>
+		/// Executes the ODE solver on the selected OpenCL device.
+		/// </summary>
 		void run_ode_solver()
 		{
 			// Output binary files - one file for each variable
@@ -827,10 +898,12 @@ namespace odecl
 
 			//delete t_out;
 			delete g;
-
 		}
 
-		// Setup selected ODE solver.
+		/// <summary>
+		/// Setups the selected ODE solver OpenCL kernel source.
+		/// </summary>
+		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
 		int setup_ode_solver()
 		{
 			// To create a cl string with the program to run
@@ -899,9 +972,6 @@ namespace odecl
 				return 0;
 			}
 			std::cout << "Data written to buffers." << std::endl;
-
-
-
 
 			//if (create_dt_buffer(m_contexts[0], m_command_queues[0], m_list_size) == 0)
 			//{
