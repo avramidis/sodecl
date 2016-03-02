@@ -460,11 +460,13 @@ namespace odecl
 			add_string_to_kernel_sources(std::to_string(static_cast<long long>(m_num_params)));
 			add_string_to_kernel_sources("\n");
 
-			double epsilon1 = 1e-7;
-			// Implicit Euler Newton-Raphson epsilon1 value
-			add_string_to_kernel_sources("#define _epsilon1_ ");
-			add_string_to_kernel_sources(double2string(epsilon1));
-			add_string_to_kernel_sources("\n");
+			if (m_solver == solver_Type::ImplicitEuler) {
+				double epsilon1 = 1e-7;
+				// Implicit Euler Newton-Raphson epsilon1 value
+				add_string_to_kernel_sources("#define _epsilon1_ ");
+				add_string_to_kernel_sources(double2string(epsilon1));
+				add_string_to_kernel_sources("\n");
+			}
 
 			cout << "ODE system number of parameters" << endl;
 
