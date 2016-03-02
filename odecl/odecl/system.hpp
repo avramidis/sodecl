@@ -433,14 +433,14 @@ namespace odecl
 		{
 			// Create the parameters section of the kernel string
 
-			cout << "Create OpenCL kernel string" << endl;
+			//cout << "Create OpenCL kernel string" << endl;
 
 			// Kernel steps
 			add_string_to_kernel_sources("#define _numsteps_ ");
 			add_string_to_kernel_sources(std::to_string(static_cast<long long>(m_kernel_steps)));
 			add_string_to_kernel_sources("\n");
 
-			cout << "Kernel steps done" << endl;
+			//cout << "Kernel steps done" << endl;
 
 			// ODE solver time size
 			add_string_to_kernel_sources("#define _m_dt ");
@@ -448,7 +448,7 @@ namespace odecl
 			add_string_to_kernel_sources(double2string(m_dt));
 			add_string_to_kernel_sources("\n");
 
-			cout << "ODE solver time size" << endl;
+			//cout << "ODE solver time size" << endl;
 
 			// ODE system number of equations
 			add_string_to_kernel_sources("#define _numeq_ ");
@@ -468,7 +468,7 @@ namespace odecl
 				add_string_to_kernel_sources("\n");
 			}
 
-			cout << "ODE system number of parameters" << endl;
+			//cout << "ODE system number of parameters" << endl;
 
 			// Read the ODE system functions
 			read_kernel_file(m_ode_system_string);
@@ -477,22 +477,22 @@ namespace odecl
 			std::vector<char> kernelpath_char;
 			string kernelpath = m_kernel_path_str;
 
-			std::cout << "The kernal path is: " << kernelpath << std::endl;
+			//std::cout << "The kernal path is: " << kernelpath << std::endl;
 
 			// Choose the solver.
 			switch (m_solver){
 			case solver_Type::Euler:
-				cout << "Read the Euler solver" << endl;
+				//cout << "Read the Euler solver" << endl;
 				kernelpath.append("/euler.cl");
 				//read_kernel_file("euler.cl");	// Euler
 				break;
 			case solver_Type::RungeKutta:
-				cout << "Read the Runge-Kutta solver" << endl;
+				//cout << "Read the Runge-Kutta solver" << endl;
 				kernelpath.append("/rk4.cl");
 				//read_kernel_file("rk4.cl");	// Runge-Kutta
 				break;
 			case solver_Type::ImplicitEuler:
-				cout << "Read the Implicit Euler solver" << endl;
+				//cout << "Read the Implicit Euler solver" << endl;
 				kernelpath.append("/ie.cl");
 				//read_kernel_file("ie.cl");	// Implicit Euler
 				break;
