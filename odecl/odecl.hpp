@@ -20,6 +20,7 @@
 #endif
 
 #include <odecl/timer.hpp>
+#include <odecl/build_Option.hpp>
 #include <odecl/output_Type.hpp>
 #include <odecl/device_Type.hpp>
 #include <odecl/solver_Type.hpp>
