@@ -817,7 +817,8 @@ namespace odecl
 		/// <summary>
 		/// Executes the ODE solver on the selected OpenCL device.
 		/// </summary>
-		void run_ode_solver()
+		/// <returns>Returns 1 if the read of the data is successful or 0 if unsuccessful.</returns>
+		int run_ode_solver()
 		{
 			// Output binary files
 			std::ofstream g_stream;
@@ -856,13 +857,15 @@ namespace odecl
 			{
 				// Read buffer g into a local list
 				//err = clEnqueueReadBuffer(m_command_queues[0], m_mem_t0, CL_TRUE, 0, m_list_size * sizeof(cl_double), t_out, 0, NULL, NULL);
+
 				err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat, g, 0, NULL, NULL);
+				
 				//err = clEnqueueNDRangeKernel(m_command_queues[0], m_kernels[0], 1, NULL, &global, &local, 0, NULL, NULL);
 				err = clEnqueueNDRangeKernel(m_command_queues[0], m_kernels[0], 1, NULL, &global, NULL, 0, NULL, NULL);
 				if (err)
 				{
 					std::cout << "Error: Failed to execute kernel!" << std::endl;
-					return;
+					return 0;
 				}
 				clFlush(m_command_queues[0]);
 				//clFinish(m_command_queues[0]);
@@ -911,6 +914,8 @@ namespace odecl
 
 			//delete t_out;
 			delete g;
+
+			return 1;
 		}
 
 		/// <summary>
