@@ -12,8 +12,9 @@ namespace odecl
 {
 	enum class output_Type
 	{
-		Array = 0,
-		File = 1
+		None = 0,
+		Array = 1,
+		File = 2
 	};
 }
 
