@@ -126,7 +126,7 @@ namespace odecl
 		/// Default constructor which initialises the odecl object. 
 		/// </summary>
 		/// <param name="kernel_path_str">Path to the OpenCL ODE solvers kernel source files.</param>
-		/// <param name="ode_system_string">Path to the OpenCL ODE system source file.</param>
+		/// <param name="ode_system_str">Path to the OpenCL ODE system source file.</param>
 		/// <param name="solver">Type of the solver that will be used to integrate the ODE system.</param>
 		/// <param name="dt">ODE solver time step size.</param>
 		/// <param name="int_time">Length of time in seconds the the ODE system with be integrated.</param>
@@ -135,11 +135,11 @@ namespace odecl
 		/// <param name="num_params">Number of parameters of the ODE system.</param>
 		/// <param name="list_size">Number of orbits to be integrated for the ODE system.</param>
 		/// <param name="output_type">Specifies the location where the output of the integration of the ODE system will be stored.</param>
-		system(string kernel_path_str, char *ode_system_string, solver_Type solver, double dt, double int_time, int kernel_steps, int num_equat, int num_params, int list_size, output_Type output_type)
+		system(string kernel_path_str, char *ode_system_str, solver_Type solver, double dt, double int_time, int kernel_steps, int num_equat, int num_params, int list_size, output_Type output_type)
 		{
 			// Set ODE Solver parameter values
 			m_kernel_path_str = kernel_path_str;
-			m_ode_system_string = ode_system_string;
+			m_ode_system_string = ode_system_str;
 			m_solver = solver;							// Choose the ODE solver.
 			m_dt = dt;									// Solver (initial) time step in seconds.
 			m_int_time = int_time;						// Integration time.
@@ -147,6 +147,7 @@ namespace odecl
 			m_list_size = list_size;					// Number of different integrations (ODE system parameter combinations).
 			m_num_equat = num_equat;					// Number of ODE system equations.
 			m_num_params = num_params;					// Number of ODE system parameters.
+			m_output_type = output_type;                // Type of output (Array or binary file).
 
 			// Find the host's platforms
 			// get the number of platforms in the system
@@ -818,9 +819,12 @@ namespace odecl
 		/// </summary>
 		void run_ode_solver()
 		{
-			// Output binary files - one file for each variable
+			// Output binary files
 			std::ofstream g_stream;
-			g_stream.open("g.bin", std::ios::binary | std::ios::app | std::ios::out);
+			if (m_output_type == odecl::output_Type::File)
+			{
+				g_stream.open("g.bin", std::ios::binary | std::ios::app | std::ios::out);
+			}
 
 			cl_double *t_out = new cl_double[m_list_size];
 			cl_double *g = new cl_double[m_list_size * m_num_equat];
@@ -868,7 +872,10 @@ namespace odecl
 				{
 					for (int ji = jo - 1; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
 					{
-						g_stream.write((char *)(&g[ji]), sizeof(cl_double));
+						if (m_output_type == odecl::output_Type::File)
+						{
+							g_stream.write((char *)(&g[ji]), sizeof(cl_double));
+						}
 						//output_data[count] = g[ji];
 						//count++;
 						//cout << g[ji] << endl;
@@ -883,7 +890,10 @@ namespace odecl
 			{
 				for (int ji = jo - 1; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
 				{
-					g_stream.write((char *)(&g[ji]), sizeof(cl_double));
+					if (m_output_type == odecl::output_Type::File)
+					{
+						g_stream.write((char *)(&g[ji]), sizeof(cl_double));
+					}
 					//output_data[count] = g[ji];
 					//count++;
 					//cout << g[ji] << endl;
@@ -894,7 +904,10 @@ namespace odecl
 
 			start_timer.stop_timer();
 
-			g_stream.close();
+			if (m_output_type == odecl::output_Type::File)
+			{
+				g_stream.close();
+			}
 
 			//delete t_out;
 			delete g;
