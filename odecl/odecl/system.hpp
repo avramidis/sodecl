@@ -73,6 +73,12 @@ namespace odecl
 		// Char vector which stores the OpenCL kernel source string. TODO: store multiple kernel source strings.
 		std::vector<char> m_kernel_sources;
 
+		// Char vector which stores the OpenCL build options string.
+		std::vector<char> m_build_options_str;
+
+		// build_Option vector which stores the OpenCL build options selection.
+		std::vector<build_Option> m_build_options;
+
 		// OpenCL kernel string.
 		char *m_source_str;
 
@@ -555,6 +561,30 @@ namespace odecl
 		}
 
 		/// <summary>
+		/// Adds a selected OpenCL build option in the vector which stores these OpenCL build options.
+		/// </summary>
+		/// <param name="build_option">build_Option which will be stored in the vector.</param>
+		/// <returns>TODO: This function should be expanded to perform all the operation for adding the OpenCL options in the char vector.</returns>
+		void add_option_to_build_options(build_Option build_option)
+		{
+			m_build_options.push_back(build_option);
+		}
+
+		/// <summary>
+		/// Adds the characters of a string in the vector which stores the OpenCL build options.
+		/// </summary>
+		/// <param name="str">String with the OpenCL build option.</param>
+		void add_string_to_build_options_str(string str)
+		{
+			int m_source_size = str.length();
+
+			for (int i = 0; i < m_source_size; i++)
+			{
+				m_build_options_str.push_back(str[i]);
+			}
+		}
+
+		/// <summary>
 		/// Build OpenCL program for the selected OpenCL device.
 		/// </summary>
 		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
@@ -563,6 +593,12 @@ namespace odecl
 			cl_device_id device_id = m_platforms[m_selected_platform]->m_devices[m_selected_device]->m_device_id;
 
 			// Build options - TODO: will be part of the options
+
+			add_string_to_build_options_str("-D KHR_DP_EXTENSION ");
+
+			//if(build_Option::FastRelaxedMath==)
+			string fastrelaxedmath = "-cl-fast-relaxed-math ";
+
 
 			//const char * options = "-D KHR_DP_EXTENSION -x clc++ -cl-mad-enable";
 			//const char * options = "-D KHR_DP_EXTENSION -cl-opt-disable -cl-mad-enable";
