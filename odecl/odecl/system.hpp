@@ -612,7 +612,7 @@ namespace odecl
 			}
 
 			m_build_options_str.shrink_to_fit();
-			const char *options = { m_build_options_str.data() };
+			const char *options = m_build_options_str.data();
 
 			//const char * options = "-D KHR_DP_EXTENSION -x clc++ -cl-mad-enable";
 			//const char * options = "-D KHR_DP_EXTENSION -cl-opt-disable -cl-mad-enable";
@@ -977,7 +977,6 @@ namespace odecl
 		int setup_ode_solver()
 		{
 			// To create a cl string with the program to run
-			// 
 			if (create_kernel_string() == 0)
 			{
 				std::cout << "Kernel code creation failed." << std::endl;
@@ -985,12 +984,6 @@ namespace odecl
 			}
 
 			std::cout << "Kernel code creation successed." << std::endl;
-
-			//read_kernel_file("test_kernel.cl"); // TODO: make the pro
-			//std::cout << "Kernel read." << std::endl;
-
-			// MATLAB mex file has a problem
-			// Check previous variables for problems
 
 			if (create_context() == 0)
 			{
