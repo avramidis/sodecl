@@ -1069,8 +1069,6 @@ namespace odecl
 			}
 			std::cout << "Kernel arguments set." << std::endl;
 
-			run_ode_solver();
-
 			return 1;
 		}
 	};
