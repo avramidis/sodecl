@@ -31,6 +31,8 @@ mysystem->set_params(params);
 // Setup and run the ODE solver
 mysystem->setup_ode_solver();
 
+mysystem->run_ode_solver();
+
 mysystem->~system();
 
 ```
