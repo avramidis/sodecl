@@ -168,6 +168,9 @@ namespace odecl
 			{
 				m_dts[i] = m_dt;
 			}
+
+			// Add default OpenCL build options
+			m_build_options.push_back(build_Option::FastRelaxedMath);
 		}
 
 		/// <summary>
@@ -592,13 +595,24 @@ namespace odecl
 		{
 			cl_device_id device_id = m_platforms[m_selected_platform]->m_devices[m_selected_device]->m_device_id;
 
-			// Build options - TODO: will be part of the options
-
+			// Build options
 			add_string_to_build_options_str("-D KHR_DP_EXTENSION ");
+			
+			for (build_Option option : m_build_options)
+			{
+				switch (option) 
+				{
+				case build_Option::FastRelaxedMath:
+					add_string_to_build_options_str("-cl-fast-relaxed-math ");
+					break;
+				case build_Option::stdCL20:
+					add_string_to_build_options_str("-cl-std=CL2.0 ");
+					break;
+				}
+			}
 
-			//if(build_Option::FastRelaxedMath==)
-			string fastrelaxedmath = "-cl-fast-relaxed-math ";
-
+			m_build_options_str.shrink_to_fit();
+			const char *options = { m_build_options_str.data() };
 
 			//const char * options = "-D KHR_DP_EXTENSION -x clc++ -cl-mad-enable";
 			//const char * options = "-D KHR_DP_EXTENSION -cl-opt-disable -cl-mad-enable";
@@ -618,7 +632,7 @@ namespace odecl
 			//const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math  -cl-nv-maxrregcount=90";
 			//const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math -cl-nv-opt-level=2";
 			//const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math -cl-nv-allow-expensive-optimizations";
-			const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math";
+			//const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math";
 			//const char * options = "";
 
 			cl_int err = clBuildProgram(m_programs[0], 1, &device_id, options, NULL, NULL);
