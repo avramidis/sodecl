@@ -232,27 +232,28 @@ namespace odecl
 		/// <param name="platform_num">Index of selected OpenCL platform.</param>
 		/// <param name="device_type">OpenCL device type.</param>
 		/// <param name="device_num">Index of selected OpenCL device in the selected OpenCL platform.</param>
-		void choose_device(int platform_num, device_Type device_type, int device_num)
+		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>		
+		int choose_device(int platform_num, device_Type device_type, int device_num)
 		{
 			// Check if selected platform exist
 			if (platform_num<0 || platform_num>m_platform_count)
 			{
 				std::cout << "Selected platform number is out of bounds." << std::endl;
-				return;
+				return 0;
 			}
 
 			// Check if selected device exist
 			if (device_num<0 || device_num>m_platforms[platform_num]->get_device_count())
 			{
 				std::cout << "Selected device number is out of bounds." << std::endl;
-				return;
+				return 0;
 			}
 
 			// Check if selected device type exist
 			if (m_platforms[platform_num]->m_devices[device_num]->type() != (cl_device_type)device_type)
 			{
 				std::cout << "Selected device is not of the type selected." << std::endl;
-				return;
+				return 0;
 			}
 
 			std::cout << "Selected platform: " << m_platforms[platform_num]->name().c_str() << std::endl;
@@ -262,6 +263,8 @@ namespace odecl
 			m_selected_platform = platform_num;
 			m_selected_device = device_num;
 			m_selected_device_type = device_type;
+
+			return 1;
 		}
 
 		/******************************************************************************************
@@ -416,19 +419,32 @@ namespace odecl
 			}
 		}
 
-		void add_string_to_kernel_sources(string str)
+		/// <summary>
+		/// Adds the string str to the vector which stores the kernel string (i.e. OpenCL kernel code) 
+		/// </summary>.
+		/// <param name="str">The sting to be pushed in the OpenCL kernel code vector.</param>
+		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
+		int add_string_to_kernel_sources(string str)
 		{
+			// TODO: Add code to catch an exception in case the operation fails
 			int m_source_size = str.length();
 
 			for (int i = 0; i < m_source_size; i++)
 			{
 				m_kernel_sources.push_back(str[i]);
 			}
+
+			return 1;
 		}
 
-		// convert double x to string s
+		/// <summary>
+		/// Convert a double to string.
+		/// </summary>
+		/// <param name="x">Double number which will be coverted to string.</param>
+		/// <returns>A string of the converted double number.</returns>
 		string double2string(double x)
 		{
+			// TODO: Add code to catch an exception in the unlikely case of the conversion fails
 			std::string s;
 			{
 				std::ostringstream ss;
@@ -438,11 +454,13 @@ namespace odecl
 			return s;
 		}
 
+		/// <summary>
+		/// Form the OpenCL kernel string.
+		/// </summary>
+		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
 		int create_kernel_string()
 		{
-			// Create the parameters section of the kernel string
-
-			//cout << "Create OpenCL kernel string" << endl;
+			// Create the parameters section of the kernel string. These parameter values are defines
 
 			// Kernel steps
 			add_string_to_kernel_sources("#define _numsteps_ ");
@@ -910,6 +928,7 @@ namespace odecl
 				// Read buffer g into a local list
 				//err = clEnqueueReadBuffer(m_command_queues[0], m_mem_t0, CL_TRUE, 0, m_list_size * sizeof(cl_double), t_out, 0, NULL, NULL);
 
+
 				err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat, g, 0, NULL, NULL);
 				
 				//err = clEnqueueNDRangeKernel(m_command_queues[0], m_kernels[0], 1, NULL, &global, &local, 0, NULL, NULL);
@@ -1026,8 +1045,6 @@ namespace odecl
 				return 0;
 			}
 			std::cout << "Buffers created." << std::endl;
-
-			////create_test_data(list_size, equat_num, param_num);
 
 			if (write_buffers(m_command_queues[0], m_list_size, m_num_equat, m_num_params) == 0)
 			{

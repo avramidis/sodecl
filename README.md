@@ -2,6 +2,11 @@
 
 ODE OpenCL solvers.
 
+Currect solvers:
+1. Euler
+2. Runge-Kutta
+3. Implicit Euler
+
 Example:
 
 ```C++
