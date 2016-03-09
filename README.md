@@ -9,11 +9,13 @@ ODECL accelerates the calculation of these ODE model orbit integrations by takin
 The library is currently at an early stage of development.
 
 Currect fixed step solvers:
+
 1. Euler.
 2. Runge-Kutta.
 3. Implicit Euler.
 
 Future work:
+
 1. MATLAB interface.
 2. More ODE solvers.
 3. Variable step ODE solvers.
