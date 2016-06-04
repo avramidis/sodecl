@@ -100,6 +100,10 @@ namespace odecl
 		cl_mem m_mem_params;			// OpenCL memory buffer which stores the parameter values of each integration orbit of the ODE system.
 		cl_mem m_mem_dt;				// OpenCL memory buffer which stores the time step for each integration orbit of the ODE system.
 
+
+		// Path to the results output file.
+		char *m_outputfile_str;
+
 		/********************************************************************************************
 		ODE SOLVERS SECTION VARIABLES
 		*/
@@ -270,6 +274,16 @@ namespace odecl
 		/******************************************************************************************
 		SOFTWARE SECTION
 		*/
+
+		/// <summary>
+		/// Sets the path of the output file to a private variable. If the file does not exist it is created.
+		/// </summary>
+		/// <param name="outputfile_str">Path and filename to the output file.</param>
+		void set_outputfile(char *outputfile_str)
+		{
+			m_outputfile_str = outputfile_str;
+		}
+
 
 	private:
 
@@ -614,7 +628,7 @@ namespace odecl
 			cl_device_id device_id = m_platforms[m_selected_platform]->m_devices[m_selected_device]->m_device_id;
 
 			// Build options
-			add_string_to_build_options_str("-D KHR_DP_EXTENSION ");
+			add_string_to_build_options_str("-D KHR_DP_EXTENSION");
 			
 			for (build_Option option : m_build_options)
 			{
@@ -894,7 +908,7 @@ namespace odecl
 			std::ofstream g_stream;
 			if (m_output_type == odecl::output_Type::File)
 			{
-				g_stream.open("g.bin", std::ios::binary | std::ios::app | std::ios::out);
+				g_stream.open(m_outputfile_str, std::ios::binary | std::ios::app | std::ios::out);
 			}
 
 			cl_double *t_out = new cl_double[m_list_size];
@@ -942,7 +956,7 @@ namespace odecl
 				//clFinish(m_command_queues[0]);
 
 				// Save data to disk or to data array - all variables
-				for (int jo = 1; jo <= 6; jo++)
+				for (int jo = 1; jo <= 1; jo++)
 				{
 					for (int ji = jo - 1; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
 					{
@@ -960,9 +974,9 @@ namespace odecl
 			// Save the data from the last kernel call.
 			err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat, g, 0, NULL, NULL);
 			// Save data to disk or to data array - all variables
-			for (int jo = 1; jo <= 6; jo++)
+			for (int jo = 1; jo <= 1; jo++)
 			{
-				for (int ji = jo - 1; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
+				for (int ji = jo - 1; ji < m_list_size*m_num_equat; ji = ji + 6)
 				{
 					if (m_output_type == odecl::output_Type::File)
 					{
