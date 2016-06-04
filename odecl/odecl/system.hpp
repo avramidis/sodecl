@@ -905,14 +905,14 @@ namespace odecl
 		int run_ode_solver()
 		{
 			// Output binary files
-			std::ofstream g_stream;
+			std::ofstream output_stream;
 			if (m_output_type == odecl::output_Type::File)
 			{
-				g_stream.open(m_outputfile_str, std::ios::binary | std::ios::app | std::ios::out);
+				output_stream.open(m_outputfile_str, std::ios::binary | std::ios::app | std::ios::out);
 			}
 
 			cl_double *t_out = new cl_double[m_list_size];
-			cl_double *g = new cl_double[m_list_size * m_num_equat];
+			cl_double *orbits_out = new cl_double[m_list_size * m_num_equat];
 
 			size_t global = size_t(m_list_size);
 			size_t local;
@@ -943,7 +943,7 @@ namespace odecl
 				//err = clEnqueueReadBuffer(m_command_queues[0], m_mem_t0, CL_TRUE, 0, m_list_size * sizeof(cl_double), t_out, 0, NULL, NULL);
 
 
-				err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat, g, 0, NULL, NULL);
+				err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat, orbits_out, 0, NULL, NULL);
 				
 				//err = clEnqueueNDRangeKernel(m_command_queues[0], m_kernels[0], 1, NULL, &global, &local, 0, NULL, NULL);
 				err = clEnqueueNDRangeKernel(m_command_queues[0], m_kernels[0], 1, NULL, &global, NULL, 0, NULL, NULL);
@@ -962,7 +962,7 @@ namespace odecl
 					{
 						if (m_output_type == odecl::output_Type::File)
 						{
-							g_stream.write((char *)(&g[ji]), sizeof(cl_double));
+							output_stream.write((char *)(&orbits_out[ji]), sizeof(cl_double));
 						}
 						//output_data[count] = g[ji];
 						//count++;
@@ -972,7 +972,7 @@ namespace odecl
 			}
 			
 			// Save the data from the last kernel call.
-			err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat, g, 0, NULL, NULL);
+			err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat, orbits_out, 0, NULL, NULL);
 			// Save data to disk or to data array - all variables
 			for (int jo = 1; jo <= 1; jo++)
 			{
@@ -980,7 +980,7 @@ namespace odecl
 				{
 					if (m_output_type == odecl::output_Type::File)
 					{
-						g_stream.write((char *)(&g[ji]), sizeof(cl_double));
+						output_stream.write((char *)(&orbits_out[ji]), sizeof(cl_double));
 					}
 					//output_data[count] = g[ji];
 					//count++;
@@ -994,11 +994,11 @@ namespace odecl
 
 			if (m_output_type == odecl::output_Type::File)
 			{
-				g_stream.close();
+				output_stream.close();
 			}
 
 			//delete t_out;
-			delete g;
+			delete orbits_out;
 
 			return 1;
 		}
