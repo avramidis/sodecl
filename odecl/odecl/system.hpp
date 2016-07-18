@@ -126,6 +126,7 @@ namespace odecl
 		cl_double *m_params;			// Client memory buffer which stores the parameter values of each integration orbit of the ODE system.
 		cl_double *m_dts;				// Client memory buffer which stores the time step for each integration orbit of the ODE system.
 
+		// Log mechanisms
 		clog *m_log;					// Pointer for log.
 
 		/*********************************************************************************************
@@ -149,7 +150,7 @@ namespace odecl
 		system(string kernel_path_str, char *ode_system_str, solver_Type solver, double dt, double int_time, int kernel_steps, int num_equat, int num_params, int list_size, output_Type output_type)
 		{
 			// Initialise the clog object
-			m_log = new clog();
+			m_log = clog::getInstance();
 
 			// Set ODE Solver parameter values
 			m_kernel_path_str = kernel_path_str;
@@ -246,27 +247,39 @@ namespace odecl
 			// Check if selected platform exist
 			if (platform_num<0 || platform_num>m_platform_count)
 			{
-				std::cout << "Selected platform number is out of bounds." << std::endl;
+				//std::cout << "Selected platform number is out of bounds." << std::endl;
+				m_log->write("Selected platform number is out of bounds.\n");
+
 				return 0;
 			}
 
 			// Check if selected device exist
 			if (device_num<0 || device_num>m_platforms[platform_num]->get_device_count())
 			{
-				std::cout << "Selected device number is out of bounds." << std::endl;
+				//std::cout << "Selected device number is out of bounds." << std::endl;
+				m_log->write("Selected device number is out of bounds.\n");
 				return 0;
 			}
 
 			// Check if selected device type exist
 			if (m_platforms[platform_num]->m_devices[device_num]->type() != (cl_device_type)device_type)
 			{
-				std::cout << "Selected device is not of the type selected." << std::endl;
+				//std::cout << "Selected device is not of the type selected." << std::endl;
+				m_log->write("Selected device is not of the type selected.\n");
 				return 0;
 			}
 
-			std::cout << "Selected platform: " << m_platforms[platform_num]->name().c_str() << std::endl;
-			std::cout << "Device name: " << m_platforms[platform_num]->m_devices[device_num]->name().c_str() << std::endl;
-			//std::cout << "Device type: " << m_platforms[platform_num]->m_devices[device_num]->type() << std::endl;
+			//std::cout << "Selected platform: " << m_platforms[platform_num]->name().c_str() << std::endl;
+			//std::cout << "Device name: " << m_platforms[platform_num]->m_devices[device_num]->name().c_str() << std::endl;
+			////std::cout << "Device type: " << m_platforms[platform_num]->m_devices[device_num]->type() << std::endl;
+
+			m_log->write("Selected platform: ");
+			m_log->write(m_platforms[platform_num]->name().c_str());
+			m_log->write("\n");
+
+			m_log->write("Device name: ");
+			m_log->write(m_platforms[platform_num]->m_devices[device_num]->name().c_str());
+			m_log->write("\n");
 
 			m_selected_platform = platform_num;
 			m_selected_device = device_num;
@@ -287,7 +300,6 @@ namespace odecl
 		{
 			m_outputfile_str = outputfile_str;
 		}
-
 
 	private:
 
@@ -931,7 +943,10 @@ namespace odecl
 				//local = size_t(256);
 			}
 			//local = 256;
-			cout << "The local group size is: " << local << endl;
+			//cout << "The local group size is: " << local << endl;
+			m_log->write("The local group size is: ");
+			m_log->write(local);
+			m_log->write("\n");
 
 			//cl_double *output_data = new cl_double[m_list_size * m_int_time / m_dt / m_kernel_steps];
 			m_output_size = m_list_size * m_int_time / m_dt / m_kernel_steps;
@@ -939,7 +954,7 @@ namespace odecl
 			timer start_timer;
 
 			int count = 0;
-			std::cout << "Running kernel.." << std::endl;
+			//std::cout << "Running kernel.." << std::endl;
 			cl_int err;
 			for (int j = 0; j < (m_int_time / m_dt / m_kernel_steps); j++)
 			{
@@ -1034,42 +1049,42 @@ namespace odecl
 				std::cout << "Failed to create OpenCL program from source." << std::endl;
 				return 0;
 			}
-			std::cout << "Program created." << std::endl;
+			//std::cout << "Program created." << std::endl;
 
 			if (build_program() == 0)
 			{
 				std::cout << "Failed to build kernel." << std::endl;
 				return 0;
 			}
-			std::cout << "Program build." << std::endl;
+			//std::cout << "Program build." << std::endl;
 
 			if (create_kernel("solver_caller", m_programs[0]) == 0)
 			{
 				std::cout << "Failed to create kernel." << std::endl;
 				return 0;
 			}
-			std::cout << "Kernel created." << std::endl;
+			//std::cout << "Kernel created." << std::endl;
 
 			if (create_command_queue() == 0)
 			{
 				std::cout << "Failed to create command queue." << std::endl;
 				return 0;
 			}
-			std::cout << "Command queue created." << std::endl;
+			//std::cout << "Command queue created." << std::endl;
 
 			if (create_buffers(m_contexts[0], m_command_queues[0], m_list_size, m_num_equat, m_num_params) == 0)
 			{
 				std::cout << "Failed to create the OpenCL buffers." << std::endl;
 				return 0;
 			}
-			std::cout << "Buffers created." << std::endl;
+			//std::cout << "Buffers created." << std::endl;
 
 			if (write_buffers(m_command_queues[0], m_list_size, m_num_equat, m_num_params) == 0)
 			{
 				std::cout << "Failed to write the data to the OpenCL buffers." << std::endl;
 				return 0;
 			}
-			std::cout << "Data written to buffers." << std::endl;
+			//std::cout << "Data written to buffers." << std::endl;
 
 			//if (create_dt_buffer(m_contexts[0], m_command_queues[0], m_list_size) == 0)
 			//{
@@ -1095,7 +1110,7 @@ namespace odecl
 				std::cout << "Failed to set kernel arguments." << std::endl;
 				return 0;
 			}
-			std::cout << "Kernel arguments set." << std::endl;
+			//std::cout << "Kernel arguments set." << std::endl;
 
 			return 1;
 		}

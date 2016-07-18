@@ -9,7 +9,7 @@
 #define ODECL_CLOG_HPP
 
 #include <string>
-#include <vector>
+#include <sstream>
 
 using namespace std;
 
@@ -19,10 +19,10 @@ namespace odecl
 	{
 	private:
 
-		// Vector with the output messages
-		std::vector<string> m_msgs;
+		static bool m_instanceExists;
+		static clog* m_instance;
 
-	public:
+		std::ostringstream oss;
 
 		/// <summary>
 		/// Default constructor which initialises the clog object. 
@@ -32,13 +32,43 @@ namespace odecl
 
 		}
 
+	public:
+
+		static clog* getInstance()
+		{
+			if (!m_instanceExists)
+			{
+				m_instance = new clog();
+				m_instanceExists = true;
+				return m_instance;
+			}
+			else
+			{
+				return m_instance;
+			}
+		}
+
+		~clog()
+		{
+			m_instanceExists = false;
+		}
+
 		/// <summary>
 		/// Writes a message to the log.
 		/// </summary>
 		/// <param name="msg">String with the message.</param>
 		void write(string msg)
 		{
-			m_msgs.push_back(msg);
+			oss << msg;
+		}
+
+		/// <summary>
+		/// Writes a message to the log.
+		/// </summary>
+		/// <param name="msg">Double with the message.</param>
+		void write(double msg)
+		{
+			oss << msg;
 		}
 
 		/// <summary>
@@ -46,9 +76,13 @@ namespace odecl
 		/// </summary>
 		void toFile()
 		{
-
+			//std::cout << oss.str();
 		}
 	};
+
+	// Initialise variables.
+	bool clog::m_instanceExists=false;
+	clog* clog::m_instance = NULL;
 }
 
 
