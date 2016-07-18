@@ -126,6 +126,7 @@ namespace odecl
 		cl_double *m_params;			// Client memory buffer which stores the parameter values of each integration orbit of the ODE system.
 		cl_double *m_dts;				// Client memory buffer which stores the time step for each integration orbit of the ODE system.
 
+		clog *m_log;					// Pointer for log.
 
 		/*********************************************************************************************
 		FUNCTIONS SECTION
@@ -147,6 +148,9 @@ namespace odecl
 		/// <param name="output_type">Specifies the location where the output of the integration of the ODE system will be stored.</param>
 		system(string kernel_path_str, char *ode_system_str, solver_Type solver, double dt, double int_time, int kernel_steps, int num_equat, int num_params, int list_size, output_Type output_type)
 		{
+			// Initialise the clog object
+			m_log = new clog();
+
 			// Set ODE Solver parameter values
 			m_kernel_path_str = kernel_path_str;
 			m_ode_system_string = ode_system_str;

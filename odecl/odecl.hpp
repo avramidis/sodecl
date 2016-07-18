@@ -19,6 +19,7 @@
 	#include <odecl/cl.hpp>		// TODO
 #endif
 
+#include <odecl/clog.hpp>
 #include <odecl/timer.hpp>
 #include <odecl/build_Option.hpp>
 #include <odecl/output_Type.hpp>
