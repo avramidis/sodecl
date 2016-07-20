@@ -563,7 +563,10 @@ namespace odecl
 			}
 			kernelpath_char.push_back('\0');
 
-			cout << &*kernelpath_char.begin() << endl;
+			//cout << &*kernelpath_char.begin() << endl;
+			m_log->write(&*kernelpath_char.begin());
+			m_log->write("\n");
+
 			
 			kernelpath_char.shrink_to_fit();
 
@@ -641,10 +644,11 @@ namespace odecl
 		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
 		int build_program()
 		{
+			
 			cl_device_id device_id = m_platforms[m_selected_platform]->m_devices[m_selected_device]->m_device_id;
 
 			// Build options
-			add_string_to_build_options_str("-D KHR_DP_EXTENSION");
+			add_string_to_build_options_str("-D KHR_DP_EXTENSION ");
 			
 			for (build_Option option : m_build_options)
 			{
@@ -698,7 +702,7 @@ namespace odecl
 				//system("pause");
 				return 0;
 			}
-
+			
 			return 1;
 		}
 
@@ -1035,14 +1039,16 @@ namespace odecl
 				return 0;
 			}
 
-			std::cout << "Kernel code creation successed." << std::endl;
+			//std::cout << "Kernel code creation successed." << std::endl;
+			m_log->write("Kernel code creation successed.\n");
 
 			if (create_context() == 0)
 			{
 				std::cout << "Context creation failed." << std::endl;
 				return 0;
 			}
-			std::cout << "Context created." << std::endl;
+			//std::cout << "Context created." << std::endl;
+			m_log->write("Context created.\n");
 
 			if (create_program() == 0)
 			{

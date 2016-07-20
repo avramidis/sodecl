@@ -34,6 +34,9 @@ namespace odecl
 
 	private:
 		
+		// Log mechanisms
+		clog *m_log;					// Pointer for log.
+
 		/*
 		FUNCTIONS SECTION
 		*/
@@ -48,6 +51,10 @@ namespace odecl
 		// Costructor with specific cl_platform_id
 		platform(cl_platform_id m_platform_id)
 		{
+
+			// Initialise the clog object
+			m_log = clog::getInstance();
+
 			this->m_platform_id = m_platform_id;
 
 			m_devices_count = get_device_count();
@@ -157,8 +164,16 @@ namespace odecl
 			}
 
 			
-			std::cout << "The platform name is " << name().c_str() << std::endl;
-			std::cout << "The platform version is " << version().c_str() << std::endl;
+			//std::cout << "The platform name is " << name().c_str() << std::endl;
+			//std::cout << "The platform version is " << version().c_str() << std::endl;
+
+			m_log->write("The platform name is ");
+			m_log->write(name().c_str());
+			m_log->write("\n");
+
+			m_log->write("The platform version is ");
+			m_log->write(version().c_str());
+			m_log->write("\n");
 		}
 
 	};
