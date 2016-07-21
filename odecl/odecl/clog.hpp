@@ -10,6 +10,7 @@
 
 #include <string>
 #include <sstream>
+#include <fstream>
 
 using namespace std;
 
@@ -22,7 +23,7 @@ namespace odecl
 		static bool m_instanceExists;
 		static clog* m_instance;
 
-		std::ostringstream oss;
+		std::ostringstream m_oss;
 
 		/// <summary>
 		/// Default constructor which initialises the clog object. 
@@ -59,7 +60,7 @@ namespace odecl
 		/// <param name="msg">String with the message.</param>
 		void write(string msg)
 		{
-			oss << msg;
+			m_oss << msg;
 		}
 
 		/// <summary>
@@ -68,7 +69,7 @@ namespace odecl
 		/// <param name="msg">Double with the message.</param>
 		void write(double msg)
 		{
-			oss << msg;
+			m_oss << msg;
 		}
 
 		/// <summary>
@@ -76,7 +77,13 @@ namespace odecl
 		/// </summary>
 		void toFile()
 		{
-			//std::cout << oss.str();
+			std::ofstream output_stream;
+
+			output_stream.open("odecllog.txt", std::ios::binary | std::ios::app | std::ios::out);
+
+			output_stream << m_oss.str();
+
+			output_stream.close();
 		}
 	};
 

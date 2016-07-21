@@ -1020,6 +1020,8 @@ namespace odecl
 				output_stream.close();
 			}
 
+			m_log->toFile();
+
 			//delete t_out;
 			delete orbits_out;
 
