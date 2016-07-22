@@ -566,7 +566,6 @@ namespace odecl
 			//cout << &*kernelpath_char.begin() << endl;
 			m_log->write(&*kernelpath_char.begin());
 			m_log->write("\n");
-
 			
 			kernelpath_char.shrink_to_fit();
 
@@ -575,7 +574,7 @@ namespace odecl
 			add_string_to_kernel_sources("\n");
 
 			// Read the solver 
-			read_kernel_file("solver_caller.cl");
+			read_kernel_file("solver_caller.cl");	// TODO: Create path to the real location of the kernel files.
 			add_string_to_kernel_sources("\n");
 
 			// Print the string
@@ -962,9 +961,8 @@ namespace odecl
 			cl_int err;
 			for (int j = 0; j < (m_int_time / m_dt / m_kernel_steps); j++)
 			{
-				// Read buffer g into a local list
-				//err = clEnqueueReadBuffer(m_command_queues[0], m_mem_t0, CL_TRUE, 0, m_list_size * sizeof(cl_double), t_out, 0, NULL, NULL);
-
+				//// Read buffer g into a local list
+				////err = clEnqueueReadBuffer(m_command_queues[0], m_mem_t0, CL_TRUE, 0, m_list_size * sizeof(cl_double), t_out, 0, NULL, NULL);
 
 				err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat, orbits_out, 0, NULL, NULL);
 				
@@ -978,7 +976,7 @@ namespace odecl
 				clFlush(m_command_queues[0]);
 				//clFinish(m_command_queues[0]);
 
-				// Save data to disk or to data array - all variables
+				//// Save data to disk or to data array - all variables
 				for (int jo = 1; jo <= 1; jo++)
 				{
 					for (int ji = jo - 1; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
@@ -1013,7 +1011,10 @@ namespace odecl
 
 			//m_output = output_data;
 
-			start_timer.stop_timer();
+			double walltime=start_timer.stop_timer();
+			m_log->write("Elapsed time: ");
+			m_log->write(walltime);
+			m_log->write("sec.\n");
 
 			if (m_output_type == odecl::output_Type::File)
 			{
@@ -1107,8 +1108,6 @@ namespace odecl
 			//	return 0;
 			//}
 			//std::cout << "Data written to dt buffer." << std::endl;
-
-
 
 			//std::cout << "Number of kernels: " << m_kernels.size() << std::endl;
 

@@ -71,7 +71,7 @@ namespace odecl
 		{
 			m_oss << msg;
 		}
-
+		
 		/// <summary>
 		/// Writes the log messages in a text file.
 		/// </summary>

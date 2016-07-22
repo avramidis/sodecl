@@ -24,7 +24,7 @@ namespace odecl
 			start = std::chrono::system_clock::now();
 		}
 
-		void stop_timer()
+		double stop_timer()
 		{
 			end = std::chrono::system_clock::now();
 
@@ -33,6 +33,8 @@ namespace odecl
 			std::time_t end_time = std::chrono::system_clock::to_time_t(end);
 
 			std::cout << "Elapsed time: " << elapsed_seconds.count() << " sec.\n";
+
+			return elapsed_seconds.count();
 		}
 	};
 }
