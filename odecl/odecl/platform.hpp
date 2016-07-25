@@ -57,6 +57,16 @@ namespace odecl
 
 			this->m_platform_id = m_platform_id;
 
+			//std::cout << "The platform name is " << name().c_str() << std::endl;
+			//std::cout << "The platform version is " << version().c_str() << std::endl;
+			m_log->write("The platform name is ");
+			m_log->write(name().c_str());
+			m_log->write("\n");
+
+			m_log->write("The platform version is ");
+			m_log->write(version().c_str());
+			m_log->write("\n");
+
 			m_devices_count = get_device_count();
 
 			create_devices();
@@ -161,19 +171,13 @@ namespace odecl
 			for (int i = 0; i < m_device_ids.size(); i++)
 			{
 				m_devices.push_back(new device(m_device_ids.at(i)));
+				
+				m_log->write("The device name is ");
+				m_log->write(m_devices.back()->name().c_str());
+				m_log->write("\n");
 			}
 
 			
-			//std::cout << "The platform name is " << name().c_str() << std::endl;
-			//std::cout << "The platform version is " << version().c_str() << std::endl;
-
-			m_log->write("The platform name is ");
-			m_log->write(name().c_str());
-			m_log->write("\n");
-
-			m_log->write("The platform version is ");
-			m_log->write(version().c_str());
-			m_log->write("\n");
 		}
 
 	};

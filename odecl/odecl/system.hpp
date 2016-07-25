@@ -180,6 +180,9 @@ namespace odecl
 
 			// Add default OpenCL build options
 			m_build_options.push_back(build_Option::FastRelaxedMath);
+			//m_build_options.push_back(build_Option::stdCL20);
+
+			//m_log->toFile();
 		}
 
 		/// <summary>
@@ -273,11 +276,11 @@ namespace odecl
 			//std::cout << "Device name: " << m_platforms[platform_num]->m_devices[device_num]->name().c_str() << std::endl;
 			////std::cout << "Device type: " << m_platforms[platform_num]->m_devices[device_num]->type() << std::endl;
 
-			m_log->write("Selected platform: ");
+			m_log->write("Selected platform name: ");
 			m_log->write(m_platforms[platform_num]->name().c_str());
 			m_log->write("\n");
 
-			m_log->write("Device name: ");
+			m_log->write("Selected device name: ");
 			m_log->write(m_platforms[platform_num]->m_devices[device_num]->name().c_str());
 			m_log->write("\n");
 
@@ -942,7 +945,7 @@ namespace odecl
 			}
 			else
 			{
-				local = size_t(64);
+				local = size_t(256);
 				//local = size_t(256);
 			}
 			//local = 256;
@@ -966,8 +969,8 @@ namespace odecl
 
 				err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat, orbits_out, 0, NULL, NULL);
 				
-				//err = clEnqueueNDRangeKernel(m_command_queues[0], m_kernels[0], 1, NULL, &global, &local, 0, NULL, NULL);
-				err = clEnqueueNDRangeKernel(m_command_queues[0], m_kernels[0], 1, NULL, &global, NULL, 0, NULL, NULL);
+				err = clEnqueueNDRangeKernel(m_command_queues[0], m_kernels[0], 1, NULL, &global, &local, 0, NULL, NULL);
+				//err = clEnqueueNDRangeKernel(m_command_queues[0], m_kernels[0], 1, NULL, &global, NULL, 0, NULL, NULL);
 				if (err)
 				{
 					std::cout << "Error: Failed to execute kernel!" << std::endl;
@@ -1118,6 +1121,8 @@ namespace odecl
 				return 0;
 			}
 			//std::cout << "Kernel arguments set." << std::endl;
+
+			//m_log->toFile();
 
 			return 1;
 		}
