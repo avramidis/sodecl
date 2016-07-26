@@ -543,18 +543,15 @@ namespace odecl
 			switch (m_solver){
 			case solver_Type::Euler:
 				//cout << "Read the Euler solver" << endl;
-				kernelpath.append("/euler.cl");
-				//read_kernel_file("euler.cl");	// Euler
+				kernelpath.append("/euler.cl");	// Euler
 				break;
 			case solver_Type::RungeKutta:
 				//cout << "Read the Runge-Kutta solver" << endl;
-				kernelpath.append("/rk4.cl");
-				//read_kernel_file("rk4.cl");	// Runge-Kutta
+				kernelpath.append("/rk4.cl");	// Runge-Kutta
 				break;
 			case solver_Type::ImplicitEuler:
 				//cout << "Read the Implicit Euler solver" << endl;
-				kernelpath.append("/ie.cl");
-				//read_kernel_file("ie.cl");	// Implicit Euler
+				kernelpath.append("/ie.cl");	// Implicit Euler	
 				break;
 			default:
 				std::cout << "No valid solver chosen!" << std::endl;
@@ -566,7 +563,6 @@ namespace odecl
 			}
 			kernelpath_char.push_back('\0');
 
-			//cout << &*kernelpath_char.begin() << endl;
 			m_log->write(&*kernelpath_char.begin());
 			m_log->write("\n");
 			
