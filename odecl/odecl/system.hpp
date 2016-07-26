@@ -577,7 +577,10 @@ namespace odecl
 			add_string_to_kernel_sources("\n");
 
 			// Read the solver 
-			read_kernel_file("solver_caller.cl");	// TODO: Create path to the real location of the kernel files.
+			string kernelsolverpath_char = m_kernel_path_str;
+			kernelsolverpath_char.append("/solver_caller.cl");
+			std::cout << kernelsolverpath_char << std::endl;
+			read_kernel_file(&kernelsolverpath_char[0]);
 			add_string_to_kernel_sources("\n");
 
 			// Print the string
