@@ -557,6 +557,7 @@ namespace odecl
 				std::cout << "No valid solver chosen!" << std::endl;
 			}
 
+
 			for (int i = 0; i < kernelpath.size(); i++)
 			{
 				kernelpath_char.push_back(kernelpath[i]);
@@ -575,7 +576,7 @@ namespace odecl
 			// Read the solver 
 			string kernelsolverpath_char = m_kernel_path_str;
 			kernelsolverpath_char.append("/solver_caller.cl");
-			std::cout << kernelsolverpath_char << std::endl;
+			//std::cout << kernelsolverpath_char << std::endl;
 			read_kernel_file(&kernelsolverpath_char[0]);
 			add_string_to_kernel_sources("\n");
 
