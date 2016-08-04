@@ -1,10 +1,3 @@
-//---------------------------------------------------------------------------//
-// Copyright (c) 2015 Eleftherios Avramidis <el.avramidis@gmail.com>
-//
-// Distributed under The MIT License (MIT)
-// See accompanying file LICENSE.txt
-//---------------------------------------------------------------------------//
-
 
 // The tridiagonal matrix algorithm (Thomas algorithm)
 void solveSystem(double jac[_numeq_][_numeq_], double v[_numeq_], double x[_numeq_])
@@ -111,7 +104,7 @@ inline static void newton(double dt, double t, double initial[_numeq_], double g
 }
 
 /////////////////////////////////////
-// Implicit midpoitn solver
+// Implicit midpoint solver
 inline static void ode_solver(double dt, double t, double y[_numeq_], double yout[_numeq_], double p[_numpar_])
 {
 	double guess[_numeq_];

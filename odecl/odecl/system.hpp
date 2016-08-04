@@ -250,7 +250,7 @@ namespace odecl
 			// Check if selected platform exist
 			if (platform_num<0 || platform_num>m_platform_count)
 			{
-				//std::cout << "Selected platform number is out of bounds." << std::endl;
+				//cerr << "Selected platform number is out of bounds." << std::endl;
 				m_log->write("Selected platform number is out of bounds.\n");
 
 				return 0;
@@ -259,17 +259,21 @@ namespace odecl
 			// Check if selected device exist
 			if (device_num<0 || device_num>m_platforms[platform_num]->get_device_count())
 			{
-				//std::cout << "Selected device number is out of bounds." << std::endl;
+				//cerr << "Selected device number is out of bounds." << std::endl;
 				m_log->write("Selected device number is out of bounds.\n");
 				return 0;
 			}
 
-			// Check if selected device type exist
-			if (m_platforms[platform_num]->m_devices[device_num]->type() != (cl_device_type)device_type)
+
+			// If selected device type is not ALL (OpenCL type) check if selected device type exist
+			if ((cl_device_type)device_type != (cl_device_type)device_Type::ALL)
 			{
-				//std::cout << "Selected device is not of the type selected." << std::endl;
-				m_log->write("Selected device is not of the type selected.\n");
-				return 0;
+				if (m_platforms[platform_num]->m_devices[device_num]->type() != (cl_device_type)device_type)
+				{
+					//cerr << "Selected device is not of the type selected." << std::endl;
+					m_log->write("Selected device is not of the type selected.\n");
+					return 0;
+				}
 			}
 
 			//std::cout << "Selected platform: " << m_platforms[platform_num]->name().c_str() << std::endl;
@@ -429,20 +433,12 @@ namespace odecl
 
 		void read_kernel_file(char* filename)
 		{
-			// Read the kernel files that include the runge kutta solve
 			std::ifstream t(filename);
-			std::string str;
-
 			t.seekg(0, std::ios::end);
-			//cout << "Kernel string size: " << t.tellg() << endl;
-
-			str.reserve(t.tellg());
-
-			t.seekg(0, std::ios::beg);
-
-			str.assign((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
-
-			t.close();
+			size_t size = t.tellg();
+			std::string str(size, ' ');
+			t.seekg(0);
+			t.read(&str[0], size);
 
 			m_source_size = str.length();
 
@@ -725,7 +721,7 @@ namespace odecl
 			cl_kernel kernel = clCreateKernel(program, kernelname, &err);
 			if (!kernel || err != CL_SUCCESS)
 			{
-				std::cout << "Error: Failed to create compute kernel!" << std::endl;
+				cerr << "Error: Failed to create compute kernel!" << std::endl;
 				return 0;
 			}
 
@@ -943,15 +939,27 @@ namespace odecl
 			size_t global = size_t(m_list_size);
 			size_t local;
 
-			if (m_selected_device_type == device_Type::CPU)
-			{
+			switch (m_selected_device_type) {
+			case device_Type::CPU: 
 				local = size_t(8);
-			}
-			else
-			{
+				break;       
+			case device_Type::GPU:
 				local = size_t(256);
-				//local = size_t(256);
+				break;
+			default: 
+				local = 0;
+				break;
 			}
+
+			//if (m_selected_device_type == device_Type::CPU)
+			//{
+			//	local = size_t(8);
+			//}
+			//else
+			//{
+			//	local = size_t(256);
+			//	//local = size_t(256);
+			//}
 			//local = 256;
 			//cout << "The local group size is: " << local << endl;
 			m_log->write("The local group size is: ");
@@ -973,11 +981,18 @@ namespace odecl
 
 				err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat, orbits_out, 0, NULL, NULL);
 				
-				err = clEnqueueNDRangeKernel(m_command_queues[0], m_kernels[0], 1, NULL, &global, &local, 0, NULL, NULL);
-				//err = clEnqueueNDRangeKernel(m_command_queues[0], m_kernels[0], 1, NULL, &global, NULL, 0, NULL, NULL);
+				if (local != 0)
+				{
+					err = clEnqueueNDRangeKernel(m_command_queues[0], m_kernels[0], 1, NULL, &global, &local, 0, NULL, NULL);
+				}
+				else
+				{
+					err = clEnqueueNDRangeKernel(m_command_queues[0], m_kernels[0], 1, NULL, &global, NULL, 0, NULL, NULL);
+				}
+				
 				if (err)
 				{
-					std::cout << "Error: Failed to execute kernel!" << std::endl;
+					cerr << "Error: Failed to execute kernel!" << std::endl;
 					return 0;
 				}
 				clFlush(m_command_queues[0]);

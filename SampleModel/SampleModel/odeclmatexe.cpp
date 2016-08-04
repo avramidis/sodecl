@@ -141,7 +141,7 @@ int main(int argc, char* argv[])
 	int success;
 
 	// Choose device
-	success = mysystem->choose_device(a_platform, odecl::device_Type::CPU, a_device);
+	success = mysystem->choose_device(a_platform, odecl::device_Type::ALL, a_device);
 	if (success == 0)
 	{
 		cerr << "Error selecting OpenCL device!" << endl;
