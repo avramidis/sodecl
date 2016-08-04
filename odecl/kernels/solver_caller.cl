@@ -39,6 +39,7 @@ __kernel void solver_caller(__global double *t0,
 		for (int ieq = 0; ieq < _numeq_; ieq++)
 		{
 			y[ieq] = detterm[ieq];
+			
 		}
 	}
 

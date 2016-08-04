@@ -63,7 +63,7 @@ namespace odecl
 			m_log->write(name().c_str());
 			m_log->write("\n");
 
-			m_log->write("The platform version is ");
+			m_log->write("	The platform version is ");
 			m_log->write(version().c_str());
 			m_log->write("\n");
 

@@ -36,7 +36,7 @@ namespace odecl
 		VARIABLES SECTION
 		*/
 	public:
-
+		
 		cl_double *m_output;
 		int m_output_size;
 
@@ -951,16 +951,6 @@ namespace odecl
 				break;
 			}
 
-			//if (m_selected_device_type == device_Type::CPU)
-			//{
-			//	local = size_t(8);
-			//}
-			//else
-			//{
-			//	local = size_t(256);
-			//	//local = size_t(256);
-			//}
-			//local = 256;
 			//cout << "The local group size is: " << local << endl;
 			m_log->write("The local group size is: ");
 			m_log->write(local);

@@ -73,14 +73,15 @@ inline static void newton(double dt, double t, double initial[_numeq_], double g
 		err1 = 0;
 		for (int i = 0; i < _numeq_; i++)
 		{
-			err1 = err1 + fabs(new_out[i]);
+			err1 = err1 + new_out[i]*new_out[i];
 		}
-		if (err1 < _epsilon1_)
+		if (sqrt(err1) < _epsilon1_)
 		{
 			break;
 		}
 
 		calc_jacobian(guess2, jac, p);
+		//calc_jacobian_numerically(t, guess2, jac, p);
 		for (int i = 0; i < _numeq_; i++)
 		{
 			for (int j = 0; j < _numeq_; j++)
