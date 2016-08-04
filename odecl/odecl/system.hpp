@@ -520,7 +520,7 @@ namespace odecl
 			add_string_to_kernel_sources(std::to_string(static_cast<long long>(m_num_params)));
 			add_string_to_kernel_sources("\n");
 
-			if (m_solver == solver_Type::ImplicitEuler) {
+			if (m_solver == solver_Type::ImplicitEuler || m_solver == solver_Type::ImplicitMidpoint) {
 				double epsilon1 = 1e-7;
 				// Implicit Euler Newton-Raphson epsilon1 value
 				add_string_to_kernel_sources("#define _epsilon1_ ");
@@ -552,6 +552,10 @@ namespace odecl
 			case solver_Type::ImplicitEuler:
 				//cout << "Read the Implicit Euler solver" << endl;
 				kernelpath.append("/ie.cl");	// Implicit Euler	
+				break;
+			case solver_Type::ImplicitMidpoint:
+				//cout << "Read the Implicit Euler solver" << endl;
+				kernelpath.append("/im.cl");	// Implicit Euler	
 				break;
 			default:
 				std::cout << "No valid solver chosen!" << std::endl;

@@ -14,9 +14,9 @@ namespace odecl
 	{
 		Euler = 0,
 		RungeKutta = 1,
-		ImplicitEuler = 2
+		ImplicitEuler = 2,
+		ImplicitMidpoint = 3
 	};
 }
-
 
 #endif // ODECL_SOLVER_TYPE_HPP

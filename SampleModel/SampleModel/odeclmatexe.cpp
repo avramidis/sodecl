@@ -82,6 +82,9 @@ int main(int argc, char* argv[])
 		case 2:
 			a_solver = odecl::solver_Type::ImplicitEuler;
 			break;
+		case 3:
+			a_solver = odecl::solver_Type::ImplicitMidpoint;
+			break;
 		default:
 			std::cout << "Unknown ODE solver selection." << std::endl;
 			return 0;
@@ -123,7 +126,7 @@ int main(int argc, char* argv[])
 		std::cout << "Argument 11 - Number of ODE solvers executed in each OpenCL kernel call" << std::endl;
 	}
 
-	odecl::system *mysystem = new odecl::system("C:/Workfolder/ODECL_Repositories/odecl/odecl/kernels", &a_system[0], odecl::solver_Type::ImplicitEuler, a_dt, a_tspan, a_ksteps, a_equats, a_nparams, a_orbits, odecl::output_Type::File);
+	odecl::system *mysystem = new odecl::system("C:/Workfolder/ODECL_Repositories/odecl/odecl/kernels", &a_system[0], a_solver, a_dt, a_tspan, a_ksteps, a_equats, a_nparams, a_orbits, odecl::output_Type::File);
 
 	mysystem->set_outputfile("odecloutput.bin");
 
