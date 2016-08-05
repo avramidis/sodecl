@@ -1,12 +1,11 @@
-% 20/09/2014
+% 05/08/2016
 % Eleftherios Avramidis
-% Circadian clock model - OpenCL Implicit Euler Solver
+% ODECL Caller
 
 close all;
 clear all;
-% clc;
 
-pop=512;
+pop=8;
 
 % Broomhead et al. (2000)
 y0=[0 0 0 0 0 2];
@@ -20,17 +19,17 @@ x0=[120 1.5 0.0045 0.05 600 9];
 x_params=repmat(x0,pop,1);
 
 % Random parameters
-a = [1,        0.0001,    0.001,       0,         1,      0.00001];
-b = [1000,     60,        0.1,         6.0,        1000,   60 ];
-x_params = repmat(a,pop,1) + repmat((b-a),pop,1).*rand(pop,6);
+% a = [1,        0.0001,    0.001,       0,         1,      0.00001];
+% b = [1000,     60,        0.1,         6.0,        1000,   60 ];
+% x_params = repmat(a,pop,1) + repmat((b-a),pop,1).*rand(pop,6);
 
 platform = 3; 
 device = 0;
 kernel = 'broomhead.cl';
 initx = x_y0;
 params = x_params;
-solver = 'ie';
-orbits = 512;
+solver = 'im';
+orbits = pop;
 nequat = 6;
 nparams = 6;
 dt = 1e-5;
@@ -44,5 +43,8 @@ delete('odecloutput.bin');
 
 plot(yout(:,1),'r');
 hold on
-load('jerkexpfloat.mat')
-plot(jerkexpfloat,'b--');
+% load('jerkexpfloat.mat')
+% plot(jerkexpfloat,'b--');
+
+load('xpp.mat')
+plot(Y(:,1),'b--');

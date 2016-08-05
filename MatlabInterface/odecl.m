@@ -52,6 +52,8 @@ switch solver
         odesolver=1;
     case 'ie'
         odesolver=2;
+    case 'im'
+        odesolver=3;
     otherwise
         odesolver=0;
 end

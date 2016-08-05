@@ -80,8 +80,8 @@ inline static void newton(double dt, double t, double initial[_numeq_], double g
 			break;
 		}
 
-		calc_jacobian(guess2, jac, p);
-		//calc_jacobian_numerically(t, guess2, jac, p);
+		//calc_jacobian(guess2, jac, p);
+		calc_jacobian_numerically(t, guess2, jac, p);
 		for (int i = 0; i < _numeq_; i++)
 		{
 			for (int j = 0; j < _numeq_; j++)
