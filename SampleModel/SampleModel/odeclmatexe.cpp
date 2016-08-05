@@ -9,11 +9,9 @@
 
 #include "iostream"
 #include <odecl.hpp>
-
 #include <stdio.h>
 
 using namespace std;
-
 
 int main(int argc, char* argv[])
 {
@@ -126,17 +124,9 @@ int main(int argc, char* argv[])
 		std::cout << "Argument 11 - Number of ODE solvers executed in each OpenCL kernel call" << std::endl;
 	}
 
-	odecl::system *mysystem = new odecl::system("C:/Workfolder/ODECL_Repositories/odecl/odecl/kernels", &a_system[0], a_solver, a_dt, a_tspan, a_ksteps, a_equats, a_nparams, a_orbits, odecl::output_Type::File);
+	odecl::system *mysystem = new odecl::system("kernels", &a_system[0], a_solver, a_dt, a_tspan, a_ksteps, a_equats, a_nparams, a_orbits, odecl::output_Type::File);
 
 	mysystem->set_outputfile("odecloutput.bin");
-
-	//odecl::system *mysystem = new odecl::system("C:/Workfolder/ODECL_Repositories/odecl/odecl/kernels", "broomhead.cl", odecl::solver_Type::RungeKutta, 1e-6, 6, 400, equat_num, param_num, list_size, odecl::output_Type::File);
-
-
-	//odecl::system *mysystem = new odecl::system("broomhead.cl", odecl::solver_Type::Euler, 1e-7, 6, 4000, equat_num, param_num, list_size);
-	//odecl::system *mysystem = new odecl::system("broomhead.cl", odecl::solver_Type::RungeKutta, 1e-6, 6, 400, equat_num, param_num, list_size);
-
-	//odecl::system *mysystem = new odecl::system(solver, dt, int_time, kernel_steps, num_equat, num_params, list_size);
 
 	int success;
 
