@@ -13,10 +13,14 @@ Currect fixed step solvers:
 1. Euler.
 2. Runge-Kutta.
 3. Implicit Euler.
+4. Implicit midpoint.
+
+Current interfaces:
+1. MATLAB script interface (no mex interface - there is an issue with Intel Threading Building Blocks when calling OpenCL for an Intel OpenCL device).
 
 Future work:
 
-1. MATLAB interface.
+1. MATLAB mex interface.
 2. More ODE solvers.
 3. Variable step ODE solvers.
 4. Benchmarks.
