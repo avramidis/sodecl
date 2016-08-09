@@ -84,6 +84,8 @@ namespace odecl
 			output_stream << m_oss.str();
 
 			output_stream.close();
+
+			m_oss.clear();
 		}
 	};
 
