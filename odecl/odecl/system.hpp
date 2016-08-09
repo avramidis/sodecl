@@ -180,7 +180,7 @@ namespace odecl
 
 			// Add default OpenCL build options
 			m_build_options.push_back(build_Option::FastRelaxedMath);
-			//m_build_options.push_back(build_Option::stdCL20);
+			m_build_options.push_back(build_Option::stdCL20);
 
 			//m_log->toFile();
 		}
@@ -650,17 +650,17 @@ namespace odecl
 			cl_device_id device_id = m_platforms[m_selected_platform]->m_devices[m_selected_device]->m_device_id;
 
 			// Build options
-			add_string_to_build_options_str("-D KHR_DP_EXTENSION ");
+			//add_string_to_build_options_str(" -D KHR_DP_EXTENSION ");
 			
 			for (build_Option option : m_build_options)
 			{
 				switch (option) 
 				{
 				case build_Option::FastRelaxedMath:
-					add_string_to_build_options_str("-cl-fast-relaxed-math ");
+					add_string_to_build_options_str(" -cl-fast-relaxed-math ");
 					break;
 				case build_Option::stdCL20:
-					add_string_to_build_options_str("-cl-std=CL2.0 ");
+					add_string_to_build_options_str(" -cl-std=CL2.0 ");
 					break;
 				}
 			}
@@ -698,8 +698,10 @@ namespace odecl
 				std::cout << "Error: " << err << std::endl;
 
 				std::cout << "Error: Failed to build program executable!" << std::endl;
+				
 				clGetProgramBuildInfo(m_programs[0], device_id, CL_PROGRAM_BUILD_LOG,
 					sizeof(buffer), buffer, &len);
+
 				std::cout << buffer << std::endl;
 				//system("pause");
 				return 0;

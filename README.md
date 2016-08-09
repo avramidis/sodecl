@@ -17,11 +17,11 @@ Currect fixed step solvers:
 
 Current interfaces:
 
-1. MATLAB script interface (no mex interface - there is an issue with Intel Threading Building Blocks when calling OpenCL for an Intel OpenCL device).
+1. MATLAB script interface.
 
 Future work:
 
-1. MATLAB mex interface.
+1. MATLAB mex interface. There is an issue with Intel Threading Building Blocks when calling OpenCL for an Intel OpenCL device. However, the latest MATLAB version (R2016a) seems not to have this issue.
 2. More ODE solvers.
 3. Variable step ODE solvers.
 4. Benchmarks.
