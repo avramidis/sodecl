@@ -681,25 +681,7 @@ namespace odecl
 			{
 				m_build_options_str.push_back(str[i]);
 			}
-			cout << endl;
 		}
-
-		///// <summary>
-		///// Generates the OpenCL build options string.
-		///// </summary>
-		///// <returns>Char pointer of the OpenCL build options string.</returns>
-		//string finalize_build_options_str()
-		//{
-		//	int m_source_size = m_build_options_str.size();
-		//	string str = new char[m_source_size];
-
-		//	for (int i = m_source_size-1; i < 0; i--)
-		//	{
-		//		str[i] = m_build_options_str.back();
-		//		m_build_options_str.pop_back();				
-		//	}
-		//	return str;
-		//}
 
 		/// <summary>
 		/// Build OpenCL program for the selected OpenCL device.
@@ -724,7 +706,10 @@ namespace odecl
 			}
 
 			const char *options = &m_build_options_str[0];
-			cerr << "Build options string: " << options << endl;
+			//cerr << "Build options string: " << options << endl;
+			m_log->write("Build options string: ");
+			m_log->write(options);
+			m_log->write("\n");
 
 			//const char * options = "-D KHR_DP_EXTENSION -x clc++ -cl-mad-enable";
 			//const char * options = "-D KHR_DP_EXTENSION -cl-opt-disable -cl-mad-enable";
@@ -1055,7 +1040,7 @@ namespace odecl
 				clFlush(m_command_queues[0]);
 				//clFinish(m_command_queues[0]);
 
-				//// Save data to disk or to data array - all variables
+				// Save data to disk or to data array - all variables
 				for (int jo = 1; jo <= 1; jo++)
 				{
 					for (int ji = jo - 1; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
@@ -1076,7 +1061,7 @@ namespace odecl
 			// Save data to disk or to data array - all variables
 			for (int jo = 1; jo <= 1; jo++)
 			{
-				for (int ji = jo - 1; ji < m_list_size*m_num_equat; ji = ji + 6)
+				for (int ji = jo - 1; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
 				{
 					if (m_output_type == odecl::output_Type::File)
 					{
