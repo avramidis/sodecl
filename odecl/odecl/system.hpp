@@ -9,6 +9,7 @@
 #define ODECL_SYSTEM_HPP
 
 #include <vector>
+#include <list>
 #include <iostream>
 
 #include <string>
@@ -74,7 +75,8 @@ namespace odecl
 		std::vector<char> m_kernel_sources;
 
 		// Char vector which stores the OpenCL build options string.
-		std::vector<char> m_build_options_str;
+		//std::list<char> m_build_options_str;
+		std::string m_build_options_str;
 
 		// build_Option vector which stores the OpenCL build options selection.
 		std::vector<build_Option> m_build_options;
@@ -433,19 +435,56 @@ namespace odecl
 
 		void read_kernel_file(char* filename)
 		{
+
+			//std::ifstream t(filename, std::ifstream::in);
+			
+			//std::string str((std::istreambuf_iterator<char>(t)),
+				//std::istreambuf_iterator<char>());
+
 			std::ifstream t(filename);
-			t.seekg(0, std::ios::end);
-			size_t size = t.tellg();
-			std::string str(size, ' ');
-			t.seekg(0);
-			t.read(&str[0], size);
 
-			m_source_size = str.length();
+			if (t.is_open()) {
+				t.seekg(0, std::ios::end);
+				size_t size = t.tellg();
+				std::string str(size, ' ');
+				t.seekg(0);
+				t.read(&str[0], size);
+				t.close();
 
-			for (int i = 0; i < m_source_size; i++)
-			{
-				m_kernel_sources.push_back(str[i]);
+				m_source_size = str.length();
+
+				for (int i = 0; i < m_source_size; i++)
+				{
+					m_kernel_sources.push_back(str[i]);
+				}
 			}
+			else {
+				// show message:
+				std::cout << "Error opening file";
+			}
+
+			
+
+			//std::string str;
+			//t.seekg(0, std::ios::end);
+			//str.reserve(t.tellg());
+			//t.seekg(0, std::ios::beg);
+
+			//str.assign((std::istreambuf_iterator<char>(t)),
+			//	std::istreambuf_iterator<char>());
+
+
+			//std::string str;
+			//if (t)
+			//{
+			//	t.seekg(0, std::ios::end);
+			//	str.resize(t.tellg());
+			//	t.seekg(0, std::ios::beg);
+			//	t.read(&str[0], str.size());
+			//	t.close();
+			//}
+
+
 		}
 
 		/// <summary>
@@ -557,7 +596,6 @@ namespace odecl
 				std::cout << "No valid solver chosen!" << std::endl;
 			}
 
-
 			for (int i = 0; i < kernelpath.size(); i++)
 			{
 				kernelpath_char.push_back(kernelpath[i]);
@@ -581,12 +619,15 @@ namespace odecl
 			add_string_to_kernel_sources("\n");
 
 			// Print the string
-			// cout << m_kernel_sources.data() << endl;
+			//cout << m_kernel_sources.data() << endl;
 
+			//m_kernel_sources.shrink_to_fit();
 			m_source_size = m_kernel_sources.size();
 
+			//cout << m_kernel_sources.data() << endl;
+			
 			// This is for debug purpose
-			std::ofstream out("Generated_kernel.txt");
+			std::ofstream out("Generated_kernel.cl");
 			out << m_kernel_sources.data();
 			out.close();
 
@@ -602,6 +643,8 @@ namespace odecl
 			const char *srcptr[] = { m_kernel_sources.data() };
 
 			//std::cout << "Size of string is: " << m_source_size << std::endl;
+
+			//cout << "Size of kernel " << m_source_size << endl;
 
 			cl_int err;
 			cl_program program = clCreateProgramWithSource(m_contexts.at(0), 1, srcptr, (const size_t *)&m_source_size, &err);
@@ -638,7 +681,25 @@ namespace odecl
 			{
 				m_build_options_str.push_back(str[i]);
 			}
+			cout << endl;
 		}
+
+		///// <summary>
+		///// Generates the OpenCL build options string.
+		///// </summary>
+		///// <returns>Char pointer of the OpenCL build options string.</returns>
+		//string finalize_build_options_str()
+		//{
+		//	int m_source_size = m_build_options_str.size();
+		//	string str = new char[m_source_size];
+
+		//	for (int i = m_source_size-1; i < 0; i--)
+		//	{
+		//		str[i] = m_build_options_str.back();
+		//		m_build_options_str.pop_back();				
+		//	}
+		//	return str;
+		//}
 
 		/// <summary>
 		/// Build OpenCL program for the selected OpenCL device.
@@ -646,27 +707,24 @@ namespace odecl
 		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
 		int build_program()
 		{
-			
 			cl_device_id device_id = m_platforms[m_selected_platform]->m_devices[m_selected_device]->m_device_id;
-
-			// Build options
-			//add_string_to_build_options_str(" -D KHR_DP_EXTENSION ");
 			
 			for (build_Option option : m_build_options)
 			{
 				switch (option) 
 				{
 				case build_Option::FastRelaxedMath:
-					add_string_to_build_options_str(" -cl-fast-relaxed-math ");
+					add_string_to_build_options_str("-cl-fast-relaxed-math ");
 					break;
 				case build_Option::stdCL20:
-					add_string_to_build_options_str(" -cl-std=CL2.0 ");
+					add_string_to_build_options_str("-cl-std=CL2.0 ");
+					//add_string_to_build_options_str("-x clc++ ");
 					break;
 				}
 			}
 
-			m_build_options_str.shrink_to_fit();
-			const char *options = m_build_options_str.data();
+			const char *options = &m_build_options_str[0];
+			cerr << "Build options string: " << options << endl;
 
 			//const char * options = "-D KHR_DP_EXTENSION -x clc++ -cl-mad-enable";
 			//const char * options = "-D KHR_DP_EXTENSION -cl-opt-disable -cl-mad-enable";
@@ -688,6 +746,7 @@ namespace odecl
 			//const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math -cl-nv-allow-expensive-optimizations";
 			//const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math";
 			//const char * options = "";
+			//const char * options = "-cl-fast-relaxed-math -cl-std=CL2.0";
 
 			cl_int err = clBuildProgram(m_programs[0], 1, &device_id, options, NULL, NULL);
 			if (err != CL_SUCCESS)
@@ -703,7 +762,6 @@ namespace odecl
 					sizeof(buffer), buffer, &len);
 
 				std::cout << buffer << std::endl;
-				//system("pause");
 				return 0;
 			}
 			
@@ -973,13 +1031,20 @@ namespace odecl
 
 				err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat, orbits_out, 0, NULL, NULL);
 				
-				if (local != 0)
+				try
 				{
-					err = clEnqueueNDRangeKernel(m_command_queues[0], m_kernels[0], 1, NULL, &global, &local, 0, NULL, NULL);
+					if (local != 0)
+					{
+						err = clEnqueueNDRangeKernel(m_command_queues[0], m_kernels[0], 1, NULL, &global, &local, 0, NULL, NULL);
+					}
+					else
+					{
+						err = clEnqueueNDRangeKernel(m_command_queues[0], m_kernels[0], 1, NULL, &global, NULL, 0, NULL, NULL);
+					}
 				}
-				else
+				catch (const std::exception &e)
 				{
-					err = clEnqueueNDRangeKernel(m_command_queues[0], m_kernels[0], 1, NULL, &global, NULL, 0, NULL, NULL);
+					m_log->write("The call to the OpenCL device has failed.");
 				}
 				
 				if (err)
