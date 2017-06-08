@@ -39,125 +39,93 @@ namespace odecl
 		*/
 	public:
 		
-		cl_double *m_output;
-		int m_output_size;
+		cl_double	*m_output;			/**< Output */
+		int			m_output_size;		/**< Output size */
 
 	private:
 
 		/********************************************************************************************
 		OPENCL HARDWARE SECTION VARIABLES
 		*/
-		// Number of OPENCL platforms
-		cl_uint m_platform_count;
 
-		// Vector which stores the odecl::platform objects. One object for each OpenCL platform.
-		std::vector<odecl::platform*> m_platforms;
-
-		// The index of the selected odecl::platform object in the m_platforms vector.
-		cl_uint m_selected_platform;
-
-		// The index of the selected odecl::device object in m_devices vector of selected platform.
-		cl_uint m_selected_device;
-
-		// Selected OpenCL device type.
-		device_Type m_selected_device_type;
+		cl_uint							m_platform_count;			/**< Number of OPENCL platforms */
+		std::vector<odecl::platform*>	m_platforms;				/**< Vector which stores the odecl::platform objects. One object for each OpenCL platform */
+		cl_uint							m_selected_platform;		/**< The index of the selected odecl::platform object in the m_platforms vector */		
+		cl_uint							m_selected_device;			/**< The index of the selected odecl::device object in m_devices vector of selected platform */		
+		device_Type						m_selected_device_type;		/**< Selected OpenCL device type. */
 
 		/********************************************************************************************
 		OPENCL SOFTWARE SECTION VARIABLES
 		*/
 
-		// OpenCL command contexts vector.
-		std::vector<cl_context> m_contexts;
+		std::vector<cl_context>			m_contexts;				/**< OpenCL command contexts vector */
+		std::vector<cl_command_queue>	m_command_queues;		/**< OpenCL command queues vector */
+		std::vector<char>				m_kernel_sources;		/**< Char vector which stores the OpenCL kernel source string. @todo store multiple kernel source strings */
+		std::string						m_build_options_str;	/**< Char vector which stores the OpenCL build options string */
+		std::vector<build_Option>		m_build_options;		/**< build_Option vector which stores the OpenCL build options selection */
+		char							*m_source_str;			/**< OpenCL kernel string */
+		string							m_kernel_path_str;		/**< OpenCL kernels solvers path */
+		size_t							m_source_size;			/**< OpenCL kernel string size */
+		std::vector<cl_program>			m_programs;				/**< OpenCL programs vector */
+		std::vector<cl_kernel>			m_kernels;				/**< OpenCL kernels vector */
+		int								m_local_group_size;		/**< OpenCL device local group size */
 
-		// OpenCL command queues vector.
-		std::vector<cl_command_queue> m_command_queues;
-
-		// Char vector which stores the OpenCL kernel source string. TODO: store multiple kernel source strings.
-		std::vector<char> m_kernel_sources;
-
-		// Char vector which stores the OpenCL build options string.
-		//std::list<char> m_build_options_str;
-		std::string m_build_options_str;
-
-		// build_Option vector which stores the OpenCL build options selection.
-		std::vector<build_Option> m_build_options;
-
-		// OpenCL kernel string.
-		char *m_source_str;
-
-		// OpenCL kernels solvers path.
-		string m_kernel_path_str;
-		
-		// OpenCL kernel string size.
-		size_t m_source_size;
-
-		// OpenCL programs vector.
-		std::vector<cl_program> m_programs;
-
-		// OpenCL kernels vector.
-		std::vector<cl_kernel> m_kernels;
-
-		// OpenCL device local group size.
-		int m_local_group_size;
-
-		// ODE solvers OpenCL buffers.
-		cl_mem m_mem_t0;				// OpenCL memory buffer which stores the time value of each integration output step.
-		cl_mem m_mem_y0;				// OpenCL memory buffer which stores the phase state of each integration output step.
-		cl_mem m_mem_params;			// OpenCL memory buffer which stores the parameter values of each integration orbit of the ODE system.
-		cl_mem m_mem_dt;				// OpenCL memory buffer which stores the time step for each integration orbit of the ODE system.
-		cl_mem m_mem_rcounter;          // OpenCL memory buffer which stores the counters for each workitem for the random number generation.
-
-		// Path to the results output file.
-		char *m_outputfile_str;
+		// ODE solvers OpenCL buffers
+		cl_mem	m_mem_t0;				/**< OpenCL memory buffer which stores the time value of each integration output step */ 
+		cl_mem	m_mem_y0;				/**< OpenCL memory buffer which stores the phase state of each integration output step */ 
+		cl_mem	m_mem_params;			/**< OpenCL memory buffer which stores the parameter values of each integration orbit of the ODE system */ 
+		cl_mem	m_mem_dt;				/**< OpenCL memory buffer which stores the time step for each integration orbit of the ODE system */ 
+		cl_mem	m_mem_rcounter;			/**< OpenCL memory buffer which stores the counters for each workitem for the random number generation */ 
+		char	*m_outputfile_str;		/**< Path to the results output file */
 
 		/********************************************************************************************
 		ODE SOLVERS SECTION VARIABLES
 		*/
 
-		char *m_ode_system_string;
-
-		solver_Type m_solver;			// ODE solver type.
-		double m_dt;					// Solver (initial) time step in seconds.
-		double m_int_time;				// Time units to integrate the ODE system.
-		int m_kernel_steps;				// Number of step the solver with perform in each kernel call.
-		int m_kernel_steps_multiplier;	// Nuymber of times the kernel steps will be multiplied. The times the results will be saved in the global memory.
-		int m_num_dt_steps;				// Number of dt steps for the state of the ODE system to be saved.
-		int m_list_size;				// Number of ODE system parameter combinations.
-		int m_num_equat;				// Number of ODE system equations.
-		int m_num_params;				// Number of ODE system parameters.
-		int m_num_noi;					// Number of noise processes
-		output_Type m_output_type;		// Type of output (binary file or array).
-
-		int *m_outputPattern;			// Array which holds the output pattern. E.g. if the system has 3 equations the array {1,2,3}
-										// will write to the output file the results of the 1st then 2nd and then 3rd state variable.
+		char			*m_ode_system_string;			/**< ODE or SDE system OpenCL function */
+		solver_Type		m_solver;						/**< ODE solver type */ 
+		double			m_dt;							/**< Solver (initial) time step in seconds */ 
+		double			m_int_time;						/**< Time units to integrate the ODE system */ 
+		int				m_kernel_steps;					/**< Number of step the solver with perform in each kernel call */ 
+		int				m_kernel_steps_multiplier;		/**< Nuymber of times the kernel steps will be multiplied. The times the results will be saved in the global memory */ 
+		int				m_num_dt_steps;					/**< Number of dt steps for the state of the ODE system to be saved */
+		int				m_list_size;					/**< Number of ODE system parameter combinations */ 
+		int				m_num_equat;					/**< Number of ODE system equations */ 
+		int				m_num_params;					/**< Number of ODE system parameters */ 
+		int				m_num_noi;						/**< Number of noise processes */ 
+		output_Type		m_output_type;					/**< Type of output (binary file or array) */ 
+		int				*m_outputPattern;				/**< Array which holds the output pattern. E.g. if the system has 3 equations the array {1,2,3}   
+															 will write to the output file the results of the 1st then 2nd and then 3rd state variable */
 
 		// arrays with the state of the system for each parameter combination
-		cl_double *m_t0;				// Client memory buffer which stores the time value of each integration output step.
-		cl_double *m_y0;				// Client memory buffer which stores the phase state of each integration output step.
-		cl_double *m_params;			// Client memory buffer which stores the parameter values of each integration orbit of the ODE system.
-		cl_double *m_dts;				// Client memory buffer which stores the time step for each integration orbit of the ODE system.							
-		cl_double *m_rcounter;			// Counter that counts the number of calls to the random number generator
+		cl_double *m_t0;			/**< Client memory buffer which stores the time value of each integration output step */ 
+		cl_double *m_y0;			/**< Client memory buffer which stores the phase state of each integration output step */  
+		cl_double *m_params;		/**< Client memory buffer which stores the parameter values of each integration orbit of the ODE system */ 
+		cl_double *m_dts;			/**< Client memory buffer which stores the time step for each integration orbit of the ODE system */ 							
+		cl_double *m_rcounter;		/**< Counter that counts the number of calls to the random number generator */ 
 
 		// Log mechanisms
-		clog *m_log;					// Pointer for log.
+		clog *m_log;				/**< Pointer for log */ 
 
 		/*********************************************************************************************
 		FUNCTIONS SECTION
 		*/
 	public:
-		/// <summary>
-		/// Default constructor which initialises the odecl object. 
-		/// </summary>
-		/// <param name="kernel_path_str">Path to the OpenCL ODE solvers kernel source files.</param>
-		/// <param name="ode_system_str">Path to the OpenCL ODE system source file.</param>
-		/// <param name="solver">Type of the solver that will be used to integrate the ODE system.</param>
-		/// <param name="dt">ODE solver time step size.</param>
-		/// <param name="int_time">Length of time in seconds the the ODE system with be integrated.</param>
-		/// <param name="kernel_steps">Number of steps the ODE solver will perform in each OpenCL device call.</param>
-		/// <param name="num_equat">Number of equations of the ODE system.</param>
-		/// <param name="num_params">Number of parameters of the ODE system.</param>
-		/// <param name="list_size">Number of orbits to be integrated for the ODE system.</param>
-		/// <param name="output_type">Specifies the location where the output of the integration of the ODE system will be stored.</param>
+	
+		/**
+		*  Default constructor which initialises the odecl object. 
+		*
+		* @param  kernel_path_str		Path to the OpenCL ODE solvers kernel source files.
+		* @param  ode_system_str		Path to the OpenCL ODE system source file.
+		* @param  solver				Type of the solver that will be used to integrate the ODE system.
+		* @param  dt					ODE solver time step size.
+		* @param  int_time				Length of time in seconds the the ODE system with be integrated.
+		* @param  kernel_steps			Number of steps the ODE solver will perform in each OpenCL device call.
+		* @param  num_equat				Number of equations of the ODE system.
+		* @param  num_params			Number of parameters of the ODE system.
+		* @param  list_size				Number of orbits to be integrated for the ODE system.
+		* @param  output_type			Specifies the location where the output of the integration of the ODE system will be stored.
+		*/
 		system(string kernel_path_str, char *ode_system_str, solver_Type solver, double dt, double int_time, int kernel_steps, int kernel_steps_multiplier, int num_equat, int num_params, int num_noi, int list_size, output_Type output_type)
 		{
 			// Initialise the clog object
