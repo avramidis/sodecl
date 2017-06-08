@@ -1,5 +1,7 @@
 # odecl
 
+**Refactoring: many stuff probably don't work.**
+
 ODECL is a library of ordinary differential equation (ODE) and stochastic differential equation (SDE) solvers in OpenCL. 
 Using ODECL the user can calculate the integration orbits of a ODE system for a large number of different parameter values.  
 One example of the usefullness of this is the fitting an ODE system representing a biological model to experimental data. 
