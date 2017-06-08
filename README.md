@@ -1,6 +1,6 @@
 # odecl
 
-ODECL is a library of ordinary differential equation (ODE) solvers in OpenCL. 
+ODECL is a library of ordinary differential equation (ODE) and stochastic differential equation (SDE) solvers in OpenCL. 
 Using ODECL the user can calculate the integration orbits of a ODE system for a large number of different parameter values.  
 One example of the usefullness of this is the fitting an ODE system representing a biological model to experimental data. 
 When optimising an ODE biological model using for example genetic algorithms the ODE model has to be calculated for a large number of different parameter values combinations.
@@ -13,10 +13,11 @@ The library is currently at an early stage of development.
 
 Currect fixed step solvers:
 
-1. Euler.
-2. Runge-Kutta.
-3. Implicit Euler.
-4. Implicit midpoint.
+1. Euler
+2. Runge-Kutta
+3. Implicit Euler
+4. Implicit midpoint
+5. Euler-Maruyama
 
 Current interfaces:
 
@@ -25,12 +26,13 @@ Current interfaces:
 Future work:
 
 1. MATLAB mex interface. There is an issue with Intel Threading Building Blocks when calling OpenCL for an Intel OpenCL device. However, the latest MATLAB version (R2016a) seems not to have this issue.
-2. More ODE solvers.
+2. More ODE and SDE solvers.
 3. Variable step ODE solvers.
 4. Benchmarks.
 5. Support for using multiple devices (e.g. CPUs+GPUs).
 6. Optimisation for AMD and NVIDIA GPUs.
 7. Tutorials.
+8. Doxygen documentation
 
 Example:
 
