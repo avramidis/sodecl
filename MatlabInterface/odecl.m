@@ -1,7 +1,7 @@
-function [tout,yout]  = odecl( platform, device, kernel, initx, params, solver, orbits, nequat, nparams, dt, tspan, ksteps )
+function [tout,yout]  = odecl( platform, device, kernel, initx, params, solver, orbits, nequat, nparams, nnoi, dt, tspan, ksteps, localgroupsize )
 %ODECL Interface for using the odecl solvers in MATLAB.
 %
-% Syntax:  [tout,yout] = ODECL( platform, device, kernel, initx, params, solver, orbits, nequat, nparams, dt, tspan, ksteps )
+% Syntax:  [tout,yout] = ODECL( platform, device, kernel, initx, params, solver, orbits, nequat, nparams, nnoi, dt, tspan, ksteps )
 %
 % Inputs:
 %   platform    - OpenCL platform number
@@ -13,6 +13,7 @@ function [tout,yout]  = odecl( platform, device, kernel, initx, params, solver, 
 %   orbits      - Number of orbits to be integrated
 %   nequat      - Number of equations of the ODE system
 %   nparams     - Number of parameter of the ODE system
+%   nnoi        - Number of noise processes
 %   dt          - ODE solver time step size
 %   tspan       - Integration time span
 %   ksteps      - Number of ODE solvers executed in each OpenCL kernel call
@@ -37,38 +38,53 @@ function [tout,yout]  = odecl( platform, device, kernel, initx, params, solver, 
 % $Date: 2016/07/25 $
 % $Version: 0.1 $
 % Copyright: MIT License
+% tic
+
+delete('t.bin');
+delete('odecloutput.bin');
+delete('odecllog.txt');
+delete('x_params.bin');
+delete('x_t0.bin');
+delete('x_y0.bin');
 
 % Write parameters and initial conditions to files
-dlmwrite('x_y0.txt', initx, 'delimiter', '\t','precision',10);
+
+% dlmwrite('x_y0.txt', initx, 'delimiter', '\t','precision',10);
+fileID = fopen('x_y0.bin','w');
+fwrite(fileID,initx','double');
+fclose(fileID);
+
 t0=0;
 x_t0=repmat(t0, orbits, 1);
-dlmwrite('x_t0.txt', x_t0, 'delimiter', '\t','precision',10);
-dlmwrite('x_params.txt', params, 'delimiter', '\t','precision',10);
+
+% dlmwrite('x_t0.txt', x_t0, 'delimiter', '\t','precision',10);
+fileID = fopen('x_t0.bin','w');
+fwrite(fileID,x_t0','double');
+fclose(fileID);
+
+% dlmwrite('x_params.txt', params, 'delimiter', '\t','precision',10);
+fileID = fopen('x_params.bin','w');
+fwrite(fileID,params','double');
+fclose(fileID);
 
 switch solver
     case 'e'
         odesolver=0;
-    case 'rk4'
-        odesolver=1;
-    case 'ie'
-        odesolver=2;
-    case 'im'
-        odesolver=3;
     otherwise
         odesolver=0;
 end
 
 % Run the opencl program
 [s w] = dos(['SampleModel.exe ' num2str(platform) ' ' num2str(device) ... 
-    ' ' kernel ' ' 'x_y0.txt' ' '  'x_params.txt' ' ' num2str(odesolver) ...
-    ' ' num2str(orbits) ' ' num2str(nequat) ' ' num2str(nparams) ' ' num2str(dt) ...
-    ' ' num2str(tspan) ' ' num2str(ksteps)], '-echo');
+    ' ' kernel ' ' 'x_y0.bin' ' '  'x_params.bin' ' ' num2str(odesolver) ...
+    ' ' num2str(orbits) ' ' num2str(nequat) ' ' num2str(nparams) ' ' num2str(nnoi) ...
+    ' ' num2str(dt) ' ' num2str(tspan) ' ' num2str(ksteps) ' ' num2str(localgroupsize)], '-echo');
 if s % then failed
-    disp(' Call to stochastic failed')
+    disp(' Call to SDECL failed')
     return
 end
 
 % get the results
 yout=getresults('odecloutput.bin', orbits);
-tout=0:0.0004:(size(yout(1,1,:),3)-1)*0.0004;
+tout=0:dt*ksteps:(length(yout)-1)*dt*ksteps;
 

@@ -5,8 +5,8 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef ODECL_PLATFORM_HPP
-#define ODECL_PLATFORM_HPP
+#ifndef odecl_PLATFORM_HPP
+#define odecl_PLATFORM_HPP
 
 #include <vector>
 
@@ -184,4 +184,4 @@ namespace odecl
 }
 
 
-#endif // ODECL_PLATFORM_HPP
+#endif // odecl_PLATFORM_HPP

@@ -5,8 +5,8 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef ODECL_OUTPUT_TYPE_HPP
-#define ODECL_OUTPUT_TYPE_HPP
+#ifndef odecl_OUTPUT_TYPE_HPP
+#define odecl_OUTPUT_TYPE_HPP
 
 namespace odecl
 {
@@ -19,4 +19,4 @@ namespace odecl
 }
 
 
-#endif // ODECL_OUTPUT_TYPE_HPP
+#endif // odecl_OUTPUT_TYPE_HPP

@@ -5,8 +5,8 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef ODECL_TIMER_HPP
-#define ODECL_TIMER_HPP
+#ifndef odecl_TIMER_HPP
+#define odecl_TIMER_HPP
 
 #include <iostream>
 #include <chrono>
@@ -32,7 +32,7 @@ namespace odecl
 			
 			std::time_t end_time = std::chrono::system_clock::to_time_t(end);
 
-			std::cout << "Elapsed time: " << elapsed_seconds.count() << " sec.\n";
+			//std::cout << "Elapsed time: " << elapsed_seconds.count() << " sec.\n";
 
 			return elapsed_seconds.count();
 		}
@@ -40,4 +40,4 @@ namespace odecl
 }
 
 
-#endif // ODECL_TIMER_HPP
+#endif // odecl_TIMER_HPP

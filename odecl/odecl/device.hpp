@@ -5,8 +5,8 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef ODECL_DEVICE_HPP
-#define ODECL_DEVICE_HPP
+#ifndef odecl_DEVICE_HPP
+#define odecl_DEVICE_HPP
 
 namespace odecl
 {
@@ -107,4 +107,4 @@ namespace odecl
 }
 
 
-#endif // ODECL_DEVICE_HPP
+#endif // odecl_DEVICE_HPP

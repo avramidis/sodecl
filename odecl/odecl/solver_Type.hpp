@@ -5,18 +5,19 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef ODECL_SOLVER_TYPE_HPP
-#define ODECL_SOLVER_TYPE_HPP
+#ifndef odecl_SOLVER_TYPE_HPP
+#define odecl_SOLVER_TYPE_HPP
 
 namespace odecl
 {
 	enum class solver_Type
 	{
-		Euler = 0,
-		RungeKutta = 1,
-		ImplicitEuler = 2,
-		ImplicitMidpoint = 3
+		StochasticEuler = 0,
+		Euler = 1,
+		RungeKutta = 2,
+		ImplicitEuler = 3,
+		ImplicitMidpoint = 4
 	};
 }
 
-#endif // ODECL_SOLVER_TYPE_HPP
+#endif // odecl_SOLVER_TYPE_HPP

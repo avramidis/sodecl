@@ -5,8 +5,8 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef ODECL_MAINCL_HPP
-#define ODECL_MAINCL_HPP
+#ifndef odecl_MAINCL_HPP
+#define odecl_MAINCL_HPP
 
 #define CL_USE_DEPRECATED_OPENCL_2_0_APIS
 #define _SCL_SECURE_NO_WARNINGS
@@ -29,4 +29,4 @@
 #include <odecl/platform.hpp>
 #include <odecl/system.hpp>
 
-#endif // ODECL_MAINCL_HPP
+#endif // odecl_MAINCL_HPP

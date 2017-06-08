@@ -23,24 +23,32 @@ x_params=repmat(x0,pop,1);
 % b = [1000,     60,        0.1,         6.0,        1000,   60 ];
 % x_params = repmat(a,pop,1) + repmat((b-a),pop,1).*rand(pop,6);
 
-platform = 3; 
-device = 0;
-kernel = 'broomhead.cl';
+platform = 0;
+device = 1;
+kernel = 'Broomhead.cl';
 initx = x_y0;
 params = x_params;
-solver = 'im';
+solver = 'e';
 orbits = pop;
 nequat = 6;
 nparams = 6;
-dt = 1e-5;
+nnoise = 4;
+dt = 5e-6;
 tspan = 6;
-ksteps = 40;
+ksteps = 80;
 
 % run simulations
 delete('t.bin');
 delete('odecloutput.bin');
-[tout,yout]=odecl(platform, device, kernel, initx, params, solver, orbits, nequat, nparams, dt, tspan, ksteps );
+delete('odecllog.txt');
+delete('x_params.txt');
+delete('x_t0.txt');
+delete('x_y0.txt');
+tic
+[tout,yout]=odecl(platform, device, kernel, initx, params, solver, orbits, nequat, nparams, nnoise, dt, tspan, ksteps );
+toc
 
+%plot(yout(1:6:end,1),'r');
 plot(yout(:,1),'r');
 hold on
 % load('jerkexpfloat.mat')

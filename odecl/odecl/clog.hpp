@@ -5,8 +5,8 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef ODECL_CLOG_HPP
-#define ODECL_CLOG_HPP
+#ifndef odecl_CLOG_HPP
+#define odecl_CLOG_HPP
 
 #include <string>
 #include <sstream>
@@ -95,4 +95,4 @@ namespace odecl
 }
 
 
-#endif // ODECL_CLOG_HPP
+#endif // odecl_CLOG_HPP
