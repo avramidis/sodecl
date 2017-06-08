@@ -1,4 +1,4 @@
-function [tout,yout]  = odecl( platform, device, kernel, initx, params, solver, orbits, nequat, nparams, nnoi, dt, tspan, ksteps, localgroupsize )
+function [tout,yout]  = odecl( platform, device, kernel, initx, params, solver, orbits, nequat, nparams, nnoi, dt, tspan, ksteps, ksteps_multi, localgroupsize )
 %ODECL Interface for using the odecl solvers in MATLAB.
 %
 % Syntax:  [tout,yout] = ODECL( platform, device, kernel, initx, params, solver, orbits, nequat, nparams, nnoi, dt, tspan, ksteps )
@@ -31,7 +31,7 @@ function [tout,yout]  = odecl( platform, device, kernel, initx, params, solver, 
 % MAT-files required: none
 % Other dependencies: odecl executable
 %
-% See also: nan
+% See also: none
 %
 % $Author: Eleftherios Avramidis $
 % $Email: el.avramidis@gmail.com $
@@ -68,17 +68,29 @@ fwrite(fileID,params','double');
 fclose(fileID);
 
 switch solver
-    case 'e'
+    case 'se'
         odesolver=0;
+    case 'e'
+        odesolver=1;
+    case 'r'
+        odesolver=2;
+    case 'ie'
+        odesolver=3;
+    case 'im'
+        odesolver=4;
     otherwise
         odesolver=0;
 end
 
-% Run the opencl program
-[s w] = dos(['SampleModel.exe ' num2str(platform) ' ' num2str(device) ... 
+['odecl.exe ' num2str(platform) ' ' num2str(device) ... 
     ' ' kernel ' ' 'x_y0.bin' ' '  'x_params.bin' ' ' num2str(odesolver) ...
     ' ' num2str(orbits) ' ' num2str(nequat) ' ' num2str(nparams) ' ' num2str(nnoi) ...
-    ' ' num2str(dt) ' ' num2str(tspan) ' ' num2str(ksteps) ' ' num2str(localgroupsize)], '-echo');
+    ' ' num2str(dt) ' ' num2str(tspan) ' ' num2str(ksteps) ' ' num2str(ksteps_multi) ' ' num2str(localgroupsize)]
+% Run the opencl program
+[s w] = dos(['odecl.exe ' num2str(platform) ' ' num2str(device) ... 
+    ' ' kernel ' ' 'x_y0.bin' ' '  'x_params.bin' ' ' num2str(odesolver) ...
+    ' ' num2str(orbits) ' ' num2str(nequat) ' ' num2str(nparams) ' ' num2str(nnoi) ...
+    ' ' num2str(dt) ' ' num2str(tspan) ' ' num2str(ksteps) ' ' num2str(ksteps_multi) ' ' num2str(localgroupsize)], '-echo');
 if s % then failed
     disp(' Call to SDECL failed')
     return
