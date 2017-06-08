@@ -48,13 +48,14 @@ inline static void newton_f_mid(double dt, double t, double initial[_numeq_], do
 	}
 }
 
-inline static void newton(double dt, double t, double initial[_numeq_], double guess[_numeq_], double detterm[_numeq_], double p[_numpar_])
+inline static void newton(double dt, double t, double initial[_numeq_], double detterm[_numeq_], double p[_numpar_])
 {
 	double jac[_numeq_][_numeq_];
 	double new_out[_numeq_];
 	double multi_out[_numeq_];
 	double err1;
 
+	double guess[_numeq_];
 	for (int i = 0; i < _numeq_; i++)
 	{
 		guess[i] = initial[i];
@@ -108,12 +109,12 @@ inline static void newton(double dt, double t, double initial[_numeq_], double g
 // Implicit midpoint solver
 inline static void ode_solver(double dt, double t, double y[_numeq_], double yout[_numeq_], double p[_numpar_])
 {
-	double guess[_numeq_];
+	//double guess[_numeq_];
 
-	for (int i = 0; i < _numeq_; i++)
-	{
-		guess[i] = y[i];
-	}
+	//for (int i = 0; i < _numeq_; i++)
+	//{
+	//	guess[i] = y[i];
+	//}
 
-	newton(dt, t, y, guess, yout, p);
+	newton(dt, t, y, yout, p);
 }
