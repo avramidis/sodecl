@@ -20,10 +20,10 @@ __kernel void solver_caller(__global double *t0,
 
 	t = t0[i];
 
-	int k = i * _numeq_;
+	int k = i * _numeq_*_numstepsmulti_;
 	for (int m = 0; m < _numeq_; m++)
 	{
-		y[m] = y0[k + m];
+		y[m] = y0[k + (_numstepsmulti_-1) * _numeq_ + m];
 	}
 
 	k = i * _numpar_;
@@ -98,10 +98,10 @@ __kernel void solver_caller(__global double *t0,
 		}
 
 		t0[i] = t;
-		k = i * _numeq_;
+		k = i * _numeq_*_numstepsmulti_;
 		for (int m = 0; m < _numeq_; m++)
 		{
-			y0[km * _numeq_ + k + m] = y[m];
+			y0[k + km * _numeq_ + m] = y[m];
 		}
 		counter_g[i] = counter;
 	}	

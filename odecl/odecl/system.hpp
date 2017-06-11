@@ -29,9 +29,9 @@ using namespace std;
 
 namespace odecl
 {
-	/// <summary>
-	/// CLASS SYSTEM is the main class of the ODECL library.
-	/// </summary>
+	/**
+	*  Manager class of ODECL.
+	*/
 	class system
 	{
 		/*********************************************************************************************
@@ -963,7 +963,12 @@ namespace odecl
 		{
 			int err = 0;
 			err |= clEnqueueWriteBuffer(commands, m_mem_t0, CL_TRUE, 0, list_size * sizeof(cl_double), m_t0, 0, NULL, NULL);
-			err |= clEnqueueWriteBuffer(commands, m_mem_y0, CL_TRUE, 0, list_size * sizeof(cl_double)*equat_num*kernel_steps_multiplier, m_y0, 0, NULL, NULL);
+			
+			for (int i = 0; i < m_kernel_steps_multiplier; ++i)
+			{
+				err |= clEnqueueWriteBuffer(commands, m_mem_y0, CL_TRUE, list_size * sizeof(cl_double)*equat_num*i, list_size * sizeof(cl_double)*equat_num, m_y0, 0, NULL, NULL);
+			}
+
 			err |= clEnqueueWriteBuffer(commands, m_mem_params, CL_TRUE, 0, list_size * sizeof(cl_double)*param_num, m_params, 0, NULL, NULL);
 			
 			if (m_num_noi > 0)
@@ -1207,6 +1212,10 @@ namespace odecl
 
 			timer start_timer;
 
+			// Run the initial values to the output file.
+			int m_kernel_steps_multiplier_orin = m_kernel_steps_multiplier;
+			m_kernel_steps_multiplier = 1;
+
 			int count = 0;
 			//std::cout << "Running kernel.." << std::endl;
 			cl_int err;
@@ -1264,6 +1273,7 @@ namespace odecl
 						}
 					}
 				//}
+				m_kernel_steps_multiplier = m_kernel_steps_multiplier_orin;
 			}
 			
 			// Save the data from the last kernel call.
