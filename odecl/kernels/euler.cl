@@ -11,8 +11,8 @@ inline static void ode_solver(double dt, double t, double y[_numeq_], double you
 {
 	ode_system(t, y, yout, p);
 
-	for (int i = 0; i < _numeq_; i++)
+	for (int ieq = 0; ieq < _numeq_; ieq++)
 	{
-		yout[i] = y[i] + yout[i] * dt;
+		yout[ieq] = y[ieq] + yout[ieq] * dt;
 	}
 }

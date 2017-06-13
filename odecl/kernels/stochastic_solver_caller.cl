@@ -21,15 +21,15 @@ __kernel void solver_caller(__global double *t0,
 	t = t0[i];
 
 	int k = i * _numeq_*_numstepsmulti_;
-	for (int m = 0; m < _numeq_; m++)
+	for (int ieq = 0; ieq < _numeq_; ieq++)
 	{
-		y[m] = y0[k + (_numstepsmulti_-1) * _numeq_ + m];
+		y[ieq] = y0[k + (_numstepsmulti_-1) * _numeq_ + ieq];
 	}
 
 	k = i * _numpar_;
-	for (int m = 0; m < _numpar_; m++)
+	for (int ipar = 0; ipar < _numpar_; ipar++)
 	{
-		params[m] = params_g[k + m];
+		params[ipar] = params_g[k + ipar];
 	}
 
 	// Noise generators
@@ -42,15 +42,14 @@ __kernel void solver_caller(__global double *t0,
 	threefry4x64_ctr_t rr;
 
 	double u[4];
-
 	rk.v[0] = 0;
 
-	for (int km = 0; km < _numstepsmulti_; ++km)
+	int number_of_noise_calls = ceil((float)((float)(_numnoi_) * 0.25));
+
+	for (int km = 0; km < _numstepsmulti_; km++)
 	{
-		int it;
-		for (it = 0; it < _numsteps_; it++)
+		for (int it = 0; it < _numsteps_; it++)
 		{
-			int number_of_noise_calls = ceil((float)((float)(_numnoi_) * 0.25));
 			int ncounter = 0;
 			for (int in = 0; in < number_of_noise_calls; in++)
 			{
@@ -99,10 +98,10 @@ __kernel void solver_caller(__global double *t0,
 
 		t0[i] = t;
 		k = i * _numeq_*_numstepsmulti_;
-		for (int m = 0; m < _numeq_; m++)
+		for (int ieq = 0; ieq < _numeq_; ieq++)
 		{
-			y0[k + km * _numeq_ + m] = y[m];
+			y0[k + km * _numeq_ + ieq] = y[ieq];
 		}
-		counter_g[i] = counter;
 	}	
+	counter_g[i] = counter;
 }

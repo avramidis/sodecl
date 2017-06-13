@@ -963,11 +963,24 @@ namespace odecl
 		{
 			int err = 0;
 			err |= clEnqueueWriteBuffer(commands, m_mem_t0, CL_TRUE, 0, list_size * sizeof(cl_double), m_t0, 0, NULL, NULL);
-			
-			for (int i = 0; i < m_kernel_steps_multiplier; ++i)
+
+			cl_double *temp = new cl_double[m_list_size*m_num_equat*m_kernel_steps_multiplier];
+			for (int orbit = 0; orbit < list_size; orbit++)
 			{
-				err |= clEnqueueWriteBuffer(commands, m_mem_y0, CL_TRUE, list_size * sizeof(cl_double)*equat_num*i, list_size * sizeof(cl_double)*equat_num, m_y0, 0, NULL, NULL);
+				for (int km = 0; km < m_kernel_steps_multiplier; km++)
+				{
+					int k = orbit * m_num_equat * m_kernel_steps_multiplier;
+					for (int ieq = 0; ieq < m_num_equat; ieq++)
+					{
+						int i = k + km * m_num_equat + ieq;
+						temp[i] = m_y0[orbit*equat_num + ieq];
+					}
+				}
 			}
+
+			err |= clEnqueueWriteBuffer(commands, m_mem_y0, CL_TRUE, 0, list_size * sizeof(cl_double)*equat_num*m_kernel_steps_multiplier, temp, 0, NULL, NULL);
+
+			delete[] temp;
 
 			err |= clEnqueueWriteBuffer(commands, m_mem_params, CL_TRUE, 0, list_size * sizeof(cl_double)*param_num, m_params, 0, NULL, NULL);
 			
@@ -1219,12 +1232,12 @@ namespace odecl
 			int count = 0;
 			//std::cout << "Running kernel.." << std::endl;
 			cl_int err;
-			for (int j = 0; j < (m_int_time / m_dt / (m_kernel_steps * m_kernel_steps_multiplier)); j++)
+			for (int j = 0; j < (m_int_time / m_dt / (m_kernel_steps * m_kernel_steps_multiplier_orin)); j++)
 			{
 				//// Read buffer g into a local list
 				////err = clEnqueueReadBuffer(m_command_queues[0], m_mem_t0, CL_TRUE, 0, m_list_size * sizeof(cl_double), t_out, 0, NULL, NULL);
 
-				err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat * m_kernel_steps_multiplier, orbits_out, 0, NULL, NULL);
+				err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat * m_kernel_steps_multiplier_orin, orbits_out, 0, NULL, NULL);
 				
 				try
 				{
@@ -1277,7 +1290,7 @@ namespace odecl
 			}
 			
 			// Save the data from the last kernel call.
-			err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat * m_kernel_steps_multiplier, orbits_out, 0, NULL, NULL);			
+			err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat * m_kernel_steps_multiplier_orin, orbits_out, 0, NULL, NULL);
 			// Save data to disk or to data array - all variables
 			for (int jo = 0; jo < m_num_equat; jo++)
 			{
