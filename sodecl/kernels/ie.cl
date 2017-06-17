@@ -7,7 +7,7 @@
 
 
 // The tridiagonal matrix algorithm (Thomas algorithm)
-void solveSystem(double jac[_numeq_][_numeq_], double v[_numeq_], double x[_numeq_])
+void solvesystem(double jac[_numeq_][_numeq_], double v[_numeq_], double x[_numeq_])
 {
 	double a[_numeq_];
 	for (int i = _numeq_ - 2; i < _numeq_; i++)
@@ -91,7 +91,7 @@ void newton(double dt, double t, double initial[_numeq_], double guess[_numeq_],
 			jac[i][i] = jac[i][i] + 1;
 		}
 
-		solveSystem(jac, new_out, multi_out);
+		solvesystem(jac, new_out, multi_out);
 		for (int i = 0; i < _numeq_; i++)
 		{
 			guess[i] = guess[i] - multi_out[i];

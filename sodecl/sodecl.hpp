@@ -27,6 +27,6 @@
 #include <sodecl/solver_Type.hpp>
 #include <sodecl/device.hpp>
 #include <sodecl/platform.hpp>
-#include <sodecl/system.hpp>
+#include <sodecl/sodeclmgr.hpp>
 
 #endif // SODECL_MAINCL_HPP

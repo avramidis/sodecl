@@ -5,8 +5,8 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef sodecl_SYSTEM_HPP
-#define sodecl_SYSTEM_HPP
+#ifndef sodecl_system_HPP
+#define sodecl_system_HPP
 
 #include <vector>
 #include <list>
@@ -32,7 +32,7 @@ namespace sodecl
 	/**
 	*  Manager class of sodecl.
 	*/
-	class system
+	class sodeclmgr
 	{
 		/*********************************************************************************************
 		VARIABLES SECTION
@@ -125,7 +125,7 @@ namespace sodecl
 		* @param  list_size				Number of orbits to be integrated for the ODE system
 		* @param  output_type			Specifies the location where the output of the integration of the ODE system will be stored
 		*/
-		system(string kernel_path_str, char *ode_system_str, solver_Type solver, double dt, double int_time, int kernel_steps, int num_equat, int num_params, int num_noi, int list_size, output_Type output_type)
+		sodeclmgr(string kernel_path_str, char *ode_system_str, solver_Type solver, double dt, double int_time, int kernel_steps, int num_equat, int num_params, int num_noi, int list_size, output_Type output_type)
 		{
 			// Initialise the clog object
 			m_log = clog::getInstance();
@@ -197,7 +197,7 @@ namespace sodecl
 		/**
 		*  Destructor. Deletes all objects, arrays, pointers, etc. 
 		*/
-		~system()
+		~sodeclmgr()
 		{
 			//delete m_ode_system_string;
 			delete m_output;
@@ -1423,4 +1423,4 @@ namespace sodecl
 }
 
 
-#endif // sodecl_SYSTEM_HPP
+#endif // sodecl_system_HPP

@@ -142,55 +142,55 @@ int main(int argc, char* argv[])
 		return 0;
 	}
 
-	sodecl::system *mysystem = new sodecl::system("kernels", &a_system[0], a_solver, a_dt, a_tspan, a_ksteps, a_equats, a_nparams, a_nnoi, a_orbits, sodecl::output_Type::File);
+	sodecl::sodeclmgr *mysodeclmgr = new sodecl::sodeclmgr("kernels", &a_system[0], a_solver, a_dt, a_tspan, a_ksteps, a_equats, a_nparams, a_nnoi, a_orbits, sodecl::output_Type::File);
 
-	mysystem->set_outputfile("sodecloutput.bin");
+	mysodeclmgr->set_outputfile("sodecloutput.bin");
 
 	int success;
 
 	// Choose device
-	success = mysystem->choose_device(a_platform, sodecl::device_Type::ALL, a_device);
+	success = mysodeclmgr->choose_device(a_platform, sodecl::device_Type::ALL, a_device);
 	if (success == 0)
 	{
 		cerr << "Error selecting OpenCL device!" << endl;
 	}
 
 	cl_double *t0 = new cl_double[a_orbits];
-	success = mysystem->read_binary_data_from_file("x_t0.bin", t0);
+	success = mysodeclmgr->read_binary_data_from_file("x_t0.bin", t0);
 	//success = mysystem->read_data_from_file("x_t0.txt", t0);
 	if (success == 0)
 	{
 		cerr << "Error reading data from file: x_t0.txt !" << endl;
 	}
-	mysystem->set_t0(t0);
+	mysodeclmgr->set_t0(t0);
 
 	cl_double *y0 = new cl_double[a_orbits*a_equats];
-	success = mysystem->read_binary_data_from_file("x_y0.bin", y0);
+	success = mysodeclmgr->read_binary_data_from_file("x_y0.bin", y0);
 	//success = mysystem->read_data_from_file("x_y0.txt", y0);
 	if (success == 0)
 	{
 		cerr << "Error reading data from file: x_y0.txt !" << endl;
 	}
-	mysystem->set_y0(y0);
+	mysodeclmgr->set_y0(y0);
 
 	cl_double *params = new cl_double[a_orbits*a_nparams];
-	success = mysystem->read_binary_data_from_file("x_params.bin", params);
+	success = mysodeclmgr->read_binary_data_from_file("x_params.bin", params);
 	//success = mysystem->read_data_from_file("x_params.txt", params);
 	if (success == 0)
 	{
 		cerr << "Error reading data from file: x_params.txt !" << endl;
 	}
-	mysystem->set_params(params);
+	mysodeclmgr->set_params(params);
 
 	// Set the local group size.
-	mysystem->set_local_group_size(a_local_group_size);
+	mysodeclmgr->set_local_group_size(a_local_group_size);
 
 	// Setup and run the ODE solver
-	mysystem->setup_ode_solver();
+	mysodeclmgr->setup_ode_solver();
 
-	mysystem->run_ode_solver();
+	mysodeclmgr->run_ode_solver();
 
-	mysystem->~system();
+	mysodeclmgr->~sodeclmgr();
 
 	return 0;
 }
