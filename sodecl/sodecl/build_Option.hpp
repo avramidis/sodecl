@@ -5,8 +5,8 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef sodecl_BUILD_OPTION_HPP
-#define sodecl_BUILD_OPTION_HPP
+#ifndef SODECL_BUILD_OPTION_HPP
+#define SODECL_BUILD_OPTION_HPP
 
 namespace sodecl
 {
@@ -19,4 +19,4 @@ namespace sodecl
 }
 
 
-#endif // sodecl_BUILD_OPTION_HPP
+#endif // SODECL_BUILD_OPTION_HPP

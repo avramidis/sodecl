@@ -87,7 +87,6 @@ namespace sodecl
 		double			m_dt;							/**< Solver (initial) time step in seconds */ 
 		double			m_int_time;						/**< Time units to integrate the ODE system */ 
 		int				m_kernel_steps;					/**< Number of step the solver with perform in each kernel call */ 
-		int				m_kernel_steps_multiplier;		/**< Nuymber of times the kernel steps will be multiplied. The times the results will be saved in the global memory */ 
 		int				m_num_dt_steps;					/**< Number of dt steps for the state of the ODE system to be saved */
 		int				m_list_size;					/**< Number of ODE system parameter combinations */ 
 		int				m_num_equat;					/**< Number of ODE system equations */ 
@@ -126,7 +125,7 @@ namespace sodecl
 		* @param  list_size				Number of orbits to be integrated for the ODE system
 		* @param  output_type			Specifies the location where the output of the integration of the ODE system will be stored
 		*/
-		system(string kernel_path_str, char *ode_system_str, solver_Type solver, double dt, double int_time, int kernel_steps, int kernel_steps_multiplier, int num_equat, int num_params, int num_noi, int list_size, output_Type output_type)
+		system(string kernel_path_str, char *ode_system_str, solver_Type solver, double dt, double int_time, int kernel_steps, int num_equat, int num_params, int num_noi, int list_size, output_Type output_type)
 		{
 			// Initialise the clog object
 			m_log = clog::getInstance();
@@ -137,8 +136,7 @@ namespace sodecl
 			m_solver = solver;										
 			m_dt = dt;												
 			m_int_time = int_time;									
-			m_kernel_steps = kernel_steps;							
-			m_kernel_steps_multiplier = kernel_steps_multiplier;
+			m_kernel_steps = kernel_steps;
 			m_list_size = list_size;								
 			m_num_equat = num_equat;								
 			m_num_params = num_params;								
@@ -160,7 +158,6 @@ namespace sodecl
 				}
 			}
 			
-
 			m_outputPattern = new int[m_num_equat];
 			for (int i = 0; i < m_num_equat; i++)
 			{
@@ -189,7 +186,7 @@ namespace sodecl
 
 			// Add default OpenCL build options
 			m_build_options.push_back(build_Option::FastRelaxedMath);
-			m_build_options.push_back(build_Option::stdCL20);
+			//m_build_options.push_back(build_Option::stdCL20);
 			//m_build_options.push_back(build_Option::stdCL21);
 
 			m_local_group_size = 0;
@@ -602,11 +599,6 @@ namespace sodecl
 			add_string_to_kernel_sources(std::to_string(static_cast<long long>(m_kernel_steps)));
 			add_string_to_kernel_sources("\n");
 
-			// Kernel steps multiplier
-			add_string_to_kernel_sources("#define _numstepsmulti_ ");
-			add_string_to_kernel_sources(std::to_string(static_cast<long long>(m_kernel_steps_multiplier)));
-			add_string_to_kernel_sources("\n");
-
 			//cout << "Kernel steps done" << endl;
 
 			// ODE solver time size
@@ -894,7 +886,7 @@ namespace sodecl
 		* @param	equat_num	The equat_num is number of equations
 		* @param	param_num	The param_num is the number of parameters
 		*/
-		int create_buffers(cl_context context, cl_command_queue commands, int list_size, int equat_num, int param_num, int kernel_steps_multiplier)
+		int create_buffers(cl_context context, cl_command_queue commands, int list_size, int equat_num, int param_num)
 		{
 			cl_int errcode;
 			// Create OpenCL device memory buffers
@@ -904,7 +896,7 @@ namespace sodecl
 				return 0;
 			}
 
-			m_mem_y0 = clCreateBuffer(context, CL_MEM_READ_WRITE, list_size * sizeof(cl_double)*equat_num*kernel_steps_multiplier, NULL, &errcode);
+			m_mem_y0 = clCreateBuffer(context, CL_MEM_READ_WRITE, list_size * sizeof(cl_double)*equat_num, NULL, &errcode);
 			if (errcode != CL_SUCCESS)
 			{
 				return 0;
@@ -959,26 +951,23 @@ namespace sodecl
 		*
 		* @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
 		*/
-		int write_buffers(cl_command_queue commands, int list_size, int equat_num, int param_num, int kernel_steps_multiplier)
+		int write_buffers(cl_command_queue commands, int list_size, int equat_num, int param_num)
 		{
 			int err = 0;
 			err |= clEnqueueWriteBuffer(commands, m_mem_t0, CL_TRUE, 0, list_size * sizeof(cl_double), m_t0, 0, NULL, NULL);
 
-			cl_double *temp = new cl_double[m_list_size*m_num_equat*m_kernel_steps_multiplier];
+			cl_double *temp = new cl_double[m_list_size*m_num_equat];
 			for (int orbit = 0; orbit < list_size; orbit++)
 			{
-				for (int km = 0; km < m_kernel_steps_multiplier; km++)
+				int k = orbit * m_num_equat;
+				for (int ieq = 0; ieq < m_num_equat; ieq++)
 				{
-					int k = orbit * m_num_equat * m_kernel_steps_multiplier;
-					for (int ieq = 0; ieq < m_num_equat; ieq++)
-					{
-						int i = k + km * m_num_equat + ieq;
-						temp[i] = m_y0[orbit*equat_num + ieq];
-					}
+					int i = k + ieq;
+					temp[i] = m_y0[orbit*equat_num + ieq];
 				}
 			}
 
-			err |= clEnqueueWriteBuffer(commands, m_mem_y0, CL_TRUE, 0, list_size * sizeof(cl_double)*equat_num*m_kernel_steps_multiplier, temp, 0, NULL, NULL);
+			err |= clEnqueueWriteBuffer(commands, m_mem_y0, CL_TRUE, 0, list_size * sizeof(cl_double)*equat_num, temp, 0, NULL, NULL);
 
 			delete[] temp;
 
@@ -1196,7 +1185,7 @@ namespace sodecl
 			}
 
 			cl_double *t_out = new cl_double[m_list_size];
-			cl_double *orbits_out = new cl_double[m_list_size * m_num_equat * m_kernel_steps_multiplier];
+			cl_double *orbits_out = new cl_double[m_list_size * m_num_equat];
 
 			size_t global = size_t(m_list_size);
 			size_t local;
@@ -1226,20 +1215,18 @@ namespace sodecl
 			timer start_timer;
 
 			// Run the initial values to the output file.
-			int m_kernel_steps_multiplier_orin = m_kernel_steps_multiplier;
-			m_kernel_steps_multiplier = 1;
 
 			int count = 0;
 			//std::cout << "Running kernel.." << std::endl;
 			cl_int err;
-			for (int j = 0; j < (m_int_time / (m_dt * (m_kernel_steps * m_kernel_steps_multiplier_orin))); j++)
+			for (int j = 0; j < (m_int_time / (m_dt * m_kernel_steps)); j++)
 			{
 
 				//std::cout << "Running kernel.." << std::endl;
 				//// Read buffer g into a local list
 				////err = clEnqueueReadBuffer(m_command_queues[0], m_mem_t0, CL_TRUE, 0, m_list_size * sizeof(cl_double), t_out, 0, NULL, NULL);
 
-				err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat * m_kernel_steps_multiplier_orin, orbits_out, 0, NULL, NULL);
+				err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat, orbits_out, 0, NULL, NULL);
 				
 				try
 				{
@@ -1266,40 +1253,36 @@ namespace sodecl
 				clFlush(m_command_queues[0]);
 				//clFinish(m_command_queues[0]);
 
-				//if (j > (2.4 / (m_dt * m_kernel_steps * m_kernel_steps_multiplier)))
-				//{
-					// Save data to disk or to data array - all variables
-					for (int jo = 0; jo < m_num_equat; jo++)
+				// Save data to disk or to data array - all variables
+				for (int jo = 0; jo < m_num_equat; jo++)
+				{
+					int e = m_outputPattern[jo];
+					if (e > 0)
 					{
-						int e = m_outputPattern[jo];
-						if (e > 0)
+						for (int ji = 0; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
 						{
-							for (int ji = 0; ji < m_list_size*m_num_equat*m_kernel_steps_multiplier; ji = ji + m_num_equat)
+							if (m_output_type == sodecl::output_Type::File)
 							{
-								if (m_output_type == sodecl::output_Type::File)
-								{
-									output_stream.write((char *)(&orbits_out[ji]), sizeof(cl_double));
-									//cout << orbits_out[ji] << endl;
-								}
-								//output_data[count] = g[ji];
-								//count++;
-								//cout << g[ji] << endl;
+								output_stream.write((char *)(&orbits_out[ji]), sizeof(cl_double));
+								//cout << orbits_out[ji] << endl;
 							}
+							//output_data[count] = g[ji];
+							//count++;
+							//cout << g[ji] << endl;
 						}
 					}
-				//}
-				m_kernel_steps_multiplier = m_kernel_steps_multiplier_orin;
+				}
 			}
 			
 			// Save the data from the last kernel call.
-			err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat * m_kernel_steps_multiplier_orin, orbits_out, 0, NULL, NULL);
+			err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat, orbits_out, 0, NULL, NULL);
 			// Save data to disk or to data array - all variables
 			for (int jo = 0; jo < m_num_equat; jo++)
 			{
 				int e = m_outputPattern[jo];
 				if (e > 0)
 				{
-					for (int ji = 0; ji < m_list_size*m_num_equat*m_kernel_steps_multiplier; ji = ji + m_num_equat)
+					for (int ji = 0; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
 					{
 						if (m_output_type == sodecl::output_Type::File)
 						{
@@ -1391,14 +1374,14 @@ namespace sodecl
 			}
 			//std::cout << "Command queue created." << std::endl;
 
-			if (create_buffers(m_contexts[0], m_command_queues[0], m_list_size, m_num_equat, m_num_params, m_kernel_steps_multiplier) == 0)
+			if (create_buffers(m_contexts[0], m_command_queues[0], m_list_size, m_num_equat, m_num_params) == 0)
 			{
 				std::cout << "Failed to create the OpenCL buffers." << std::endl;
 				return 0;
 			}
 			//std::cout << "Buffers created." << std::endl;
 
-			if (write_buffers(m_command_queues[0], m_list_size, m_num_equat, m_num_params, m_kernel_steps_multiplier) == 0)
+			if (write_buffers(m_command_queues[0], m_list_size, m_num_equat, m_num_params) == 0)
 			{
 				std::cout << "Failed to write the data to the OpenCL buffers." << std::endl;
 				return 0;
@@ -1431,7 +1414,7 @@ namespace sodecl
 			//m_log->toFile();
 
 			//double walltime = start_timer.stop_timer();
-			//cout << "Setup SDE solver runtime: " << walltime << endl;
+			//cout << "Setup SODE solver runtime: " << walltime << endl;
 
 			return 1;
 		}

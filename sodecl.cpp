@@ -53,9 +53,6 @@ int main(int argc, char* argv[])
 	// ksteps - Number of ODE solvers executed in each OpenCL kernel call
 	int a_ksteps;
 
-	// ksteps_multi
-	int a_ksteps_multi;
-
 	// local_group_size - OpenCL local group size
 	int a_local_group_size;
 
@@ -120,11 +117,8 @@ int main(int argc, char* argv[])
 		// ksteps - Number of SDE solvers executed in each OpenCL kernel call
 		a_ksteps = atoi(argv[13]);
 
-		// ksteps_multi
-		a_ksteps_multi = atoi(argv[14]);
-
 		// local_group_size - OpenCL local group size
-		a_local_group_size = atoi(argv[15]);
+		a_local_group_size = atoi(argv[14]);
 	}
 	else
 	{
@@ -143,13 +137,12 @@ int main(int argc, char* argv[])
 		std::cout << "Argument 11 - SDE solver time step size" << std::endl;
 		std::cout << "Argument 12 - Integration time span" << std::endl;
 		std::cout << "Argument 13 - Number of SDE solvers executed in each OpenCL kernel call" << std::endl;
-		std::cout << "Argument 14 - Number multiplier" << std::endl;
-		std::cout << "Argument 15 - OpenCL local group size" << std::endl;
+		std::cout << "Argument 14 - OpenCL local group size" << std::endl;
 
 		return 0;
 	}
 
-	sodecl::system *mysystem = new sodecl::system("kernels", &a_system[0], a_solver, a_dt, a_tspan, a_ksteps, a_ksteps_multi, a_equats, a_nparams, a_nnoi, a_orbits, sodecl::output_Type::File);
+	sodecl::system *mysystem = new sodecl::system("kernels", &a_system[0], a_solver, a_dt, a_tspan, a_ksteps, a_equats, a_nparams, a_nnoi, a_orbits, sodecl::output_Type::File);
 
 	mysystem->set_outputfile("sodecloutput.bin");
 

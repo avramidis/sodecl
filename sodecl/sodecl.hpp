@@ -5,8 +5,8 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef sodecl_MAINCL_HPP
-#define sodecl_MAINCL_HPP
+#ifndef SODECL_MAINCL_HPP
+#define SODECL_MAINCL_HPP
 
 #define CL_USE_DEPRECATED_OPENCL_2_0_APIS
 #define _SCL_SECURE_NO_WARNINGS
@@ -29,4 +29,4 @@
 #include <sodecl/platform.hpp>
 #include <sodecl/system.hpp>
 
-#endif // sodecl_MAINCL_HPP
+#endif // SODECL_MAINCL_HPP
