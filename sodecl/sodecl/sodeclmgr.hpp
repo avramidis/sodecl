@@ -145,8 +145,8 @@ namespace sodecl
 
 			if (m_num_noi > 0)
 			{
-				double lower_bound = 1;
-				double upper_bound = 100000;
+				double lower_bound = -100000000000;
+				double upper_bound = 100000000000;
 				std::uniform_real_distribution<double> unif(lower_bound, upper_bound);
 				std::random_device rd;
 				std::mt19937 gen(rd());
