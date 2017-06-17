@@ -12,12 +12,12 @@
 #define _SCL_SECURE_NO_WARNINGS
 
 // TODO: In case I want to define for different architectures
-#include <sodecl/cl.hpp>
-#ifdef _WIN32
-	#include <sodecl/cl.hpp>
-#elif __APPLE__
-	#include <sodecl/cl.hpp>		// TODO
-#endif
+#include <CL/cl.hpp>
+//#ifdef _WIN32
+//	#include <CL/cl.hpp>
+//#elif __APPLE__
+//	#include <CL/cl.hpp>		// TODO
+//#endif
 
 #include <sodecl/clog.hpp>
 #include <sodecl/timer.hpp>
