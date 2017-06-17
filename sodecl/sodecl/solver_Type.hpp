@@ -5,10 +5,10 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef odecl_SOLVER_TYPE_HPP
-#define odecl_SOLVER_TYPE_HPP
+#ifndef sodecl_SOLVER_TYPE_HPP
+#define sodecl_SOLVER_TYPE_HPP
 
-namespace odecl
+namespace sodecl
 {
 	enum class solver_Type
 	{
@@ -20,4 +20,4 @@ namespace odecl
 	};
 }
 
-#endif // odecl_SOLVER_TYPE_HPP
+#endif // sodecl_SOLVER_TYPE_HPP

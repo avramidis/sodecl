@@ -5,8 +5,8 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef odecl_CLOG_HPP
-#define odecl_CLOG_HPP
+#ifndef sodecl_CLOG_HPP
+#define sodecl_CLOG_HPP
 
 #include <string>
 #include <sstream>
@@ -14,7 +14,7 @@
 
 using namespace std;
 
-namespace odecl
+namespace sodecl
 {
 	class clog
 	{
@@ -79,7 +79,7 @@ namespace odecl
 		{
 			std::ofstream output_stream;
 
-			output_stream.open("odecllog.txt", std::ios::binary | std::ios::app | std::ios::out);
+			output_stream.open("sodecllog.txt", std::ios::binary | std::ios::app | std::ios::out);
 
 			output_stream << m_oss.str();
 
@@ -95,4 +95,4 @@ namespace odecl
 }
 
 
-#endif // odecl_CLOG_HPP
+#endif // sodecl_CLOG_HPP

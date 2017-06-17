@@ -5,12 +5,12 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef odecl_PLATFORM_HPP
-#define odecl_PLATFORM_HPP
+#ifndef sodecl_PLATFORM_HPP
+#define sodecl_PLATFORM_HPP
 
 #include <vector>
 
-namespace odecl
+namespace sodecl
 {
 	class platform
 	{
@@ -19,9 +19,9 @@ namespace odecl
 		*/
 	public:
 
-		// Array with pointer to odecl::platform objects
-		//odecl::device *m_devices;
-		std::vector<odecl::device*> m_devices;
+		// Array with pointer to sodecl::platform objects
+		//sodecl::device *m_devices;
+		std::vector<sodecl::device*> m_devices;
 
 		// Platform ID
 		cl_platform_id m_platform_id;
@@ -78,7 +78,7 @@ namespace odecl
 
 		}
 
-		std::vector<odecl::device*> get_devices()
+		std::vector<sodecl::device*> get_devices()
 		{
 			return m_devices;
 		}
@@ -147,7 +147,7 @@ namespace odecl
 			return device_count;
 		}
 
-		// Create all odecl::device objects
+		// Create all sodecl::device objects
 		void create_devices()
 		{
 			//cl_uint platform_count = get_platform_count();
@@ -184,4 +184,4 @@ namespace odecl
 }
 
 
-#endif // odecl_PLATFORM_HPP
+#endif // sodecl_PLATFORM_HPP

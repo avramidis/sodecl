@@ -5,10 +5,10 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef odecl_BUILD_OPTION_HPP
-#define odecl_BUILD_OPTION_HPP
+#ifndef sodecl_BUILD_OPTION_HPP
+#define sodecl_BUILD_OPTION_HPP
 
-namespace odecl
+namespace sodecl
 {
 	enum class build_Option
 	{
@@ -19,4 +19,4 @@ namespace odecl
 }
 
 
-#endif // odecl_BUILD_OPTION_HPP
+#endif // sodecl_BUILD_OPTION_HPP

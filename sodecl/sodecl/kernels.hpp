@@ -5,8 +5,8 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef odecl_KERNLES_HPP
-#define odecl_KERNLES_HPP
+#ifndef sodecl_KERNLES_HPP
+#define sodecl_KERNLES_HPP
 
 
-#endif // odecl_KERNLES_HPP
+#endif // sodecl_KERNLES_HPP

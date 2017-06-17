@@ -5,14 +5,14 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef odecl_TIMER_HPP
-#define odecl_TIMER_HPP
+#ifndef sodecl_TIMER_HPP
+#define sodecl_TIMER_HPP
 
 #include <iostream>
 #include <chrono>
 #include <ctime>
 
-namespace odecl
+namespace sodecl
 {
 	class timer
 	{
@@ -40,4 +40,4 @@ namespace odecl
 }
 
 
-#endif // odecl_TIMER_HPP
+#endif // sodecl_TIMER_HPP

@@ -5,28 +5,28 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef odecl_MAINCL_HPP
-#define odecl_MAINCL_HPP
+#ifndef sodecl_MAINCL_HPP
+#define sodecl_MAINCL_HPP
 
 #define CL_USE_DEPRECATED_OPENCL_2_0_APIS
 #define _SCL_SECURE_NO_WARNINGS
 
 // TODO: In case I want to define for different architectures
-#include <odecl/cl.hpp>
+#include <sodecl/cl.hpp>
 #ifdef _WIN32
-	#include <odecl/cl.hpp>
+	#include <sodecl/cl.hpp>
 #elif __APPLE__
-	#include <odecl/cl.hpp>		// TODO
+	#include <sodecl/cl.hpp>		// TODO
 #endif
 
-#include <odecl/clog.hpp>
-#include <odecl/timer.hpp>
-#include <odecl/build_Option.hpp>
-#include <odecl/output_Type.hpp>
-#include <odecl/device_Type.hpp>
-#include <odecl/solver_Type.hpp>
-#include <odecl/device.hpp>
-#include <odecl/platform.hpp>
-#include <odecl/system.hpp>
+#include <sodecl/clog.hpp>
+#include <sodecl/timer.hpp>
+#include <sodecl/build_Option.hpp>
+#include <sodecl/output_Type.hpp>
+#include <sodecl/device_Type.hpp>
+#include <sodecl/solver_Type.hpp>
+#include <sodecl/device.hpp>
+#include <sodecl/platform.hpp>
+#include <sodecl/system.hpp>
 
-#endif // odecl_MAINCL_HPP
+#endif // sodecl_MAINCL_HPP

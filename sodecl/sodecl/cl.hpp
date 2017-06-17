@@ -5,9 +5,9 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef odecl_CL_HPP
-#define odecl_CL_HPP
+#ifndef sodecl_CL_HPP
+#define sodecl_CL_HPP
 
 #include <CL/cl.h>
 
-#endif // odecl_CL_HPP
+#endif // sodecl_CL_HPP

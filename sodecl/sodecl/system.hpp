@@ -5,8 +5,8 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef odecl_SYSTEM_HPP
-#define odecl_SYSTEM_HPP
+#ifndef sodecl_SYSTEM_HPP
+#define sodecl_SYSTEM_HPP
 
 #include <vector>
 #include <list>
@@ -27,10 +27,10 @@
 
 using namespace std;
 
-namespace odecl
+namespace sodecl
 {
 	/**
-	*  Manager class of ODECL.
+	*  Manager class of sodecl.
 	*/
 	class system
 	{
@@ -49,9 +49,9 @@ namespace odecl
 		*/
 
 		cl_uint							m_platform_count;			/**< Number of OPENCL platforms */
-		std::vector<odecl::platform*>	m_platforms;				/**< Vector which stores the odecl::platform objects. One object for each OpenCL platform */
-		cl_uint							m_selected_platform;		/**< The index of the selected odecl::platform object in the m_platforms vector */		
-		cl_uint							m_selected_device;			/**< The index of the selected odecl::device object in m_devices vector of selected platform */		
+		std::vector<sodecl::platform*>	m_platforms;				/**< Vector which stores the sodecl::platform objects. One object for each OpenCL platform */
+		cl_uint							m_selected_platform;		/**< The index of the selected sodecl::platform object in the m_platforms vector */		
+		cl_uint							m_selected_device;			/**< The index of the selected sodecl::device object in m_devices vector of selected platform */		
 		device_Type						m_selected_device_type;		/**< Selected OpenCL device type */
 
 		/********************************************************************************************
@@ -113,7 +113,7 @@ namespace odecl
 	public:
 	
 		/**
-		*  Default constructor which initialises the odecl object. 
+		*  Default constructor which initialises the sodecl object. 
 		*
 		* @param  kernel_path_str		Path to the OpenCL ODE solvers kernel source files
 		* @param  ode_system_str		Path to the OpenCL ODE system source file
@@ -177,7 +177,7 @@ namespace odecl
 				cerr << "Error getting OpenCL planform number!" << endl;
 			}
 
-			// create all odecl::platform objects, one for each OpenCL platform
+			// create all sodecl::platform objects, one for each OpenCL platform
 			create_platforms();
 
 			// This is used for the variable time step solvers
@@ -261,7 +261,7 @@ namespace odecl
 		*/
 	
 		/**
-		*  Sets the odecl object to use the selected OpenCL device for the integration of the ODE model.
+		*  Sets the sodecl object to use the selected OpenCL device for the integration of the ODE model.
 		*
 		* @param	platform_num	Index of selected OpenCL platform
 		* @param	device_type		OpenCL device type
@@ -349,7 +349,7 @@ namespace odecl
 		*/
 
 		/**
-		* Creates all odecl::platform objects
+		* Creates all sodecl::platform objects
 		*
 		* @todo needs a better description
 		*/
@@ -407,7 +407,7 @@ namespace odecl
 		}
 
 		/**
-		* Sets the odecl object to use the CPU to integrate the ODE model.
+		* Sets the sodecl object to use the CPU to integrate the ODE model.
 		*
 		* @todo	There could be an issue when selecting the OpenCL platform if there are more than one
 		*/
@@ -1190,7 +1190,7 @@ namespace odecl
 		{
 			// Output binary files
 			std::ofstream output_stream;
-			if (m_output_type == odecl::output_Type::File)
+			if (m_output_type == sodecl::output_Type::File)
 			{
 				output_stream.open(m_outputfile_str, std::ios::binary | std::ios::app | std::ios::out);
 			}
@@ -1276,7 +1276,7 @@ namespace odecl
 						{
 							for (int ji = 0; ji < m_list_size*m_num_equat*m_kernel_steps_multiplier; ji = ji + m_num_equat)
 							{
-								if (m_output_type == odecl::output_Type::File)
+								if (m_output_type == sodecl::output_Type::File)
 								{
 									output_stream.write((char *)(&orbits_out[ji]), sizeof(cl_double));
 									//cout << orbits_out[ji] << endl;
@@ -1301,7 +1301,7 @@ namespace odecl
 				{
 					for (int ji = 0; ji < m_list_size*m_num_equat*m_kernel_steps_multiplier; ji = ji + m_num_equat)
 					{
-						if (m_output_type == odecl::output_Type::File)
+						if (m_output_type == sodecl::output_Type::File)
 						{
 							output_stream.write((char *)(&orbits_out[ji]), sizeof(cl_double));
 							//cout << orbits_out[ji] << endl;
@@ -1321,7 +1321,7 @@ namespace odecl
 			m_log->write(walltime);
 			m_log->write("sec.\n");
 
-			if (m_output_type == odecl::output_Type::File)
+			if (m_output_type == sodecl::output_Type::File)
 			{
 				output_stream.close();
 			}
@@ -1341,7 +1341,7 @@ namespace odecl
 		*/
 		int setup_ode_solver()
 		{
-			//odecl::timer start_timer;
+			//sodecl::timer start_timer;
 
 			//std::cout << "setup_ode_solver start." << std::endl;
 
@@ -1440,4 +1440,4 @@ namespace odecl
 }
 
 
-#endif // ODECL_SYSTEM_HPP
+#endif // sodecl_SYSTEM_HPP
