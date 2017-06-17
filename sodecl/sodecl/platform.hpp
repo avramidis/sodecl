@@ -136,7 +136,7 @@ namespace odecl
 		{
 			cl_uint device_count;
 
-			// get platform count
+			// get device count
 			cl_int err = clGetDeviceIDs(m_platform_id, CL_DEVICE_TYPE_ALL, 0, NULL, &device_count);
 
 			if (err != CL_SUCCESS)
@@ -158,7 +158,7 @@ namespace odecl
 			std::vector<cl_device_id> m_device_ids;
 
 			// populate vector with cl_platform_ids
-			for (int i = 0; i < m_devices_count; i++)
+			for (cl_int i = 0; i < m_devices_count; i++)
 			{
 				m_device_ids.push_back(cpDevice[i]);
 			}

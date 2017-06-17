@@ -144,7 +144,7 @@ namespace odecl
 			m_num_params = num_params;								
 			m_num_noi = num_noi;									
 			m_output_type = output_type;							
-			
+
 			if (m_num_noi > 0)
 			{
 				double lower_bound = 1;
@@ -159,6 +159,7 @@ namespace odecl
 					m_rcounter[i] = unif(gen);
 				}
 			}
+			
 
 			m_outputPattern = new int[m_num_equat];
 			for (int i = 0; i < m_num_equat; i++)
@@ -287,7 +288,6 @@ namespace odecl
 				return 0;
 			}
 
-
 			// If selected device type is not ALL (OpenCL type) check if selected device type exist
 			if ((cl_device_type)device_type != (cl_device_type)device_Type::ALL)
 			{
@@ -355,7 +355,6 @@ namespace odecl
 		*/
 		void create_platforms()
 		{
-
 			//cl_uint platform_count = get_platform_count();
 			cl_platform_id *cpPlatform = new cl_platform_id[m_platform_count];
 
@@ -384,6 +383,7 @@ namespace odecl
 			{
 				m_platforms.push_back(new platform(m_platform_ids.at(i)));
 			}
+
 		}
 
 		/**
@@ -1232,8 +1232,10 @@ namespace odecl
 			int count = 0;
 			//std::cout << "Running kernel.." << std::endl;
 			cl_int err;
-			for (int j = 0; j < (m_int_time / m_dt / (m_kernel_steps * m_kernel_steps_multiplier_orin)); j++)
+			for (int j = 0; j < (m_int_time / (m_dt * (m_kernel_steps * m_kernel_steps_multiplier_orin))); j++)
 			{
+
+				//std::cout << "Running kernel.." << std::endl;
 				//// Read buffer g into a local list
 				////err = clEnqueueReadBuffer(m_command_queues[0], m_mem_t0, CL_TRUE, 0, m_list_size * sizeof(cl_double), t_out, 0, NULL, NULL);
 
@@ -1341,6 +1343,8 @@ namespace odecl
 		{
 			//odecl::timer start_timer;
 
+			//std::cout << "setup_ode_solver start." << std::endl;
+
 			// To create a cl string with the program to run
 			if (create_kernel_string() == 0)
 			{
@@ -1423,7 +1427,6 @@ namespace odecl
 				std::cout << "Failed to set kernel arguments." << std::endl;
 				return 0;
 			}
-			//std::cout << "Kernel arguments set." << std::endl;
 
 			//m_log->toFile();
 
