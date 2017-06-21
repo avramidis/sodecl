@@ -20,16 +20,14 @@ __kernel void solver_caller(__global double *t0,
 
 	t = t0[i];
 
-	int k = i * _numeq_;
 	for (int ieq = 0; ieq < _numeq_; ieq++)
 	{
-		y[ieq] = y0[k + ieq];
+		y[ieq] = y0[i * _numeq_ + ieq];
 	}
 
-	k = i * _numpar_;
 	for (int ipar = 0; ipar < _numpar_; ipar++)
 	{
-		params[ipar] = params_g[k + ipar];
+		params[ipar] = params_g[i * _numpar_ + ipar];
 	}
 
 	// Noise generators
@@ -95,10 +93,9 @@ __kernel void solver_caller(__global double *t0,
 	}
 
 	t0[i] = t;
-	k = i * _numeq_;
 	for (int ieq = 0; ieq < _numeq_; ieq++)
 	{
-		y0[k + ieq] = y[ieq];
+		y0[i * _numeq_ + ieq] = y[ieq];
 	}
 	counter_g[i] = counter;
 }
