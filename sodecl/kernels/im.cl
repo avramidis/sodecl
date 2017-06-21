@@ -1,6 +1,6 @@
 
 // The tridiagonal matrix algorithm (Thomas algorithm)
-void solvesystem(double jac[_numeq_][_numeq_], double v[_numeq_], double x[_numeq_])
+inline static void solvesystem(double jac[_numeq_][_numeq_], double v[_numeq_], double x[_numeq_])
 {
 	double a[_numeq_];
 	for (int i = _numeq_ - 2; i < _numeq_; i++)
