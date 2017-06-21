@@ -23,7 +23,7 @@ function results=getresults(f, p)
 % Subfunctions: none
 % MAT-files required: none
 %
-% See also: nan
+% See also: none
 %
 % $Author: Eleftherios Avramidis $
 % $Email: el.avramidis@gmail.com $

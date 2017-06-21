@@ -1,4 +1,4 @@
-function [tout,yout]  = odecl( platform, device, kernel, initx, params, solver, orbits, nequat, nparams, nnoi, dt, tspan, ksteps, ksteps_multi, localgroupsize )
+function [tout,yout]  = sodecl( platform, device, kernel, initx, params, solver, orbits, nequat, nparams, nnoi, dt, tspan, ksteps, localgroupsize )
 %ODECL Interface for using the odecl solvers in MATLAB.
 %
 % Syntax:  [tout,yout] = ODECL( platform, device, kernel, initx, params, solver, orbits, nequat, nparams, nnoi, dt, tspan, ksteps )
@@ -31,7 +31,9 @@ function [tout,yout]  = odecl( platform, device, kernel, initx, params, solver, 
 % MAT-files required: none
 % Other dependencies: odecl executable
 %
-% See also: none
+% See also: E. Avramidis & O.E. Akman. Optimisation of an exemplar oculomotor model
+% using multi-objective genetic algorithms executed on a GPU-CPU combination.
+% BMC Syst. Biol., 11: 40 (2017)
 %
 % $Author: Eleftherios Avramidis $
 % $Email: el.avramidis@gmail.com $
@@ -41,11 +43,13 @@ function [tout,yout]  = odecl( platform, device, kernel, initx, params, solver, 
 % tic
 
 delete('t.bin');
-delete('odecloutput.bin');
-delete('odecllog.txt');
+delete('sodecloutput.bin');
+delete('sodecllog.txt');
 delete('x_params.bin');
 delete('x_t0.bin');
 delete('x_y0.bin');
+
+nparams=nparams+nnoi;
 
 % Write parameters and initial conditions to files
 
@@ -82,21 +86,25 @@ switch solver
         odesolver=0;
 end
 
-['odecl.exe ' num2str(platform) ' ' num2str(device) ... 
+['sodeclexe.exe ' num2str(platform) ' ' num2str(device) ... 
     ' ' kernel ' ' 'x_y0.bin' ' '  'x_params.bin' ' ' num2str(odesolver) ...
     ' ' num2str(orbits) ' ' num2str(nequat) ' ' num2str(nparams) ' ' num2str(nnoi) ...
-    ' ' num2str(dt) ' ' num2str(tspan) ' ' num2str(ksteps) ' ' num2str(ksteps_multi) ' ' num2str(localgroupsize)]
+    ' ' num2str(dt) ' ' num2str(tspan) ' ' num2str(ksteps) ' ' num2str(localgroupsize)]
 % Run the opencl program
-[s w] = dos(['odecl.exe ' num2str(platform) ' ' num2str(device) ... 
+% tic
+[s w] = dos(['sodeclexe.exe ' num2str(platform) ' ' num2str(device) ... 
     ' ' kernel ' ' 'x_y0.bin' ' '  'x_params.bin' ' ' num2str(odesolver) ...
     ' ' num2str(orbits) ' ' num2str(nequat) ' ' num2str(nparams) ' ' num2str(nnoi) ...
-    ' ' num2str(dt) ' ' num2str(tspan) ' ' num2str(ksteps) ' ' num2str(ksteps_multi) ' ' num2str(localgroupsize)], '-echo');
+    ' ' num2str(dt) ' ' num2str(tspan) ' ' num2str(ksteps) ' ' num2str(localgroupsize)], '-echo');
 if s % then failed
     disp(' Call to SDECL failed')
     return
 end
+% toc
 
 % get the results
-yout=getresults('odecloutput.bin', orbits);
-tout=0:dt*ksteps:(length(yout)-1)*dt*ksteps;
+yout=getresults('sodecloutput.bin', orbits);
+
+% (m_int_time / (m_dt * (m_kernel_steps * m_kernel_steps_multiplier_orin)))
+tout=0:dt:(length(yout)-1)*dt;
 
