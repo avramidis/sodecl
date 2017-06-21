@@ -266,7 +266,7 @@ namespace sodecl
 		*
 		* @return	output_type		Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
 		*/
-		int choose_device(int platform_num, device_Type device_type, int device_num)
+		int choose_device(cl_uint platform_num, device_Type device_type, cl_uint device_num)
 		{
 			// Check if selected platform exist
 			if (platform_num<0 || platform_num>m_platform_count)
@@ -306,6 +306,10 @@ namespace sodecl
 
 			m_log->write("Selected device name: ");
 			m_log->write(m_platforms[platform_num]->m_devices[device_num]->name().c_str());
+			m_log->write("\n");
+
+			m_log->write("Selected device OpenCL version: ");
+			m_log->write(m_platforms[platform_num]->m_devices[device_num]->version().c_str());
 			m_log->write("\n");
 
 			m_selected_platform = platform_num;
@@ -366,7 +370,7 @@ namespace sodecl
 			std::vector<cl_platform_id> m_platform_ids;
 
 			// populate vector with cl_platform_ids
-			for (int i = 0; i < m_platform_count; i++)
+			for (cl_uint i = 0; i < m_platform_count; i++)
 			{
 				m_platform_ids.push_back(cpPlatform[i]);
 			}
@@ -535,9 +539,9 @@ namespace sodecl
 		int add_string_to_kernel_sources(string str)
 		{
 			// TODO: Add code to catch an exception in case the operation fails
-			int m_source_size = str.length();
+			size_t m_source_size = str.length();
 
-			for (int i = 0; i < m_source_size; i++)
+			for (size_t i = 0; i < m_source_size; i++)
 			{
 				m_kernel_sources.push_back(str[i]);
 			}
@@ -772,9 +776,9 @@ namespace sodecl
 		*/
 		void add_string_to_build_options_str(string str)
 		{
-			int m_source_size = str.length();
+			size_t m_source_size = str.length();
 
-			for (int i = 0; i < m_source_size; i++)
+			for (size_t i = 0; i < m_source_size; i++)
 			{
 				m_build_options_str.push_back(str[i]);
 			}
@@ -1206,7 +1210,7 @@ namespace sodecl
 
 			//cout << "The local group size is: " << local << endl;
 			m_log->write("The local group size is: ");
-			m_log->write(local);
+			m_log->write((double)local);
 			m_log->write("\n");
 
 			//cl_double *output_data = new cl_double[m_list_size * m_int_time / m_dt / m_kernel_steps];

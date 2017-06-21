@@ -158,7 +158,7 @@ namespace sodecl
 			std::vector<cl_device_id> m_device_ids;
 
 			// populate vector with cl_platform_ids
-			for (cl_int i = 0; i < m_devices_count; i++)
+			for (cl_uint i = 0; i < m_devices_count; i++)
 			{
 				m_device_ids.push_back(cpDevice[i]);
 			}
