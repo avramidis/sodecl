@@ -44,7 +44,7 @@ function [tout,yout]  = sodecl( platform, device, kernel, initx, params, solver,
 
 delete('t.bin');
 delete('sodecloutput.bin');
-delete('sodecllog.txt');
+% delete('sodecllog.txt');
 delete('x_params.bin');
 delete('x_t0.bin');
 delete('x_y0.bin');

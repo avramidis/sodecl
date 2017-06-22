@@ -251,6 +251,9 @@ namespace sodecl
 				clReleaseContext((cl_context)(m_contexts.back()));
 				m_contexts.pop_back();
 			}
+
+			// The executable exited normally
+			m_log->writeExitStatusFile(0, "Normal.");
 		}
 
 		/******************************************************************************************
@@ -539,9 +542,7 @@ namespace sodecl
 		int add_string_to_kernel_sources(string str)
 		{
 			// TODO: Add code to catch an exception in case the operation fails
-			size_t m_source_size = str.length();
-
-			for (size_t i = 0; i < m_source_size; i++)
+			for (size_t i = 0; i < str.length(); i++)
 			{
 				m_kernel_sources.push_back(str[i]);
 			}
@@ -776,9 +777,7 @@ namespace sodecl
 		*/
 		void add_string_to_build_options_str(string str)
 		{
-			size_t m_source_size = str.length();
-
-			for (size_t i = 0; i < m_source_size; i++)
+			for (size_t i = 0; i < str.length(); i++)
 			{
 				m_build_options_str.push_back(str[i]);
 			}
@@ -885,12 +884,11 @@ namespace sodecl
 		* Builds OpenCL program for the selected OpenCL device.
 		*
 		* @param	context		The context is the cl_context
-		* @param	commands	The commands is the cl_command_queue
 		* @param	list_size	The list_size is the size of the buffers
 		* @param	equat_num	The equat_num is number of equations
 		* @param	param_num	The param_num is the number of parameters
 		*/
-		int create_buffers(cl_context context, cl_command_queue commands, int list_size, int equat_num, int param_num)
+		int create_buffers(cl_context context, int list_size, int equat_num, int param_num)
 		{
 			cl_int errcode;
 			// Create OpenCL device memory buffers
@@ -928,12 +926,11 @@ namespace sodecl
 		* Create OpenCL device memory buffer for the dt.
 		*
 		* @param	context		OpenCL context
-		* @param	commands	OpenCL command queue
 		* @param	list_size	Number of orbits which the ODE or SDE system will be integrated for
 		* 
 		* @return	param_num	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
 		*/
-		int create_dt_buffer(cl_context context, cl_command_queue commands, int list_size)
+		int create_dt_buffer(cl_context context, int list_size)
 		{
 			cl_int errcode;
 			m_mem_dt = clCreateBuffer(context, CL_MEM_READ_WRITE, list_size * sizeof(cl_double), NULL, &errcode);
@@ -1095,7 +1092,6 @@ namespace sodecl
 			ifstream ifs;
 			ifs.open(filename, ios::in | ios::binary | ios::ate);
 
-			int j = 0;
 			if (ifs.good())
 			{				
 				streampos size = ifs.tellg();
@@ -1219,8 +1215,6 @@ namespace sodecl
 			timer start_timer;
 
 			// Run the initial values to the output file.
-
-			int count = 0;
 			//std::cout << "Running kernel.." << std::endl;
 			cl_int err;
 			for (int j = 0; j < (m_int_time / (m_dt * m_kernel_steps)); j++)
@@ -1246,6 +1240,7 @@ namespace sodecl
 				catch (const std::exception &e)
 				{
 					m_log->write("The call to the OpenCL device has failed.");
+					m_log->write(e.what());
 				}
 				
 				if (err)
@@ -1324,7 +1319,7 @@ namespace sodecl
 		/**
 		* Setups the selected ODE or SDE solver OpenCL kernel source.
 		*
-		* @param	params		Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
+		* @return 1 if the operations were succcessfull or 0 if they were unsuccessful
 		*/
 		int setup_ode_solver()
 		{
@@ -1378,7 +1373,7 @@ namespace sodecl
 			}
 			//std::cout << "Command queue created." << std::endl;
 
-			if (create_buffers(m_contexts[0], m_command_queues[0], m_list_size, m_num_equat, m_num_params) == 0)
+			if (create_buffers(m_contexts[0], m_list_size, m_num_equat, m_num_params) == 0)
 			{
 				std::cout << "Failed to create the OpenCL buffers." << std::endl;
 				return 0;

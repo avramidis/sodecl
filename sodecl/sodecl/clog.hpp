@@ -30,7 +30,11 @@ namespace sodecl
 		/// </summary>
 		clog()
 		{
+			ofstream newFileLog("sodecllog.txt", std::ios::binary | std::ios::out);
+			newFileLog.close();
 
+			ofstream newFileExitStatus("sodeclexitstatus.txt", std::ios::binary | std::ios::out);
+			newFileExitStatus.close();
 		}
 
 	public:
@@ -86,6 +90,31 @@ namespace sodecl
 			output_stream.close();
 
 			m_oss.clear();
+		}
+
+		/// <summary>
+		/// Writes the SODECL exit status file.
+		/// </summary>
+		void writeExitStatusFile(size_t exittype, string msg)
+		{
+			std::ostringstream oss;
+			if (exittype == 0)
+			{
+				oss << "1 ";
+			}
+			else
+			{
+				oss << "0 ";
+			}
+
+			oss << msg;
+
+			std::ofstream output_stream;
+			output_stream.open("sodeclexitstatus.txt", std::ios::binary | std::ios::app | std::ios::out);
+			output_stream << oss.str();
+			output_stream.close();
+
+			oss.clear();
 		}
 	};
 
