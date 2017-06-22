@@ -1,22 +1,22 @@
 function [tout,yout]  = sodecl( platform, device, kernel, initx, params, solver, orbits, nequat, nparams, nnoi, dt, tspan, ksteps, localgroupsize )
-%ODECL Interface for using the odecl solvers in MATLAB.
+%SODECL Interface for using the odecl solvers in MATLAB.
 %
-% Syntax:  [tout,yout] = ODECL( platform, device, kernel, initx, params, solver, orbits, nequat, nparams, nnoi, dt, tspan, ksteps )
+% Syntax:  [tout,yout] = SODECL( platform, device, kernel, initx, params, solver, orbits, nequat, nparams, nnoi, dt, tspan, ksteps )
 %
 % Inputs:
 %   platform    - OpenCL platform number
 %   device      - OpenCL device number of selected platform
-%   kernel      - ODE system kernel filename
+%   kernel      - ODE or SDE system kernel filename
 %   initx       - Initial conditions for each orbit for the ODE system
 %   params      - Parameters sets for the ODE system for all orbits
-%   solver      - ODE solver
+%   solver      - ODE or SDE solver
 %   orbits      - Number of orbits to be integrated
 %   nequat      - Number of equations of the ODE system
 %   nparams     - Number of parameter of the ODE system
 %   nnoi        - Number of noise processes
-%   dt          - ODE solver time step size
+%   dt          - ODE or SDE solver time step size
 %   tspan       - Integration time span
-%   ksteps      - Number of ODE solvers executed in each OpenCL kernel call
+%   ksteps      - Number of ODE or SDE integrations executed in each OpenCL kernel call
 %
 %
 % Outputs:
@@ -24,7 +24,7 @@ function [tout,yout]  = sodecl( platform, device, kernel, initx, params, solver,
 %   yout - Model output
 %
 % Example:
-%   [tout,yout]  = odecl( 3 0 broomhead.cl x_y0.txt x_params.txt 2 512 6 6 1e-5 6 40)
+%   [tout,yout]  = sodecl( 3 0 broomhead.cl x_y0.bin x_params.bin 2 512 6 6 1e-5 6 40)
 %
 % Other m-files required: none
 % Subfunctions: none
@@ -90,21 +90,16 @@ end
     ' ' kernel ' ' 'x_y0.bin' ' '  'x_params.bin' ' ' num2str(odesolver) ...
     ' ' num2str(orbits) ' ' num2str(nequat) ' ' num2str(nparams) ' ' num2str(nnoi) ...
     ' ' num2str(dt) ' ' num2str(tspan) ' ' num2str(ksteps) ' ' num2str(localgroupsize)]
-% Run the opencl program
-% tic
 [s w] = dos(['sodeclexe.exe ' num2str(platform) ' ' num2str(device) ... 
     ' ' kernel ' ' 'x_y0.bin' ' '  'x_params.bin' ' ' num2str(odesolver) ...
     ' ' num2str(orbits) ' ' num2str(nequat) ' ' num2str(nparams) ' ' num2str(nnoi) ...
     ' ' num2str(dt) ' ' num2str(tspan) ' ' num2str(ksteps) ' ' num2str(localgroupsize)], '-echo');
-if s % then failed
-    disp(' Call to SDECL failed')
+if s
+    disp(' Call to SODECL failed')
     return
 end
-% toc
 
 % get the results
 yout=getresults('sodecloutput.bin', orbits);
-
-% (m_int_time / (m_dt * (m_kernel_steps * m_kernel_steps_multiplier_orin)))
 tout=0:dt:(length(yout)-1)*dt;
 
