@@ -96,7 +96,7 @@ namespace sodecl
 			clGetDeviceInfo(m_device_id, cl_pi, infoSize, info, NULL);
 			
 			std::string str(info);
-
+			delete info;
 			return str;
 		}
 
