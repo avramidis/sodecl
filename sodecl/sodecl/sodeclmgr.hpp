@@ -200,14 +200,14 @@ namespace sodecl
 		~sodeclmgr()
 		{
 			//delete m_ode_system_string;
-			delete m_output;
-			delete m_source_str;
+			//delete m_output;
+			//delete m_source_str;
 
 			//delete[] m_ode_system_string;  // This is a string literals. That means it has static storage duration (not dynamically allocated).
 			delete m_t0;
 			delete m_y0;
 			delete m_params;
-			delete m_dts;
+			//delete m_dts;
 			if (m_num_noi > 0)
 			{
 				delete[] m_rcounter;
@@ -252,8 +252,16 @@ namespace sodecl
 				m_contexts.pop_back();
 			}
 
+			for (auto i : m_platforms)
+			{
+				delete i;
+			}
+
+			m_platforms.clear();
+
 			// The executable exited normally
 			m_log->writeExitStatusFile(0, "Normal.");
+			delete m_log;
 		}
 
 		/******************************************************************************************
@@ -366,28 +374,30 @@ namespace sodecl
 			cl_int err = clGetPlatformIDs(m_platform_count, cpPlatform, NULL);
 			if (err != CL_SUCCESS)
 			{
-				delete cpPlatform;
+				delete[] cpPlatform;
 				//return NULL;
 			}
 
-			std::vector<cl_platform_id> m_platform_ids;
+			//std::vector<cl_platform_id> m_platform_ids;
 
-			// populate vector with cl_platform_ids
-			for (cl_uint i = 0; i < m_platform_count; i++)
-			{
-				m_platform_ids.push_back(cpPlatform[i]);
-			}
+			//// populate vector with cl_platform_ids
+			//for (cl_uint i = 0; i < m_platform_count; i++)
+			//{
+			//	m_platform_ids.push_back(cpPlatform[i]);
+			//}
 
 			//for (auto &i : m_platform_ids)
 			//{
 			//	m_platforms.push_back(new platform(i));
 			//}
 
-			for (int i = 0; i < m_platform_ids.size(); i++)
+			//for (int i = 0; i < m_platform_ids.size(); i++)
+			for (int i = 0; i < m_platform_count; i++)
 			{
-				m_platforms.push_back(new platform(m_platform_ids.at(i)));
+				//m_platforms.push_back(new platform(m_platform_ids.at(i)));
+				m_platforms.push_back(new platform(cpPlatform[i]));
 			}
-
+			delete[] cpPlatform;
 		}
 
 		/**
@@ -1310,7 +1320,7 @@ namespace sodecl
 
 			m_log->toFile();
 
-			//delete t_out;
+			delete t_out;
 			delete orbits_out;
 
 			return 1;

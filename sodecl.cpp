@@ -5,6 +5,13 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+#ifdef _DEBUG
+#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#define new DEBUG_NEW
+#endif
+
 #include "iostream"
 #include <sodecl.hpp>
 #include <stdio.h>
@@ -190,7 +197,13 @@ int main(int argc, char* argv[])
 
 	mysodeclmgr->run_ode_solver();
 
-	mysodeclmgr->~sodeclmgr();
+	delete mysodeclmgr;
+
+	//delete t0;
+	//delete y0;
+	//delete params;
+
+	_CrtDumpMemoryLeaks();
 
 	return 0;
 }

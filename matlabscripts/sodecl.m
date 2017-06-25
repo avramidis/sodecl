@@ -44,10 +44,11 @@ function [tout,yout]  = sodecl( platform, device, kernel, initx, params, solver,
 
 delete('t.bin');
 delete('sodecloutput.bin');
-% delete('sodecllog.txt');
 delete('x_params.bin');
 delete('x_t0.bin');
 delete('x_y0.bin');
+delete('sodecllog.txt');
+delete('sodeclexitstatus.txt');
 
 nparams=nparams+nnoi;
 
@@ -98,6 +99,7 @@ if s
     disp(' Call to SODECL failed')
     return
 end
+
 
 % get the results
 yout=getresults('sodecloutput.bin', orbits);
