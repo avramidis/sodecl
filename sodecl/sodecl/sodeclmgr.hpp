@@ -1320,8 +1320,8 @@ namespace sodecl
 
 			m_log->toFile();
 
-			delete t_out;
-			delete orbits_out;
+			delete[] t_out;
+			delete[] orbits_out;
 
 			return 1;
 		}

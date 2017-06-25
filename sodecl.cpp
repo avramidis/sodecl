@@ -5,12 +5,12 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
-#ifdef _DEBUG
-#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
-#define new DEBUG_NEW
-#endif
+//#define _CRTDBG_MAP_ALLOC
+//#include <crtdbg.h>
+//#ifdef _DEBUG
+//#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+//#define new DEBUG_NEW
+//#endif
 
 #include "iostream"
 #include <sodecl.hpp>
@@ -20,6 +20,7 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
+	//_CrtSetBreakAlloc(170);
 	//sodecl::timer start_timer;
 
 	int a_platform;											 /**< platform - OpenCL platform number */
@@ -199,11 +200,7 @@ int main(int argc, char* argv[])
 
 	delete mysodeclmgr;
 
-	//delete t0;
-	//delete y0;
-	//delete params;
-
-	_CrtDumpMemoryLeaks();
+	//_CrtDumpMemoryLeaks();
 
 	return 0;
 }
