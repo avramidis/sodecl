@@ -20,49 +20,44 @@ inline static void ode_solver(double dt, double t, double y[_numeq_], double you
 
 	// k1
 	double k1[_numeq_];
-	int i;
-
-	for (i = 0; i < _numeq_; i++)
+	for (int i = 0; i < _numeq_; ++i)
 	{
 		k1[i] = yout[i];
 	}
 
 	// k2
 	double x2[_numeq_];
-
-	for (i = 0; i < _numeq_; i++)
+	for (int i = 0; i < _numeq_; ++i)
 	{
 		x2[i] = y[i] + (dt * 0.50)*k1[i];
 	}
 	
 	ode_system(t + 0.50*dt, x2, k1, p);
-
-	for (i = 0; i < _numeq_; i++)
+	for (int i = 0; i < _numeq_; ++i)
 	{
 		yout[i] = yout[i] + 2.00 * k1[i];
 	}
 
 	// k3
-
-	for (i = 0; i < _numeq_; i++)
+	for (int i = 0; i < _numeq_; ++i)
 	{
 		x2[i] = y[i] + (dt * 0.50)*k1[i];
 	}
 	ode_system(t + 0.50*dt, x2, k1, p);
 
-	for (i = 0; i < _numeq_; i++)
+	for (int i = 0; i < _numeq_; ++i)
 	{
 		yout[i] = yout[i] + 2.00 * k1[i];
 	}
 
 	// k4
-	for (i = 0; i < _numeq_; i++)
+	for (int i = 0; i < _numeq_; ++i)
 	{
 		x2[i] = y[i] + dt*k1[i];
 	}
 	ode_system(t+dt, x2, k1, p);
 
-	for (i = 0; i < _numeq_; i++)
+	for (int i = 0; i < _numeq_; ++i)
 	{
 		yout[i] = y[i] + (yout[i] + k1[i]) * dt / 6.00;
 	}

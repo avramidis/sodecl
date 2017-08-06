@@ -5,12 +5,12 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef ODECL_PLATFORM_HPP
-#define ODECL_PLATFORM_HPP
+#ifndef sodecl_PLATFORM_HPP
+#define sodecl_PLATFORM_HPP
 
 #include <vector>
 
-namespace odecl
+namespace sodecl
 {
 	class platform
 	{
@@ -19,9 +19,9 @@ namespace odecl
 		*/
 	public:
 
-		// Array with pointer to odecl::platform objects
-		//odecl::device *m_devices;
-		std::vector<odecl::device*> m_devices;
+		// Array with pointer to sodecl::platform objects
+		//sodecl::device *m_devices;
+		std::vector<sodecl::device*> m_devices;
 
 		// Platform ID
 		cl_platform_id m_platform_id;
@@ -75,10 +75,15 @@ namespace odecl
 		// Distractor
 		~platform()
 		{
-
+			for (auto i : m_devices)
+			{
+				delete i;
+			}
+			
+			m_devices.clear();
 		}
 
-		std::vector<odecl::device*> get_devices()
+		std::vector<sodecl::device*> get_devices()
 		{
 			return m_devices;
 		}
@@ -127,6 +132,7 @@ namespace odecl
 			clGetPlatformInfo(m_platform_id, cl_pi, infoSize, info, NULL);
 
 			std::string str(info);
+			delete info;
 
 			return str;
 		}
@@ -136,7 +142,7 @@ namespace odecl
 		{
 			cl_uint device_count;
 
-			// get platform count
+			// get device count
 			cl_int err = clGetDeviceIDs(m_platform_id, CL_DEVICE_TYPE_ALL, 0, NULL, &device_count);
 
 			if (err != CL_SUCCESS)
@@ -147,41 +153,25 @@ namespace odecl
 			return device_count;
 		}
 
-		// Create all odecl::device objects
+		// Create all sodecl::device objects
 		void create_devices()
 		{
-			//cl_uint platform_count = get_platform_count();
 			cl_device_id *cpDevice = new cl_device_id[m_devices_count];
 
 			clGetDeviceIDs(m_platform_id, CL_DEVICE_TYPE_ALL, m_devices_count, cpDevice, NULL);
 
-			std::vector<cl_device_id> m_device_ids;
-
-			// populate vector with cl_platform_ids
 			for (int i = 0; i < m_devices_count; i++)
 			{
-				m_device_ids.push_back(cpDevice[i]);
-			}
-
-			//for (auto &i : m_device_ids)
-			//{
-			//	m_devices.push_back(new device(i));
-			//}
-
-			for (int i = 0; i < m_device_ids.size(); i++)
-			{
-				m_devices.push_back(new device(m_device_ids.at(i)));
+				m_devices.push_back(new device(cpDevice[i]));
 				
 				m_log->write("	The device name is ");
 				m_log->write(m_devices.back()->name().c_str());
 				m_log->write("\n");
 			}
-
-			
+			delete[] cpDevice;
 		}
-
 	};
 }
 
 
-#endif // ODECL_PLATFORM_HPP
+#endif // sodecl_PLATFORM_HPP

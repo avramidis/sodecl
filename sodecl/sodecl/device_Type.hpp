@@ -5,12 +5,12 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef ODECL_DEVICE_TYPE_HPP
-#define ODECL_DEVICE_TYPE_HPP
+#ifndef sodecl_DEVICE_TYPE_HPP
+#define sodecl_DEVICE_TYPE_HPP
 
-namespace odecl
+namespace sodecl
 {
-	enum class device_Type
+	enum class device_Type : uint64_t
 	{
 		ALL = CL_DEVICE_TYPE_ALL,
 		CPU = CL_DEVICE_TYPE_CPU,
@@ -20,4 +20,4 @@ namespace odecl
 }
 
 
-#endif // ODECL_SOLVER_TYPE_HPP
+#endif // sodecl_SOLVER_TYPE_HPP

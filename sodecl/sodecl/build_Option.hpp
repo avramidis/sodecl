@@ -5,17 +5,18 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef ODECL_BUILD_OPTION_HPP
-#define ODECL_BUILD_OPTION_HPP
+#ifndef SODECL_BUILD_OPTION_HPP
+#define SODECL_BUILD_OPTION_HPP
 
-namespace odecl
+namespace sodecl
 {
 	enum class build_Option
 	{
 		FastRelaxedMath = 1,
-		stdCL20 = 2
+		stdCL20 = 2,
+		stdCL21 = 3
 	};
 }
 
 
-#endif // ODECL_BUILD_OPTION_HPP
+#endif // SODECL_BUILD_OPTION_HPP

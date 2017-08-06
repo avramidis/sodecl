@@ -5,10 +5,10 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef ODECL_DEVICE_HPP
-#define ODECL_DEVICE_HPP
+#ifndef sodecl_DEVICE_HPP
+#define sodecl_DEVICE_HPP
 
-namespace odecl
+namespace sodecl
 {
 
 	class device
@@ -96,7 +96,7 @@ namespace odecl
 			clGetDeviceInfo(m_device_id, cl_pi, infoSize, info, NULL);
 			
 			std::string str(info);
-
+			delete[] info;
 			return str;
 		}
 
@@ -107,4 +107,4 @@ namespace odecl
 }
 
 
-#endif // ODECL_DEVICE_HPP
+#endif // sodecl_DEVICE_HPP

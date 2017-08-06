@@ -5,8 +5,8 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef ODECL_CLOG_HPP
-#define ODECL_CLOG_HPP
+#ifndef sodecl_CLOG_HPP
+#define sodecl_CLOG_HPP
 
 #include <string>
 #include <sstream>
@@ -14,7 +14,7 @@
 
 using namespace std;
 
-namespace odecl
+namespace sodecl
 {
 	class clog
 	{
@@ -30,7 +30,11 @@ namespace odecl
 		/// </summary>
 		clog()
 		{
+			ofstream newFileLog("sodecllog.txt", std::ios::binary | std::ios::out);
+			newFileLog.close();
 
+			ofstream newFileExitStatus("sodeclexitstatus.txt", std::ios::binary | std::ios::out);
+			newFileExitStatus.close();
 		}
 
 	public:
@@ -79,13 +83,38 @@ namespace odecl
 		{
 			std::ofstream output_stream;
 
-			output_stream.open("odecllog.txt", std::ios::binary | std::ios::app | std::ios::out);
+			output_stream.open("sodecllog.txt", std::ios::binary | std::ios::app | std::ios::out);
 
 			output_stream << m_oss.str();
 
 			output_stream.close();
 
 			m_oss.clear();
+		}
+
+		/// <summary>
+		/// Writes the SODECL exit status file.
+		/// </summary>
+		void writeExitStatusFile(size_t exittype, string msg)
+		{
+			std::ostringstream oss;
+			if (exittype == 0)
+			{
+				oss << "1 ";
+			}
+			else
+			{
+				oss << "0 ";
+			}
+
+			oss << msg;
+
+			std::ofstream output_stream;
+			output_stream.open("sodeclexitstatus.txt", std::ios::binary | std::ios::app | std::ios::out);
+			output_stream << oss.str();
+			output_stream.close();
+
+			oss.clear();
 		}
 	};
 
@@ -95,4 +124,4 @@ namespace odecl
 }
 
 
-#endif // ODECL_CLOG_HPP
+#endif // sodecl_CLOG_HPP

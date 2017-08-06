@@ -7,7 +7,7 @@
 
 
 // The tridiagonal matrix algorithm (Thomas algorithm)
-void solveSystem(double jac[_numeq_][_numeq_], double v[_numeq_], double x[_numeq_])
+inline static void solvesystem(double jac[_numeq_][_numeq_], double v[_numeq_], double x[_numeq_])
 {
 	double a[_numeq_];
 	for (int i = _numeq_ - 2; i < _numeq_; i++)
@@ -47,7 +47,7 @@ void solveSystem(double jac[_numeq_][_numeq_], double v[_numeq_], double x[_nume
 	}
 }
 
-void newton_f(double dt, double t, double initial[_numeq_], double guess[_numeq_], double yout[_numeq_], double p[_numpar_])
+inline static void newton_f(double dt, double t, double initial[_numeq_], double guess[_numeq_], double yout[_numeq_], double p[_numpar_])
 {
 	double detterm[_numeq_];
 	ode_system(t, guess, detterm, p);
@@ -58,7 +58,7 @@ void newton_f(double dt, double t, double initial[_numeq_], double guess[_numeq_
 	}
 }
 
-void newton(double dt, double t, double initial[_numeq_], double guess[_numeq_], double detterm[_numeq_], double p[_numpar_])
+inline static void newton(double dt, double t, double initial[_numeq_], double guess[_numeq_], double detterm[_numeq_], double p[_numpar_])
 {
 	double jac[_numeq_][_numeq_];
 	double new_out[_numeq_];
@@ -91,7 +91,7 @@ void newton(double dt, double t, double initial[_numeq_], double guess[_numeq_],
 			jac[i][i] = jac[i][i] + 1;
 		}
 
-		solveSystem(jac, new_out, multi_out);
+		solvesystem(jac, new_out, multi_out);
 		for (int i = 0; i < _numeq_; i++)
 		{
 			guess[i] = guess[i] - multi_out[i];

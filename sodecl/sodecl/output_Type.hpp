@@ -5,10 +5,10 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef ODECL_OUTPUT_TYPE_HPP
-#define ODECL_OUTPUT_TYPE_HPP
+#ifndef sodecl_OUTPUT_TYPE_HPP
+#define sodecl_OUTPUT_TYPE_HPP
 
-namespace odecl
+namespace sodecl
 {
 	enum class output_Type
 	{
@@ -19,4 +19,4 @@ namespace odecl
 }
 
 
-#endif // ODECL_OUTPUT_TYPE_HPP
+#endif // sodecl_OUTPUT_TYPE_HPP

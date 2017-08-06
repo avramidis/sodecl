@@ -5,8 +5,8 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef ODECL_SYSTEM_HPP
-#define ODECL_SYSTEM_HPP
+#ifndef sodecl_system_HPP
+#define sodecl_system_HPP
 
 #include <vector>
 #include <list>
@@ -23,133 +23,109 @@
 #include <sstream>
 #include <algorithm>
 #include <iterator>
+#include <random>
 
 using namespace std;
 
-namespace odecl
+namespace sodecl
 {
-	/// <summary>
-	/// CLASS SYSTEM is the main class of the ODECL library.
-	/// </summary>
-	class system
+	/**
+	*  Manager class of sodecl.
+	*/
+	class sodeclmgr
 	{
 		/*********************************************************************************************
 		VARIABLES SECTION
 		*/
 	public:
 		
-		cl_double *m_output;
-		int m_output_size;
+		cl_double*	m_output;			/**< Output */
+		int			m_output_size;		/**< Output size */
 
 	private:
 
 		/********************************************************************************************
 		OPENCL HARDWARE SECTION VARIABLES
 		*/
-		// Number of OPENCL platforms
-		cl_uint m_platform_count;
 
-		// Vector which stores the odecl::platform objects. One object for each OpenCL platform.
-		std::vector<odecl::platform*> m_platforms;
-
-		// The index of the selected odecl::platform object in the m_platforms vector.
-		cl_uint m_selected_platform;
-
-		// The index of the selected odecl::device object in m_devices vector of selected platform.
-		cl_uint m_selected_device;
-
-		// Selected OpenCL device type.
-		device_Type m_selected_device_type;
+		cl_uint							m_platform_count;			/**< Number of OPENCL platforms */
+		std::vector<sodecl::platform*>	m_platforms;				/**< Vector which stores the sodecl::platform objects. One object for each OpenCL platform */
+		cl_uint							m_selected_platform;		/**< The index of the selected sodecl::platform object in the m_platforms vector */		
+		cl_uint							m_selected_device;			/**< The index of the selected sodecl::device object in m_devices vector of selected platform */		
+		device_Type						m_selected_device_type;		/**< Selected OpenCL device type */
 
 		/********************************************************************************************
 		OPENCL SOFTWARE SECTION VARIABLES
 		*/
 
-		// OpenCL command contexts vector.
-		std::vector<cl_context> m_contexts;
+		std::vector<cl_context>			m_contexts;				/**< OpenCL command contexts vector */
+		std::vector<cl_command_queue>	m_command_queues;		/**< OpenCL command queues vector */
+		std::vector<char>				m_kernel_sources;		/**< Char vector which stores the OpenCL kernel source string. @todo store multiple kernel source strings */
+		std::string						m_build_options_str;	/**< Char vector which stores the OpenCL build options string */
+		std::vector<build_Option>		m_build_options;		/**< build_Option vector which stores the OpenCL build options selection */
+		char*							m_source_str;			/**< OpenCL kernel string */
+		string							m_kernel_path_str;		/**< OpenCL kernels solvers path */
+		size_t							m_source_size;			/**< OpenCL kernel string size */
+		std::vector<cl_program>			m_programs;				/**< OpenCL programs vector */
+		std::vector<cl_kernel>			m_kernels;				/**< OpenCL kernels vector */
+		int								m_local_group_size;		/**< OpenCL device local group size */
 
-		// OpenCL command queues vector.
-		std::vector<cl_command_queue> m_command_queues;
-
-		// Char vector which stores the OpenCL kernel source string. TODO: store multiple kernel source strings.
-		std::vector<char> m_kernel_sources;
-
-		// Char vector which stores the OpenCL build options string.
-		//std::list<char> m_build_options_str;
-		std::string m_build_options_str;
-
-		// build_Option vector which stores the OpenCL build options selection.
-		std::vector<build_Option> m_build_options;
-
-		// OpenCL kernel string.
-		char *m_source_str;
-
-		// OpenCL kernels solvers path.
-		string m_kernel_path_str;
-		
-		// OpenCL kernel string size.
-		size_t m_source_size;
-
-		// OpenCL programs vector.
-		std::vector<cl_program> m_programs;
-
-		// OpenCL kernels vector.
-		std::vector<cl_kernel> m_kernels;
-
-		// ODE solvers OpenCL buffers.
-		cl_mem m_mem_t0;				// OpenCL memory buffer which stores the time value of each integration output step.
-		cl_mem m_mem_y0;				// OpenCL memory buffer which stores the phase state of each integration output step.
-		cl_mem m_mem_params;			// OpenCL memory buffer which stores the parameter values of each integration orbit of the ODE system.
-		cl_mem m_mem_dt;				// OpenCL memory buffer which stores the time step for each integration orbit of the ODE system.
-
-
-		// Path to the results output file.
-		char *m_outputfile_str;
+		// ODE solvers OpenCL buffers
+		cl_mem	m_mem_t0;				/**< OpenCL memory buffer which stores the time value of each integration output step */ 
+		cl_mem	m_mem_y0;				/**< OpenCL memory buffer which stores the phase state of each integration output step */ 
+		cl_mem	m_mem_params;			/**< OpenCL memory buffer which stores the parameter values of each integration orbit of the ODE system */ 
+		cl_mem	m_mem_dt;				/**< OpenCL memory buffer which stores the time step for each integration orbit of the ODE system */ 
+		cl_mem	m_mem_rcounter;			/**< OpenCL memory buffer which stores the counters for each workitem for the random number generation */ 
+		char*	m_outputfile_str;		/**< Path to the results output file */
 
 		/********************************************************************************************
 		ODE SOLVERS SECTION VARIABLES
 		*/
 
-		char *m_ode_system_string;
-
-		solver_Type m_solver;			// ODE solver type.
-		double m_dt;					// Solver (initial) time step in seconds.
-		double m_int_time;				// Time units to integrate the ODE system.
-		int m_kernel_steps;				// Number of step the solver with perform in each kernel call.
-		int m_num_dt_steps;				// Number of dt steps for the state of the ODE system to be saved.
-		int m_list_size;				// Number of ODE system parameter combinations.
-		int m_num_equat;				// Number of ODE system equations.
-		int m_num_params;				// Number of ODE system parameters.
-		output_Type m_output_type;		// Type of output (binary file or array).
+		char*			m_ode_system_string;			/**< ODE or SDE system OpenCL function */
+		solver_Type		m_solver;						/**< ODE solver type */ 
+		double			m_dt;							/**< Solver (initial) time step in seconds */ 
+		double			m_int_time;						/**< Time units to integrate the ODE system */ 
+		int				m_kernel_steps;					/**< Number of step the solver with perform in each kernel call */ 
+		int				m_num_dt_steps;					/**< Number of dt steps for the state of the ODE system to be saved */
+		int				m_list_size;					/**< Number of ODE system parameter combinations */ 
+		int				m_num_equat;					/**< Number of ODE system equations */ 
+		int				m_num_params;					/**< Number of ODE system parameters */ 
+		int				m_num_noi;						/**< Number of noise processes */ 
+		output_Type		m_output_type;					/**< Type of output (binary file or array) */ 
+		int*			m_outputPattern;				/**< Array which holds the output pattern. E.g. if the system has 3 equations the array {1,2,3}   
+															 will write to the output file the results of the 1st then 2nd and then 3rd state variable */
 
 		// arrays with the state of the system for each parameter combination
-		cl_double *m_t0;				// Client memory buffer which stores the time value of each integration output step.
-		cl_double *m_y0;				// Client memory buffer which stores the phase state of each integration output step.
-		cl_double *m_params;			// Client memory buffer which stores the parameter values of each integration orbit of the ODE system.
-		cl_double *m_dts;				// Client memory buffer which stores the time step for each integration orbit of the ODE system.
+		cl_double*	m_t0;			/**< Client memory buffer which stores the time value of each integration output step */ 
+		cl_double*	m_y0;			/**< Client memory buffer which stores the phase state of each integration output step */  
+		cl_double*	m_params;		/**< Client memory buffer which stores the parameter values of each integration orbit of the ODE system */ 
+		cl_double*	m_dts;			/**< Client memory buffer which stores the time step for each integration orbit of the ODE system */ 							
+		cl_double*	m_rcounter;		/**< Counter that counts the number of calls to the random number generator */ 
 
 		// Log mechanisms
-		clog *m_log;					// Pointer for log.
+		clog*	m_log;				/**< Pointer for log */ 
 
 		/*********************************************************************************************
 		FUNCTIONS SECTION
 		*/
 	public:
-
-		/// <summary>
-		/// Default constructor which initialises the odecl object. 
-		/// </summary>
-		/// <param name="kernel_path_str">Path to the OpenCL ODE solvers kernel source files.</param>
-		/// <param name="ode_system_str">Path to the OpenCL ODE system source file.</param>
-		/// <param name="solver">Type of the solver that will be used to integrate the ODE system.</param>
-		/// <param name="dt">ODE solver time step size.</param>
-		/// <param name="int_time">Length of time in seconds the the ODE system with be integrated.</param>
-		/// <param name="kernel_steps">Number of steps the ODE solver will perform in each OpenCL device call.</param>
-		/// <param name="num_equat">Number of equations of the ODE system.</param>
-		/// <param name="num_params">Number of parameters of the ODE system.</param>
-		/// <param name="list_size">Number of orbits to be integrated for the ODE system.</param>
-		/// <param name="output_type">Specifies the location where the output of the integration of the ODE system will be stored.</param>
-		system(string kernel_path_str, char *ode_system_str, solver_Type solver, double dt, double int_time, int kernel_steps, int num_equat, int num_params, int list_size, output_Type output_type)
+	
+		/**
+		*  Default constructor which initialises the sodecl object. 
+		*
+		* @param  kernel_path_str		Path to the OpenCL ODE solvers kernel source files
+		* @param  ode_system_str		Path to the OpenCL ODE system source file
+		* @param  solver				Type of the solver that will be used to integrate the ODE system
+		* @param  dt					ODE solver time step size
+		* @param  int_time				Length of time in seconds the the ODE system with be integrated
+		* @param  kernel_steps			Number of steps the ODE solver will perform in each OpenCL device call
+		* @param  num_equat				Number of equations of the ODE system
+		* @param  num_params			Number of parameters of the ODE system
+		* @param  list_size				Number of orbits to be integrated for the ODE system
+		* @param  output_type			Specifies the location where the output of the integration of the ODE system will be stored
+		*/
+		sodeclmgr(string kernel_path_str, char *ode_system_str, solver_Type solver, double dt, double int_time, int kernel_steps, int num_equat, int num_params, int num_noi, int list_size, output_Type output_type)
 		{
 			// Initialise the clog object
 			m_log = clog::getInstance();
@@ -157,54 +133,95 @@ namespace odecl
 			// Set ODE Solver parameter values
 			m_kernel_path_str = kernel_path_str;
 			m_ode_system_string = ode_system_str;
-			m_solver = solver;							// Choose the ODE solver.
-			m_dt = dt;									// Solver (initial) time step in seconds.
-			m_int_time = int_time;						// Integration time.
-			m_kernel_steps = kernel_steps;				// Number of step the solver with perform in each kernel call.
-			m_list_size = list_size;					// Number of different integrations (ODE system parameter combinations).
-			m_num_equat = num_equat;					// Number of ODE system equations.
-			m_num_params = num_params;					// Number of ODE system parameters.
-			m_output_type = output_type;                // Type of output (Array or binary file).
+			m_solver = solver;										
+			m_dt = dt;												
+			m_int_time = int_time;									
+			m_kernel_steps = kernel_steps;
+			m_list_size = list_size;								
+			m_num_equat = num_equat;								
+			m_num_params = num_params;								
+			m_num_noi = num_noi;									
+			m_output_type = output_type;							
+
+			if (m_num_noi > 0)
+			{
+				double lower_bound = -100000000000;
+				double upper_bound = 100000000000;
+				std::uniform_real_distribution<double> unif(lower_bound, upper_bound);
+				std::random_device rd;
+				std::mt19937 gen(rd());
+
+				m_rcounter = new double[m_list_size];
+				for (int i = 0; i < m_list_size; i++)
+				{
+					m_rcounter[i] = unif(gen);
+				}
+			}
+			
+			m_outputPattern = new int[m_num_equat];
+			for (int i = 0; i < m_num_equat; i++)
+			{
+				//m_outputPattern[i] = i+1;
+				m_outputPattern[i] = 0;
+			}
+			m_outputPattern[0] = 1;
 
 			// Find the host's platforms
 			// get the number of platforms in the system
 			m_platform_count = get_platform_count();
+			if (m_platform_count == -1)
+			{
+				cerr << "Error getting OpenCL planform number!" << endl;
+			}
 
-			// create all odecl::platform objects
+			// create all sodecl::platform objects, one for each OpenCL platform
 			create_platforms();
 
 			// This is used for the variable time step solvers
-			m_dts = new cl_double[m_list_size];
-			for (int i = 0; i < m_list_size; i++)
-			{
-				m_dts[i] = m_dt;
-			}
+			//m_dts = new cl_double[m_list_size];
+			//for (int i = 0; i < m_list_size; i++)
+			//{
+			//	m_dts[i] = m_dt;
+			//}
 
 			// Add default OpenCL build options
 			m_build_options.push_back(build_Option::FastRelaxedMath);
-			m_build_options.push_back(build_Option::stdCL20);
+			//m_build_options.push_back(build_Option::stdCL20);
+			//m_build_options.push_back(build_Option::stdCL21);
+
+			m_local_group_size = 0;
 
 			//m_log->toFile();
 		}
 
-		/// <summary>
-		/// Destructor. Deletes all objects, arrays, pointers, etc. 
-		/// </summary>
-		~system()
+		/**
+		*  Destructor. Deletes all objects, arrays, pointers, etc. 
+		*/
+		~sodeclmgr()
 		{
-			delete m_output;
-			delete m_source_str;
+			//delete m_ode_system_string;
+			//delete m_output;
+			//delete m_source_str;
 
 			//delete[] m_ode_system_string;  // This is a string literals. That means it has static storage duration (not dynamically allocated).
 			delete m_t0;
 			delete m_y0;
 			delete m_params;
-			delete m_dts;
+			//delete m_dts;
+			if (m_num_noi > 0)
+			{
+				delete[] m_rcounter;
+			}
+			delete[] m_outputPattern;
 
 			// Clean OpenCL memory buffers.
 			clReleaseMemObject(m_mem_t0);
 			clReleaseMemObject(m_mem_y0);
 			clReleaseMemObject(m_mem_params);
+			if (m_num_noi > 0)
+			{
+				clReleaseMemObject(m_mem_rcounter);
+			}
 			//clReleaseMemObject(m_mem_dt);
 
 			// Clean OpenCL command queues.
@@ -234,20 +251,33 @@ namespace odecl
 				clReleaseContext((cl_context)(m_contexts.back()));
 				m_contexts.pop_back();
 			}
+
+			for (auto i : m_platforms)
+			{
+				delete i;
+			}
+
+			m_platforms.clear();
+
+			// The executable exited normally
+			m_log->writeExitStatusFile(0, "Normal.");
+			delete m_log;
 		}
 
 		/******************************************************************************************
 		HARDWARE SECTION
 		*/
-
-		/// <summary>
-		/// Sets the odecl object to use the selected OpenCL device for the integration of the ODE model.
-		/// </summary>
-		/// <param name="platform_num">Index of selected OpenCL platform.</param>
-		/// <param name="device_type">OpenCL device type.</param>
-		/// <param name="device_num">Index of selected OpenCL device in the selected OpenCL platform.</param>
-		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>		
-		int choose_device(int platform_num, device_Type device_type, int device_num)
+	
+		/**
+		*  Sets the sodecl object to use the selected OpenCL device for the integration of the ODE model.
+		*
+		* @param	platform_num	Index of selected OpenCL platform
+		* @param	device_type		OpenCL device type
+		* @param	device_num		Index of selected OpenCL device in the selected OpenCL platform
+		*
+		* @return	output_type		Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
+		*/
+		int choose_device(cl_uint platform_num, device_Type device_type, cl_uint device_num)
 		{
 			// Check if selected platform exist
 			if (platform_num<0 || platform_num>m_platform_count)
@@ -265,7 +295,6 @@ namespace odecl
 				m_log->write("Selected device number is out of bounds.\n");
 				return 0;
 			}
-
 
 			// If selected device type is not ALL (OpenCL type) check if selected device type exist
 			if ((cl_device_type)device_type != (cl_device_type)device_Type::ALL)
@@ -290,6 +319,10 @@ namespace odecl
 			m_log->write(m_platforms[platform_num]->m_devices[device_num]->name().c_str());
 			m_log->write("\n");
 
+			m_log->write("Selected device OpenCL version: ");
+			m_log->write(m_platforms[platform_num]->m_devices[device_num]->version().c_str());
+			m_log->write("\n");
+
 			m_selected_platform = platform_num;
 			m_selected_device = device_num;
 			m_selected_device_type = device_type;
@@ -297,14 +330,25 @@ namespace odecl
 			return 1;
 		}
 
+		/**
+		*  Sets the number of work items in each group.
+		*
+		* @param	local_group_size	Number of work items for each group
+		*/
+		void set_local_group_size(int local_group_size)
+		{
+			m_local_group_size = local_group_size;
+		}
+
 		/******************************************************************************************
 		SOFTWARE SECTION
 		*/
 
-		/// <summary>
-		/// Sets the path of the output file to a private variable. If the file does not exist it is created.
-		/// </summary>
-		/// <param name="outputfile_str">Path and filename to the output file.</param>
+		/**
+		*  Sets the path of the output file to a private variable. If the file does not exist it is created.
+		*
+		* @param	outputfile_str	Path and filename to the output file
+		*/
 		void set_outputfile(char *outputfile_str)
 		{
 			m_outputfile_str = outputfile_str;
@@ -316,12 +360,13 @@ namespace odecl
 		HARDWARE SECTION
 		*/
 
-		/// <summary>
-		/// Create all odecl::platform objects 
-		/// </summary>
+		/**
+		* Creates all sodecl::platform objects
+		*
+		* @todo needs a better description
+		*/
 		void create_platforms()
 		{
-
 			//cl_uint platform_count = get_platform_count();
 			cl_platform_id *cpPlatform = new cl_platform_id[m_platform_count];
 
@@ -329,39 +374,43 @@ namespace odecl
 			cl_int err = clGetPlatformIDs(m_platform_count, cpPlatform, NULL);
 			if (err != CL_SUCCESS)
 			{
-				delete cpPlatform;
+				delete[] cpPlatform;
 				//return NULL;
 			}
 
-			std::vector<cl_platform_id> m_platform_ids;
+			//std::vector<cl_platform_id> m_platform_ids;
 
-			// populate vector with cl_platform_ids
-			for (int i = 0; i < m_platform_count; i++)
-			{
-				m_platform_ids.push_back(cpPlatform[i]);
-			}
+			//// populate vector with cl_platform_ids
+			//for (cl_uint i = 0; i < m_platform_count; i++)
+			//{
+			//	m_platform_ids.push_back(cpPlatform[i]);
+			//}
 
 			//for (auto &i : m_platform_ids)
 			//{
 			//	m_platforms.push_back(new platform(i));
 			//}
 
-			for (int i = 0; i < m_platform_ids.size(); i++)
+			//for (int i = 0; i < m_platform_ids.size(); i++)
+			for (int i = 0; i < m_platform_count; i++)
 			{
-				m_platforms.push_back(new platform(m_platform_ids.at(i)));
+				//m_platforms.push_back(new platform(m_platform_ids.at(i)));
+				m_platforms.push_back(new platform(cpPlatform[i]));
 			}
+			delete[] cpPlatform;
 		}
 
-		/// <summary>
-		/// Finds and returns the number of OpenCL platforms available.
-		/// </summary>
-		/// <returns>The number of OpenCL platforms available. Returns -1 if the operation fails.</returns>
+		/**
+		* Finds and returns the number of OpenCL platforms available.
+		*
+		* @return	The number of OpenCL platforms available. Returns -1 if the operation failed
+		*/
 		cl_uint get_platform_count()
 		{
 			cl_uint platform_count;
 
 			// get platform count
-			cl_int err = clGetPlatformIDs(10, NULL, &platform_count);
+			cl_int err = clGetPlatformIDs(platform_count, NULL, &platform_count);
 
 			if (err != CL_SUCCESS)
 			{
@@ -371,10 +420,11 @@ namespace odecl
 			return platform_count;
 		}
 
-		/// <summary>
-		/// Sets the odecl object to use the CPU to integrate the ODE model. 
-		/// </summary>
-		/// <remarks>There could be an issue when selecting the OpenCL platform if there are more than one.</remarks>
+		/**
+		* Sets the sodecl object to use the CPU to integrate the ODE model.
+		*
+		* @todo	There could be an issue when selecting the OpenCL platform if there are more than one
+		*/
 		void get_CPU_device()
 		{
 
@@ -384,10 +434,11 @@ namespace odecl
 		SOFTWARE SECTION
 		*/
 
-		/// <summary>
-		/// Create OpenCL context for the selected OpenCL platform and OpenCL device.
-		/// </summary>
-		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
+		/**
+		* Create OpenCL context for the selected OpenCL platform and OpenCL device.
+		*
+		* @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
+		*/
 		int create_context()
 		{
 			cl_int err;
@@ -404,10 +455,11 @@ namespace odecl
 
 		}
 
-		/// <summary>
-		/// Create OpenCL command queue for the selected OpenCL platform and OpenCL device. 
-		/// </summary>
-		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
+		/**
+		* Create OpenCL command queue for the selected OpenCL platform and OpenCL device. 
+		*
+		* @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
+		*/
 		int create_command_queue()
 		{
 			cl_context context = m_contexts[0];
@@ -433,6 +485,11 @@ namespace odecl
 
 	private:
 
+		/**
+		* Reads an OpenCL function or kernel
+		*
+		* @param	filename	OpenCL file
+		*/
 		void read_kernel_file(char* filename)
 		{
 
@@ -483,21 +540,19 @@ namespace odecl
 			//	t.read(&str[0], str.size());
 			//	t.close();
 			//}
-
-
 		}
 
-		/// <summary>
-		/// Adds the string str to the vector which stores the kernel string (i.e. OpenCL kernel code) 
-		/// </summary>.
-		/// <param name="str">The sting to be pushed in the OpenCL kernel code vector.</param>
-		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
+		/**
+		* Adds the string str to the vector which stores the kernel string (i.e. OpenCL kernel code) 
+		*
+		* @param	str		The sting to be pushed in the OpenCL kernel code vector
+		*
+		* @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull
+		*/
 		int add_string_to_kernel_sources(string str)
 		{
 			// TODO: Add code to catch an exception in case the operation fails
-			int m_source_size = str.length();
-
-			for (int i = 0; i < m_source_size; i++)
+			for (size_t i = 0; i < str.length(); i++)
 			{
 				m_kernel_sources.push_back(str[i]);
 			}
@@ -505,14 +560,16 @@ namespace odecl
 			return 1;
 		}
 
-		/// <summary>
-		/// Convert a double to string.
-		/// </summary>
-		/// <param name="x">Double number which will be coverted to string.</param>
-		/// <returns>A string of the converted double number.</returns>
+		/**
+		* Convert a double to string.
+		*
+		* @param	x		Double number which will be coverted to string
+		*
+		* @return	A string of the converted double number
+		*/
 		string double2string(double x)
 		{
-			// TODO: Add code to catch an exception in the unlikely case of the conversion fails
+			// @todo Add code to catch an exception in the unlikely case of the conversion fails
 			std::string s;
 			{
 				std::ostringstream ss;
@@ -522,14 +579,36 @@ namespace odecl
 			return s;
 		}
 
-		/// <summary>
-		/// Form the OpenCL kernel string.
-		/// </summary>
-		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
+		/**
+		* Form the OpenCL kernel string.
+		*
+		* @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
+		*/
 		int create_kernel_string()
 		{
 			// Create the parameters section of the kernel string. These parameter values are defines
 
+			if (m_num_noi > 0)
+			{
+				add_string_to_kernel_sources("#define R123_USE_U01_DOUBLE 1");
+				add_string_to_kernel_sources("\n");
+
+				add_string_to_kernel_sources("#include <Random123/threefry.h>");
+				add_string_to_kernel_sources("\n");
+
+				add_string_to_kernel_sources("#include <Random123/u01.h>");
+				add_string_to_kernel_sources("\n");
+			}
+			// Number of noise parameters
+			add_string_to_kernel_sources("#define _numnoi_ ");
+			add_string_to_kernel_sources(std::to_string(static_cast<long long>(m_num_noi)));
+			add_string_to_kernel_sources("\n");
+
+			// List size
+			add_string_to_kernel_sources("#define _listsize_ ");
+			add_string_to_kernel_sources(std::to_string(static_cast<long long>(m_list_size)));
+
+			add_string_to_kernel_sources("\n");
 			// Kernel steps
 			add_string_to_kernel_sources("#define _numsteps_ ");
 			add_string_to_kernel_sources(std::to_string(static_cast<long long>(m_kernel_steps)));
@@ -538,7 +617,7 @@ namespace odecl
 			//cout << "Kernel steps done" << endl;
 
 			// ODE solver time size
-			add_string_to_kernel_sources("#define _m_dt ");
+			add_string_to_kernel_sources("#define _m_dt_ ");
 			//add_string_to_kernel_sources(std::to_string(static_cast<long double>(m_dt)));
 			add_string_to_kernel_sources(double2string(m_dt));
 			add_string_to_kernel_sources("\n");
@@ -557,7 +636,7 @@ namespace odecl
 
 			if (m_solver == solver_Type::ImplicitEuler || m_solver == solver_Type::ImplicitMidpoint) {
 				double epsilon1 = 1e-7;
-				// Implicit Euler Newton-Raphson epsilon1 value
+				// Implicit StochasticEuler Newton-Raphson epsilon1 value
 				add_string_to_kernel_sources("#define _epsilon1_ ");
 				add_string_to_kernel_sources(double2string(epsilon1));
 				add_string_to_kernel_sources("\n");
@@ -576,6 +655,10 @@ namespace odecl
 
 			// Choose the solver.
 			switch (m_solver){
+			case solver_Type::StochasticEuler:
+				//cout << "Read the StochasticEuler solver" << endl;
+				kernelpath.append("/stochasticeuler.cl");	// StochasticEuler
+				break;
 			case solver_Type::Euler:
 				//cout << "Read the Euler solver" << endl;
 				kernelpath.append("/euler.cl");	// Euler
@@ -585,12 +668,10 @@ namespace odecl
 				kernelpath.append("/rk4.cl");	// Runge-Kutta
 				break;
 			case solver_Type::ImplicitEuler:
-				//cout << "Read the Implicit Euler solver" << endl;
-				kernelpath.append("/ie.cl");	// Implicit Euler	
+				kernelpath.append("/ie.cl");	// Runge-Kutta
 				break;
 			case solver_Type::ImplicitMidpoint:
-				//cout << "Read the Implicit Euler solver" << endl;
-				kernelpath.append("/im.cl");	// Implicit Euler	
+				kernelpath.append("/im.cl");	// Runge-Kutta
 				break;
 			default:
 				std::cout << "No valid solver chosen!" << std::endl;
@@ -613,7 +694,29 @@ namespace odecl
 
 			// Read the solver 
 			string kernelsolverpath_char = m_kernel_path_str;
-			kernelsolverpath_char.append("/solver_caller.cl");
+
+			// Choose the solver.
+			switch (m_solver) {
+			case solver_Type::StochasticEuler:
+				kernelsolverpath_char.append("/stochastic_solver_caller.cl");
+				break;
+			case solver_Type::Euler:
+				//cout << "Read the Runge-Kutta solver" << endl;
+				kernelsolverpath_char.append("/solver_caller.cl");
+				break;
+			case solver_Type::RungeKutta:
+				//cout << "Read the Runge-Kutta solver" << endl;
+				kernelsolverpath_char.append("/solver_caller.cl");
+				break;
+			case solver_Type::ImplicitEuler:
+				kernelsolverpath_char.append("/solver_caller.cl");
+				break;
+			case solver_Type::ImplicitMidpoint:
+				kernelsolverpath_char.append("/solver_caller.cl");
+				break;
+			default:
+				std::cout << "No valid solver chosen!" << std::endl;
+			}
 			//std::cout << kernelsolverpath_char << std::endl;
 			read_kernel_file(&kernelsolverpath_char[0]);
 			add_string_to_kernel_sources("\n");
@@ -634,10 +737,11 @@ namespace odecl
 			return 1;
 		}
 
-		/// <summary>
-		/// Create OpenCL program for the selected OpenCL platform, OpenCL device and created OpenCL context.
-		/// </summary>
-		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
+		/**
+		* Create OpenCL program for the selected OpenCL platform, OpenCL device and created OpenCL context.
+		*
+		* @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
+		*/
 		int create_program()
 		{
 			const char *srcptr[] = { m_kernel_sources.data() };
@@ -659,11 +763,13 @@ namespace odecl
 			return 1;
 		}
 
-		/// <summary>
-		/// Adds a selected OpenCL build option in the vector which stores these OpenCL build options.
-		/// </summary>
-		/// <param name="build_option">build_Option which will be stored in the vector.</param>
-		/// <returns>TODO: This function should be expanded to perform all the operation for adding the OpenCL options in the char vector.</returns>
+		/**
+		* Adds a selected OpenCL build option in the vector which stores these OpenCL build options.
+		*
+		* @param	build_option	build_Option which will be stored in the vector
+		*
+		* @todo		This function should be expanded to perform all the operations for adding the OpenCL options in the char vector
+		*/
 		void add_option_to_build_options(build_Option build_option)
 		{
 			m_build_options.push_back(build_option);
@@ -673,24 +779,31 @@ namespace odecl
 		/// Adds the characters of a string in the vector which stores the OpenCL build options.
 		/// </summary>
 		/// <param name="str">String with the OpenCL build option.</param>
+
+		/**
+		* Adds the characters of a string in the vector which stores the OpenCL build options.
+		*
+		* @param	str		String with the OpenCL build option
+		*/
 		void add_string_to_build_options_str(string str)
 		{
-			int m_source_size = str.length();
-
-			for (int i = 0; i < m_source_size; i++)
+			for (size_t i = 0; i < str.length(); i++)
 			{
 				m_build_options_str.push_back(str[i]);
 			}
 		}
 
-		/// <summary>
-		/// Build OpenCL program for the selected OpenCL device.
-		/// </summary>
-		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
+		/**
+		* Builds OpenCL program for the selected OpenCL device.
+		*
+		* @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
+		*/
 		int build_program()
 		{
 			cl_device_id device_id = m_platforms[m_selected_platform]->m_devices[m_selected_device]->m_device_id;
 			
+			add_string_to_build_options_str("-I. ");
+
 			for (build_Option option : m_build_options)
 			{
 				switch (option) 
@@ -700,7 +813,9 @@ namespace odecl
 					break;
 				case build_Option::stdCL20:
 					add_string_to_build_options_str("-cl-std=CL2.0 ");
-					//add_string_to_build_options_str("-x clc++ ");
+					break;
+				case build_Option::stdCL21:
+					add_string_to_build_options_str("-cl-std=CL2.1 ");
 					break;
 				}
 			}
@@ -775,15 +890,15 @@ namespace odecl
 			return 1;
 		}
 
-		/// <summary>
-		/// Creates the buffers for specific context and command queue.
-		/// </summary>
-		/// <param name="context">The context is the cl_context.</param>
-		/// <param name="commands">The commands is the cl_command_queue.</param>
-		/// <param name="list_size">The list_size is the size of the buffers.</param>
-		/// <param name="equat_num">The equat_num is number of equations.</param>
-		/// <param name="param_num">The param_num is the number of parameters.</param>
-		int create_buffers(cl_context context, cl_command_queue commands, int list_size, int equat_num, int param_num)
+		/**
+		* Builds OpenCL program for the selected OpenCL device.
+		*
+		* @param	context		The context is the cl_context
+		* @param	list_size	The list_size is the size of the buffers
+		* @param	equat_num	The equat_num is number of equations
+		* @param	param_num	The param_num is the number of parameters
+		*/
+		int create_buffers(cl_context context, int list_size, int equat_num, int param_num)
 		{
 			cl_int errcode;
 			// Create OpenCL device memory buffers
@@ -805,17 +920,27 @@ namespace odecl
 				return 0;
 			}
 
+			if (m_num_noi > 0)
+			{
+				m_mem_rcounter = clCreateBuffer(context, CL_MEM_READ_ONLY, list_size * sizeof(cl_double), NULL, &errcode);
+				if (errcode != CL_SUCCESS)
+				{
+					return 0;
+				}
+			}
+
 			return 1;
 		}
 
-		/// <summary>
-		/// Create OpenCL device memory buffer for the dt.
-		/// </summary>
-		/// <param name="context">OpenCL context.</param>
-		/// <param name="commands">OpenCL command queue.</param>
-		/// <param name="list_size">Number of orbits which the ODE system with be integrated for.</param>
-		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
-		int create_dt_buffer(cl_context context, cl_command_queue commands, int list_size)
+		/**
+		* Create OpenCL device memory buffer for the dt.
+		*
+		* @param	context		OpenCL context
+		* @param	list_size	Number of orbits which the ODE or SDE system will be integrated for
+		* 
+		* @return	param_num	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
+		*/
+		int create_dt_buffer(cl_context context, int list_size)
 		{
 			cl_int errcode;
 			m_mem_dt = clCreateBuffer(context, CL_MEM_READ_WRITE, list_size * sizeof(cl_double), NULL, &errcode);
@@ -827,20 +952,42 @@ namespace odecl
 			return 1;
 		}
 
-		/// <summary>
-		/// Write data in the OpenCL memory buffers.
-		/// </summary>
-		/// <param name="commands">OpenCL command queue.</param>
-		/// <param name="list_size">Number of data points to be written in the OpenCL memory buffers.</param>
-		/// <param name="equat_num">Number of equations of the ODE system.</param>
-		/// <param name="param_num">Number of parameters of the ODE system.</param>
-		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
+		/**
+		* Write data in the OpenCL memory buffers.
+		*
+		* @param	commands	OpenCL command queue
+		* @param	list_size	Number of data points to be written in the OpenCL memory buffers
+		* @param	equat_num	Number of equations of the ODE or SDE system
+		* @param	param_num	Number of parameters of the ODE or SDE system
+		*
+		* @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
+		*/
 		int write_buffers(cl_command_queue commands, int list_size, int equat_num, int param_num)
 		{
 			int err = 0;
 			err |= clEnqueueWriteBuffer(commands, m_mem_t0, CL_TRUE, 0, list_size * sizeof(cl_double), m_t0, 0, NULL, NULL);
-			err |= clEnqueueWriteBuffer(commands, m_mem_y0, CL_TRUE, 0, list_size * sizeof(cl_double)*equat_num, m_y0, 0, NULL, NULL);
+
+			cl_double *temp = new cl_double[m_list_size*m_num_equat];
+			for (int orbit = 0; orbit < list_size; orbit++)
+			{
+				int k = orbit * m_num_equat;
+				for (int ieq = 0; ieq < m_num_equat; ieq++)
+				{
+					int i = k + ieq;
+					temp[i] = m_y0[orbit*equat_num + ieq];
+				}
+			}
+
+			err |= clEnqueueWriteBuffer(commands, m_mem_y0, CL_TRUE, 0, list_size * sizeof(cl_double)*equat_num, temp, 0, NULL, NULL);
+
+			delete[] temp;
+
 			err |= clEnqueueWriteBuffer(commands, m_mem_params, CL_TRUE, 0, list_size * sizeof(cl_double)*param_num, m_params, 0, NULL, NULL);
+			
+			if (m_num_noi > 0)
+			{
+				err |= clEnqueueWriteBuffer(commands, m_mem_rcounter, CL_TRUE, 0, list_size * sizeof(cl_double), m_rcounter, 0, NULL, NULL);
+			}
 
 			if (err != CL_SUCCESS)
 			{
@@ -851,12 +998,14 @@ namespace odecl
 			return 1;
 		}
 
-		/// <summary>
-		/// Write the initial ODE solver time steps for each ODE system orbit.
-		/// </summary>
-		/// <param name="commands">OpenCL command queue.</param>
-		/// <param name="list_size">Number of data points to be written in the OpenCL memory buffers.</param>
-		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
+		/**
+		* Write the initial ODE solver time steps for each ODE or SDE system orbit.
+		*
+		* @param	commands	OpenCL command queue
+		* @param	list_size	Number of data points to be written in the OpenCL memory buffers
+		*
+		* @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
+		*/
 		int write_dt_buffer(cl_command_queue commands, int list_size)
 		{
 			int err = 0;
@@ -871,16 +1020,22 @@ namespace odecl
 			return 1;
 		}
 
+		/**
+		* @todo what is this?
+		*/
 		void input_data()
 		{
 
 		}
 
-		/// <summary>
-		/// Sets OpenCL kernel arguments.
-		/// </summary>
-		/// <param name="kernel">OpenCL kernel.</param>
-		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
+		/**
+		* Sets OpenCL kernel arguments.
+		*
+		* @param	commands	OpenCL command queue
+		* @param	list_size	Number of data points to be written in the OpenCL memory buffers
+		*
+		* @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
+		*/
 		int set_kernel_args(cl_kernel kernel)
 		{
 			// Set the arguments to the compute kernel
@@ -889,7 +1044,10 @@ namespace odecl
 			err |= clSetKernelArg(kernel, 1, sizeof(cl_mem), &m_mem_y0);
 			err |= clSetKernelArg(kernel, 2, sizeof(cl_mem), &m_mem_params);
 
-			//err |= clSetKernelArg(kernel, 3, sizeof(cl_mem), &m_mem_dt);
+			if (m_num_noi > 0)
+			{
+				err |= clSetKernelArg(kernel, 3, sizeof(cl_mem), &m_mem_rcounter);
+			}
 
 			if (err != CL_SUCCESS)
 			{
@@ -901,27 +1059,84 @@ namespace odecl
 
 	public:
 
+		/**
+		* Sets the initial value for the time variable.
+		*
+		* @param	t0		Initial time value for each orbit to be calculated
+		*/
 		void set_t0(cl_double *t0)
 		{
 			m_t0 = t0;
 		}
 
+		/**
+		* Sets the initial values for the variables of the ODE or SDE system.
+		*
+		* @param	y0		Initial variables values for each orbit to be calculated
+		*/
 		void set_y0(cl_double *y0)
 		{
 			m_y0 = y0;
 		}
 
+		/**
+		* Sets the parameter values for the variables of the ODE or SDE system.
+		*
+		* @param	params		Parameter variables values for each orbit to be calculated
+		*/
 		void set_params(cl_double *params)
 		{
 			m_params = params;
 		}
 
-		/// <summary>
-		/// Reads data from a txt file and saves the data in an array.
-		/// </summary>
-		/// <param name="filename">Filename to read the data from.</param>
-		/// <param name="data">Pointer to cl_double array to store the read data to.</param>
-		/// <returns>Returns 1 if the read of the data is successful or 0 if unsuccessful.</returns>
+		/**
+		* Reads data from a binary file and saves the data in an array.
+		*
+		* @param	filename	Filename to read the data from
+		* @param	data		Pointer to cl_double array to store the read data to
+		*
+		* @param	params		Returns 1 if the read of the data is successful or 0 if unsuccessful
+		*/
+		int read_binary_data_from_file(char *filename, cl_double *data)
+		{
+			ifstream ifs;
+			ifs.open(filename, ios::in | ios::binary | ios::ate);
+
+			if (ifs.good())
+			{				
+				streampos size = ifs.tellg();
+
+				ifs.seekg(0, ios::beg);
+				
+				vector<double> vectordata;
+				vectordata.resize(size);
+				ifs.read(reinterpret_cast<char*>(vectordata.data()), size);
+
+				for (int i = 0; i < size/8; i++)
+				{
+					data[i] = vectordata.at(i);
+				}
+
+				ifs.close();
+				return 1;
+			}
+			else
+			{
+				cout << "ERROR: can't open " << filename << " file." << endl;
+				return 0;
+			}
+
+			return 1;
+		}
+
+		/**
+		* Reads data from a txt file and saves the data in an array.
+		*
+		* @param	filename	Filename to read the data from
+		* @param	data		Pointer to cl_double array to store the read data to
+		*
+		* @param	params		Returns 1 if the read of the data is successful or 0 if unsuccessful
+		*/
 		int read_data_from_file(char *filename, cl_double *data)
 		{
 			// a string to store line of text
@@ -965,15 +1180,16 @@ namespace odecl
 			return 1;
 		}
 
-		/// <summary>
-		/// Executes the ODE solver on the selected OpenCL device.
-		/// </summary>
-		/// <returns>Returns 1 if the read of the data is successful or 0 if unsuccessful.</returns>
+		/**
+		* Executes the ODE or SDE solver on the selected OpenCL device.
+		*
+		* @param	params		Returns 1 if the read of the data is successful or 0 if unsuccessful
+		*/
 		int run_ode_solver()
 		{
 			// Output binary files
 			std::ofstream output_stream;
-			if (m_output_type == odecl::output_Type::File)
+			if (m_output_type == sodecl::output_Type::File)
 			{
 				output_stream.open(m_outputfile_str, std::ios::binary | std::ios::app | std::ios::out);
 			}
@@ -984,33 +1200,37 @@ namespace odecl
 			size_t global = size_t(m_list_size);
 			size_t local;
 
-			switch (m_selected_device_type) {
-			case device_Type::CPU: 
-				local = size_t(8);
-				break;       
-			case device_Type::GPU:
-				local = size_t(256);
-				break;
-			default: 
-				local = 0;
-				break;
-			}
+			//switch (m_selected_device_type) {
+			//case device_Type::CPU: 
+			//	local = size_t(8);
+			//	break;       
+			//case device_Type::GPU:
+			//	local = size_t(256);
+			//	break;
+			//default: 
+			//	local = 64;
+			//	break;
+			//}
+
+			local = m_local_group_size;
 
 			//cout << "The local group size is: " << local << endl;
 			m_log->write("The local group size is: ");
-			m_log->write(local);
+			m_log->write((double)local);
 			m_log->write("\n");
 
 			//cl_double *output_data = new cl_double[m_list_size * m_int_time / m_dt / m_kernel_steps];
-			m_output_size = m_list_size * m_int_time / m_dt / m_kernel_steps;
+			//m_output_size = m_list_size * m_int_time / m_dt / m_kernel_steps / m_kernel_steps_multiplier;
 
 			timer start_timer;
 
-			int count = 0;
+			// Run the initial values to the output file.
 			//std::cout << "Running kernel.." << std::endl;
 			cl_int err;
-			for (int j = 0; j < (m_int_time / m_dt / m_kernel_steps); j++)
+			for (int j = 0; j < (m_int_time / (m_dt * m_kernel_steps)); j++)
 			{
+
+				//std::cout << "Running kernel.." << std::endl;
 				//// Read buffer g into a local list
 				////err = clEnqueueReadBuffer(m_command_queues[0], m_mem_t0, CL_TRUE, 0, m_list_size * sizeof(cl_double), t_out, 0, NULL, NULL);
 
@@ -1030,28 +1250,35 @@ namespace odecl
 				catch (const std::exception &e)
 				{
 					m_log->write("The call to the OpenCL device has failed.");
+					m_log->write(e.what());
 				}
 				
 				if (err)
 				{
-					cerr << "Error: Failed to execute kernel!" << std::endl;
+					//cerr << "Error: Failed to execute kernel!" << std::endl;
+					m_log->write("Error: Failed to execute kernel!");
 					return 0;
 				}
 				clFlush(m_command_queues[0]);
 				//clFinish(m_command_queues[0]);
 
 				// Save data to disk or to data array - all variables
-				for (int jo = 1; jo <= 1; jo++)
+				for (int jo = 0; jo < m_num_equat; jo++)
 				{
-					for (int ji = jo - 1; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
+					int e = m_outputPattern[jo];
+					if (e > 0)
 					{
-						if (m_output_type == odecl::output_Type::File)
+						for (int ji = 0; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
 						{
-							output_stream.write((char *)(&orbits_out[ji]), sizeof(cl_double));
+							if (m_output_type == sodecl::output_Type::File)
+							{
+								output_stream.write((char *)(&orbits_out[ji]), sizeof(cl_double));
+								//cout << orbits_out[ji] << endl;
+							}
+							//output_data[count] = g[ji];
+							//count++;
+							//cout << g[ji] << endl;
 						}
-						//output_data[count] = g[ji];
-						//count++;
-						//cout << g[ji] << endl;
 					}
 				}
 			}
@@ -1059,46 +1286,57 @@ namespace odecl
 			// Save the data from the last kernel call.
 			err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat, orbits_out, 0, NULL, NULL);
 			// Save data to disk or to data array - all variables
-			for (int jo = 1; jo <= 1; jo++)
+			for (int jo = 0; jo < m_num_equat; jo++)
 			{
-				for (int ji = jo - 1; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
+				int e = m_outputPattern[jo];
+				if (e > 0)
 				{
-					if (m_output_type == odecl::output_Type::File)
+					for (int ji = 0; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
 					{
-						output_stream.write((char *)(&orbits_out[ji]), sizeof(cl_double));
+						if (m_output_type == sodecl::output_Type::File)
+						{
+							output_stream.write((char *)(&orbits_out[ji]), sizeof(cl_double));
+							//cout << orbits_out[ji] << endl;
+						}
+						//output_data[count] = g[ji];
+						//count++;
+						//cout << g[ji] << endl;
 					}
-					//output_data[count] = g[ji];
-					//count++;
-					//cout << g[ji] << endl;
 				}
 			}
 
 			//m_output = output_data;
 
 			double walltime=start_timer.stop_timer();
-			m_log->write("Elapsed time: ");
+			std::cout << "Compute results runtime: " << walltime << " sec.\n";
+			m_log->write("Compute results runtime: ");
 			m_log->write(walltime);
 			m_log->write("sec.\n");
 
-			if (m_output_type == odecl::output_Type::File)
+			if (m_output_type == sodecl::output_Type::File)
 			{
 				output_stream.close();
 			}
 
 			m_log->toFile();
 
-			//delete t_out;
-			delete orbits_out;
+			delete[] t_out;
+			delete[] orbits_out;
 
 			return 1;
 		}
 
-		/// <summary>
-		/// Setups the selected ODE solver OpenCL kernel source.
-		/// </summary>
-		/// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
+		/**
+		* Setups the selected ODE or SDE solver OpenCL kernel source.
+		*
+		* @return 1 if the operations were succcessfull or 0 if they were unsuccessful
+		*/
 		int setup_ode_solver()
 		{
+			//sodecl::timer start_timer;
+
+			//std::cout << "setup_ode_solver start." << std::endl;
+
 			// To create a cl string with the program to run
 			if (create_kernel_string() == 0)
 			{
@@ -1107,7 +1345,7 @@ namespace odecl
 			}
 
 			//std::cout << "Kernel code creation successed." << std::endl;
-			m_log->write("Kernel code creation successed.\n");
+			//m_log->write("Kernel code creation successed.\n");
 
 			if (create_context() == 0)
 			{
@@ -1115,7 +1353,7 @@ namespace odecl
 				return 0;
 			}
 			//std::cout << "Context created." << std::endl;
-			m_log->write("Context created.\n");
+			//m_log->write("Context created.\n");
 
 			if (create_program() == 0)
 			{
@@ -1145,7 +1383,7 @@ namespace odecl
 			}
 			//std::cout << "Command queue created." << std::endl;
 
-			if (create_buffers(m_contexts[0], m_command_queues[0], m_list_size, m_num_equat, m_num_params) == 0)
+			if (create_buffers(m_contexts[0], m_list_size, m_num_equat, m_num_params) == 0)
 			{
 				std::cout << "Failed to create the OpenCL buffers." << std::endl;
 				return 0;
@@ -1181,9 +1419,11 @@ namespace odecl
 				std::cout << "Failed to set kernel arguments." << std::endl;
 				return 0;
 			}
-			//std::cout << "Kernel arguments set." << std::endl;
 
 			//m_log->toFile();
+
+			//double walltime = start_timer.stop_timer();
+			//cout << "Setup SODE solver runtime: " << walltime << endl;
 
 			return 1;
 		}
@@ -1192,4 +1432,4 @@ namespace odecl
 }
 
 
-#endif // ODECL_SYSTEM_HPP
+#endif // sodecl_system_HPP

@@ -5,6 +5,14 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef ODECL_KERNLES_HPP
-#define ODECL_KERNLES_HPP
 
+// Euler solver
+inline static void ode_solver(double dt, double t, double y[_numeq_], double yout[_numeq_], double p[_numpar_])
+{
+	ode_system(t, y, yout, p);
+
+	for (int ieq = 0; ieq < _numeq_; ieq++)
+	{
+		yout[ieq] = y[ieq] + yout[ieq] * dt;
+	}
+}
