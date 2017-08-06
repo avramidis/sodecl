@@ -10,9 +10,6 @@ One example of the usefullness of SODECL is the fitting an ODE system representi
 **If you use this library you agree to cite the following article:**
 Avramidis, Eleftherios, and Ozgur E. Akman. "Optimisation of an exemplar oculomotor model using multi-objective genetic algorithms executed on a GPU-CPU combination." BMC systems Biology 11.1 (2017): 40. DOI: 10.1186/s12918-017-0416-2
 
-**If you use this library you agree to cite the following article:**
-Avramidis, Eleftherios, and Ozgur E. Akman. "Optimisation of an exemplar oculomotor model using multi-objective genetic algorithms executed on a GPU-CPU combination." BMC Systems Biology 11.1 (2017): 40. DOI: 10.1186/s12918-017-0416-2
-
 The library is currently at an early stage of development.
 
 Currect fixed step solvers:
