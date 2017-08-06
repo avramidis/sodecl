@@ -12,37 +12,40 @@ __kernel void solver_caller(__global double *t0,
 {
 	int i = get_global_id(0);
 
-	double t;
+	double dtsqrt = sqrt(_m_dt_);
+
+	//double t;
 	double y[_numeq_];
 	double detterm[_numeq_];
 	double params[_numpar_];
 	double noise[_numnoi_];
 
-	t = t0[i];
-
+	//t = t0[i];
+	#pragma unroll 1
 	for (int ieq = 0; ieq < _numeq_; ieq++)
 	{
 		y[ieq] = y0[i * _numeq_ + ieq];
 	}
-
+	#pragma unroll 1
 	for (int ipar = 0; ipar < _numpar_; ipar++)
 	{
 		params[ipar] = params_g[i * _numpar_ + ipar];
 	}
 
 	// Noise generators
-	int counter;
-	counter = counter_g[i];
+	//int counter;
+	//counter = counter_g[i];
 
-	threefry4x64_key_t rk = { { i, 0xf00dcafe, 0xdeadbeef, 0xbeeff00d } };
-	threefry4x64_ctr_t rc = { { 0, 0xdecafbad, 0xfacebead, 0x12345678 } };	
+	threefry2x64_key_t rk = { { i, 0xf00dcafe } };
+	threefry2x64_ctr_t rc = { { 0, 0xdecafbad } };	
 	
-	threefry4x64_ctr_t rr;
+	threefry2x64_ctr_t rr;
 
-	double u[4];
+	double u0;
+	double u1;
 	rk.v[0] = 0;
 
-	int number_of_noise_calls = ceil((float)((float)(_numnoi_) * 0.25));
+	int number_of_noise_calls = ceil((float)((float)(_numnoi_) * 0.5));
 
 	for (int it = 0; it < _numsteps_; it++)
 	{
@@ -51,51 +54,41 @@ __kernel void solver_caller(__global double *t0,
 		{
 			// Generate the noise values
 			rc.v[0] = i;
-			rc.v[1] = counter; // some iteration number change between kernel calls.
+			rc.v[1] = counter_g[i]; // some iteration number change between kernel calls.
 
-			rr = threefry4x64(rc, rk);
-			counter = counter + 1;
+			rr = threefry2x64(rc, rk);
+			counter_g[i] = counter_g[i] + 1;
 
 			if (ncounter < _numnoi_)
 			{
-				u[0] = u01_open_open_64_53(rr.v[0]);
-				u[1] = u01_open_open_64_53(rr.v[1]);
-				noise[ncounter] = sqrt(-2 * log(u[0])) * cos(2 * M_PI * u[1])*sqrt(_m_dt_);
+				u0 = u01_open_open_64_53(rr.v[0]);
+				u1 = u01_open_open_64_53(rr.v[1]);
+				noise[ncounter] = sqrt(-2 * log(u0)) * cos(2 * M_PI * u1)*dtsqrt;
 				ncounter = ncounter + 1;
 			}
 			if (ncounter < _numnoi_)
 			{
-				noise[ncounter] = sqrt(-2 * log(u[0])) * sin(2 * M_PI * u[1])*sqrt(_m_dt_);
-				ncounter = ncounter + 1;
-			}
-			if (ncounter < _numnoi_)
-			{
-				u[2] = u01_open_open_64_53(rr.v[2]);
-				u[3] = u01_open_open_64_53(rr.v[3]);
-				noise[ncounter] = sqrt(-2 * log(u[2])) * cos(2 * M_PI * u[3])*sqrt(_m_dt_);
-				ncounter = ncounter + 1;
-			}
-			if (ncounter < _numnoi_)
-			{
-				noise[ncounter] = sqrt(-2 * log(u[2])) * sin(2 * M_PI * u[3])*sqrt(_m_dt_);
+				noise[ncounter] = sqrt(-2 * log(u0)) * sin(2 * M_PI * u1)*dtsqrt;
 				ncounter = ncounter + 1;
 			}
 		}
 
 		// Call the solver
-		ode_solver(_m_dt_, t, y, detterm, params, noise);
+		ode_solver(t0[i], y, detterm, params, noise);
 
-		t = t + _m_dt_;
+		t0[i] = t0[i] + _m_dt_;
+		#pragma unroll 1
 		for (int ieq = 0; ieq < _numeq_; ieq++)
 		{
 			y[ieq] = detterm[ieq];
 		}
 	}
 
-	t0[i] = t;
+	//t0[i] = t;
+	#pragma unroll 1
 	for (int ieq = 0; ieq < _numeq_; ieq++)
 	{
 		y0[i * _numeq_ + ieq] = y[ieq];
 	}
-	counter_g[i] = counter;
+	//counter_g[i] = counter;
 }
