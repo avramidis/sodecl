@@ -186,7 +186,7 @@ namespace sodecl
 
 			// Add default OpenCL build options
 			m_build_options.push_back(build_Option::FastRelaxedMath);
-			m_build_options.push_back(build_Option::stdCL20);
+			//m_build_options.push_back(build_Option::stdCL20);
 			//m_build_options.push_back(build_Option::stdCL21);
 
 			m_local_group_size = 0;
