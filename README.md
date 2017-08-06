@@ -22,15 +22,15 @@ Currect fixed step solvers:
 
 Current interfaces:
 
-1. MATLAB script interface.
+1. Python wrapper.
 
 Future work:
 
-1. MATLAB mex interface. There is an issue with Intel Threading Building Blocks when calling OpenCL for an Intel OpenCL device. However, the latest MATLAB version (R2016a) seems not to have this issue.
-2. More ODE and SDE solvers.
-3. Variable step ODE solvers.
-4. Benchmarks.
-5. Support for using multiple devices (e.g. CPUs+GPUs).
-6. Optimisation for AMD and NVIDIA GPUs.
-7. Tutorials.
-8. Doxygen documentation
+1. More ODE and SDE solvers.
+2. Variable step ODE solvers.
+3. Benchmarks.
+4. Support for using multiple devices (e.g. CPUs+GPUs).
+5. Optimisation for AMD and NVIDIA GPUs.
+6. Tutorials.
+7. Doxygen documentation
+8. MATLAB mex interface.
