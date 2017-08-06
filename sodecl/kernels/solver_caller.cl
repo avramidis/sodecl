@@ -30,25 +30,22 @@ __kernel void solver_caller(__global double *t0,
 		params[m] = params_g[k + m];
 	}
 
-	for (int km = 0; km < _numstepsmulti_; ++km)
+	int it;
+	for (it = 0; it < _numsteps_; ++it)
 	{
-		int it;
-		for (it = 0; it < _numsteps_; ++it)
-		{
-			ode_solver(_m_dt_, t, y, detterm, params);
+		ode_solver(_m_dt_, t, y, detterm, params);
 
-			t = t + _m_dt_;
-			for (int ieq = 0; ieq < _numeq_; ++ieq)
-			{
-				y[ieq] = detterm[ieq];
-			}
-		}
-
-		t0[i] = t;
-		k = i * _numeq_;
-		for (int m = 0; m < _numeq_; ++m)
+		t = t + _m_dt_;
+		for (int ieq = 0; ieq < _numeq_; ++ieq)
 		{
-			y0[km * _numeq_ + k + m] = y[m];
+			y[ieq] = detterm[ieq];
 		}
+	}
+
+	t0[i] = t;
+	k = i * _numeq_;
+	for (int m = 0; m < _numeq_; ++m)
+	{
+		y0[k + m] = y[m];
 	}
 }
