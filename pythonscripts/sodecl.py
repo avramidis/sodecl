@@ -1,63 +1,73 @@
-## Calls the SODECL executable.
+# ---------------------------------------------------------------------------//
+#  Copyright (c) 2017 Eleftherios Avramidis <el.avramidis@gmail.com>
 #
-#  Executes the SODECL executable in the simulator folder.
-#
-#  @param runpath       is the path to the folder the executable will run.
-#  @param outputpath    is the path to the folder that the output files will be moves to.
-#  @param exepath       is the path to the mpem executable.
-#
-#  @return              the code from the execution command. If the call of the executable is successful then 0 is returned.
-#
-#  @exception           FileNotFoundError if the executable file is not found.
+#  Distributed under The MIT License (MIT)
+#  See accompanying file LICENSE.txt
+# ---------------------------------------------------------------------------//
 
 import numpy
 import os
+import subprocess
+import platform
 
-def callsodecl(runpath, outputpath = None, exepath = None ):
-	import subprocess
-	import platform
+## Calls the SODECL executable.
+#
+#  Executes the SODECL executable.
+#
+#  @param openclplatform       	is the number of the OpenCL platform.
+#  @param opencldevice       	is the is the number of the OpenCL device for the selected platform.
+#  @param openclkernel       	is the path to the OpenCL kernel with the definition of the SODE system.
+#  @param initx       			is the array with the initial state of the SODE system.
+#  @param params       			is the array with the parameters of the SODE system.
+#  @param sodesolver       		is the integration solver for the SODE system.
+#  @param orbits       			is the number of orbits to integrate the SODE system.
+#  @param nequat       			is the number of equations of the SODE system.
+#  @param nnoiseprocesses       is the number of noise processes needed by the SODE system.
+#  @param dt       				is the time step for the SODE solver.
+#  @param tspan       			is the time span for the integration of the SODE system.
+#  @param ksteps       			is the number of SODE solver step for each call to the OpenCL device.
+#  @param localgroupsize       	is the size of the OpenCL local group size.
+#
+#  @return              		the code from the execution command. If the call of the executable is successful then 0 is returned.
+#
+#  @exception           		FileNotFoundError if the executable file is not found.
+def sodecl(openclplatform, opencldevice, openclkernel,
+			initx, params, sodesolver,
+			orbits, nequat, nnoiseprocesses,
+			dt, tspan, ksteps, localgroupsize):
 
-	if outputpath is None:
-		outputpath = runpath
+	if os.path.exists('sodecloutput.bin'):
+			os.remove('sodecloutput.bin')
 
-	if exepath is None:
-		if platform.system() == 'Windows':
-			exepath = 'sodeclexe.exe'
-		else:
-			exepath = 'sodeclexe.exe'
+	if os.path.exists('x_t0.bin'):
+		os.remove('x_t0.bin')
+
+	if os.path.exists('x_y0.bin'):
+		os.remove('x_y0.bin')
+
+	if os.path.exists('x_params.bin'):
+		os.remove('x_params.bin')
+
+	t0 = numpy.array([0])
+	t0.tofile('x_t0.bin')
+	initx.tofile('x_y0.bin')
+	params.tofile('x_params.bin')
+
+	runcommandstr = ['sodeclexe.exe ' + str(openclplatform) + ' ' + str(opencldevice) + ' '
+		+ openclkernel + ' x_y0.bin x_params.bin ' + str(sodesolver) + ' '
+		+ str(orbits) + ' ' + str(nequat) + ' ' + str(nparams) + ' '
+		+ str(nnoi) + ' ' + str(dt) + ' ' + str(tspan) + ' '
+		+ str(ksteps) + ' ' + str(localgroupsize)]
 
 	try:
+		#print(runcommandstr[0])
+
 		## Run the exe without output
-		#process = subprocess.Popen(exepath+" "+str(runid), cwd=runpath, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		# process = subprocess.Popen(exepath, cwd=runpath, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+		# process = subprocess.Popen(runcommandstr[0], cwd='.', stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 		# stdout, stderr = process.communicate()
 
-		platform = 1
-		device = 0
-		kernel = 'kernels/broomhead.cl'
-		odesolver = 0
-		orbits = 1
-		nequat = 6
-		nparams = 9
-		nnoi = 3
-		dt = 1e-7
-		tspan = 1
-		ksteps = 4000
-		localgroupsize = 0
-
-		runcommandstr = ['sodeclexe.exe ' + str(platform) + ' ' + str(device) + ' '
-			+ kernel + ' x_y0.bin x_params.bin ' + str(odesolver) + ' '
-			+ str(orbits) + ' ' + str(nequat) + ' ' + str(nparams) + ' '
-			+ str(nnoi) + ' ' + str(dt) + ' ' + str(tspan) + ' '
-			+ str(ksteps) + ' ' + str(localgroupsize)]
-
-		print(runcommandstr[0])
 		# Run the exe with output
-		process = subprocess.Popen(runcommandstr[0], cwd=runpath)
-		#process = subprocess.Popen(exepath, cwd=runpath)
-
-		# process = subprocess.Popen(runcommandstr[0], cwd=runpath, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-		# stdout, stderr = process.communicate()
+		process = subprocess.Popen(runcommandstr[0], cwd='.')
 
 	except FileNotFoundError:
 		print("\n")
@@ -81,50 +91,20 @@ def callsodecl(runpath, outputpath = None, exepath = None ):
 	#     print("\n")
 	#     raise
 
-	# print(process.returncode)
 	return process.returncode
 
-
-def sodecl(openclplatform, opencldevice, openclkernel,
-			initx, params, solver,
-			orbits, nequat, nnoiseprocesses,
-			dt, tspan, ksteps, localgroupsize):
-	pass
-
-	# Save binary files with the parameters and initial states.
-	# x_params.bin
-	# x_t0.bin
-	# x_y0.bin
-
-
-	if os.path.exists('sodecloutput.bin'):
-			os.remove('sodecloutput.bin')
-
-	if os.path.exists('x_t0.bin'):
-		os.remove('x_t0.bin')
-
-	if os.path.exists('x_y0.bin'):
-		os.remove('x_y0.bin')
-
-	if os.path.exists('x_params.bin'):
-		os.remove('x_params.bin')
-
-	t0 = numpy.array([0])
-	t0.tofile('x_t0.bin')
-	initx.tofile('x_y0.bin')
-	params.tofile('x_params.bin')
-
 if __name__ ==  '__main__':
+
 	openclplatform = 1
 	opencldevice = 0
 	openclkernel = 'kernels/broomhead.cl'
 	solver = 0
 	orbits = 1
 	nequat = 6
-	nparams = 6
+	nparams = 9
 	nnoi = 3
 	dt = 1e-7
-	tspan = 0.1
+	tspan = 6
 	ksteps = 4000
 	localgroupsize = 0
 
@@ -149,8 +129,6 @@ if __name__ ==  '__main__':
 				orbits, nequat, nnoiseprocesses,
 				dt, tspan, ksteps, localgroupsize)
 
-	callsodecl('.')
-
 	f = open("sodecloutput.bin", "r")
 	a = numpy.fromfile(f, dtype=numpy.float)
 
@@ -158,5 +136,3 @@ if __name__ ==  '__main__':
 	plt.plot(a)
 	plt.ylabel('some numbers')
 	plt.show()
-	#
-	# print(a)
