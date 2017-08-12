@@ -1115,7 +1115,6 @@ namespace sodecl
 				for (int i = 0; i < size/8; i++)
 				{
 					data[i] = vectordata.at(i);
-					cout << data[i] << endl;
 				}
 
 				ifs.close();
