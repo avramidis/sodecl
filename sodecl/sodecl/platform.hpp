@@ -138,7 +138,7 @@ namespace sodecl
 		}
 
 		// get number of devices
-		cl_uint get_device_count()
+		int get_device_count()
 		{
 			cl_uint device_count;
 
@@ -160,7 +160,7 @@ namespace sodecl
 
 			clGetDeviceIDs(m_platform_id, CL_DEVICE_TYPE_ALL, m_devices_count, cpDevice, NULL);
 
-			for (int i = 0; i < m_devices_count; i++)
+			for (cl_uint i = 0; i < m_devices_count; i++)
 			{
 				m_devices.push_back(new device(cpDevice[i]));
 				

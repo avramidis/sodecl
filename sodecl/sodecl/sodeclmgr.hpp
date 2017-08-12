@@ -392,7 +392,7 @@ namespace sodecl
 			//}
 
 			//for (int i = 0; i < m_platform_ids.size(); i++)
-			for (int i = 0; i < m_platform_count; i++)
+			for (cl_uint i = 0; i < m_platform_count; i++)
 			{
 				//m_platforms.push_back(new platform(m_platform_ids.at(i)));
 				m_platforms.push_back(new platform(cpPlatform[i]));
@@ -405,7 +405,7 @@ namespace sodecl
 		*
 		* @return	The number of OpenCL platforms available. Returns -1 if the operation failed
 		*/
-		cl_uint get_platform_count()
+		int get_platform_count()
 		{
 			cl_uint platform_count;
 
