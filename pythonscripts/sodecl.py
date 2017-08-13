@@ -12,7 +12,7 @@ import platform
 
 ## Calls the SODECL executable.
 #
-#  Executes the SODECL executable.
+#  Executes the SODECL executable for specific parameters.
 #
 #  @param openclplatform       	is the number of the OpenCL platform.
 #  @param opencldevice       	is the is the number of the OpenCL device for the selected platform.
@@ -54,11 +54,8 @@ def sodecl(openclplatform, opencldevice, openclkernel,
 	initx.tofile('x_y0.bin')
 	params.tofile('x_params.bin')
 
-	# print(params.size)
-	# print(params[0].size)
-
 	nparams = params[0].size
-	print(nparams)
+	#print(nparams)
 
 	runcommandstr = ['sodeclexe.exe ' + str(openclplatform) + ' ' + str(opencldevice) + ' '
 		+ openclkernel + ' x_y0.bin x_params.bin ' + str(sodesolver) + ' '
@@ -78,8 +75,8 @@ def sodecl(openclplatform, opencldevice, openclkernel,
 
 	except FileNotFoundError:
 		print("\n")
-		print("Error: The executable was not found or cannot be executed!")
-		print("Possible fix: Make sure that the executable path is correct and it has execute permision.")
+		print("Error: The SODECL executable was not found or cannot be executed!")
+		print("Possible fix: Make sure that the executable path is present and it has execute permision.")
 		print("\n")
 		raise
 	else:
@@ -99,47 +96,3 @@ def sodecl(openclplatform, opencldevice, openclkernel,
 	#     raise
 
 	return process.returncode
-
-# if __name__ ==  '__main__':
-#
-# 	openclplatform = 1
-# 	opencldevice = 0
-# 	openclkernel = 'kernels/broomhead.cl'
-# 	solver = 0
-# 	orbits = 1
-# 	nequat = 6
-# 	nparams = 9
-# 	nnoi = 3
-# 	dt = 1e-7
-# 	tspan = 6
-# 	ksteps = 4000
-# 	localgroupsize = 0
-#
-# 	pop=1
-# 	#initx = numpy.array([5,1], ndmin=2)
-# 	# initx = numpy.zeros((1,1))
-# 	# print(type(initx))
-# 	# print(initx[0].size)
-# 	# print(initx)
-#
-#
-# 	initx = numpy.array([0, 0, 0, 0, 0, 0.7])
-# 	#print(type(initx))
-#
-# 	params = numpy.array([120, 1.5, 0.0045, 0.05, 600, 9, 0, 0.002, 0])
-# 	#pop=size(x_params,1)
-#
-# 	nnoiseprocesses = 3
-#
-# 	sodecl(openclplatform, opencldevice, openclkernel,
-# 				initx, params, solver,
-# 				orbits, nequat, nnoiseprocesses,
-# 				dt, tspan, ksteps, localgroupsize)
-#
-# 	f = open("sodecloutput.bin", "r")
-# 	a = numpy.fromfile(f, dtype=numpy.float)
-#
-# 	import matplotlib.pyplot as plt
-# 	plt.plot(a)
-# 	plt.ylabel('some numbers')
-# 	plt.show()
