@@ -1,7 +1,5 @@
 # sodecl
 
-**Refactoring: many stuff probably don't work.**
-
 SODECL is a library of ordinary differential equation (ODE) and stochastic differential equation (SDE) solvers in OpenCL. 
 Using SODECL the user can calculate the integration orbits of a ODE or SDE system for a large number of different parameter values.  
 
@@ -20,7 +18,7 @@ Currect fixed step solvers:
 4. Implicit midpoint
 5. Euler-Maruyama
 
-Current interfaces:
+Current wrappers:
 
 1. Python wrapper.
 
@@ -32,5 +30,4 @@ Future work:
 4. Support for using multiple devices (e.g. CPUs+GPUs).
 5. Optimisation for AMD and NVIDIA GPUs.
 6. Tutorials.
-7. Doxygen documentation
-8. MATLAB mex interface.
+7. Doxygen documentation.
