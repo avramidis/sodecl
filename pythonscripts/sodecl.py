@@ -57,17 +57,20 @@ def sodecl(openclplatform, opencldevice, openclkernel,
 	nparams = params[0].size
 	#print(nparams)
 
-	solvers = {'se': 0,
-				'e': 1,
-				'r': 2,
-				'ie': 3,
-				'im': 4}
+	if nnoiseprocesses==0:
+		solvers = {'se': 0,
+					'e': 1,
+					'r': 2,
+					'ie': 3,
+					'im': 4}
 
-	try:
-		solver2user=solvers[sodesolver]
-	except KeyError:
-		print("Invalid SODE solver selected! Using Euler!")
-		solver2user=1
+		try:
+			solver2user=solvers[sodesolver]
+		except KeyError:
+			print("Invalid SODE solver selected! Using Euler!")
+			solver2user=1
+	else:
+		solver2user=0
 
 	runcommandstr = ['sodeclexe.exe ' + str(openclplatform) + ' ' + str(opencldevice) + ' '
 		+ openclkernel + ' x_y0.bin x_params.bin ' + str(solver2user) + ' '
