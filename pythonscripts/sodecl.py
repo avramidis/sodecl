@@ -49,14 +49,21 @@ def sodecl(openclplatform, opencldevice, openclkernel,
 		os.remove('x_params.bin')
 
 	t0 = numpy.array([0])
+	t0 = numpy.matlib.repmat(t0, orbits, 1)
 	t0.tofile('x_t0.bin')
 	initx.tofile('x_y0.bin')
 	params.tofile('x_params.bin')
 
+	# print(params.size)
+	# print(params[0].size)
+
+	nparams = params[0].size
+	print(nparams)
+
 	runcommandstr = ['sodeclexe.exe ' + str(openclplatform) + ' ' + str(opencldevice) + ' '
 		+ openclkernel + ' x_y0.bin x_params.bin ' + str(sodesolver) + ' '
 		+ str(orbits) + ' ' + str(nequat) + ' ' + str(nparams) + ' '
-		+ str(nnoi) + ' ' + str(dt) + ' ' + str(tspan) + ' '
+		+ str(nnoiseprocesses) + ' ' + str(dt) + ' ' + str(tspan) + ' '
 		+ str(ksteps) + ' ' + str(localgroupsize)]
 
 	try:
@@ -93,46 +100,46 @@ def sodecl(openclplatform, opencldevice, openclkernel,
 
 	return process.returncode
 
-if __name__ ==  '__main__':
-
-	openclplatform = 1
-	opencldevice = 0
-	openclkernel = 'kernels/broomhead.cl'
-	solver = 0
-	orbits = 1
-	nequat = 6
-	nparams = 9
-	nnoi = 3
-	dt = 1e-7
-	tspan = 6
-	ksteps = 4000
-	localgroupsize = 0
-
-	pop=1
-	#initx = numpy.array([5,1], ndmin=2)
-	# initx = numpy.zeros((1,1))
-	# print(type(initx))
-	# print(initx[0].size)
-	# print(initx)
-
-
-	initx = numpy.array([0, 0, 0, 0, 0, 0.7])
-	#print(type(initx))
-
-	params = numpy.array([120, 1.5, 0.0045, 0.05, 600, 9, 0, 0.002, 0])
-	#pop=size(x_params,1)
-
-	nnoiseprocesses = 3
-
-	sodecl(openclplatform, opencldevice, openclkernel,
-				initx, params, solver,
-				orbits, nequat, nnoiseprocesses,
-				dt, tspan, ksteps, localgroupsize)
-
-	f = open("sodecloutput.bin", "r")
-	a = numpy.fromfile(f, dtype=numpy.float)
-
-	import matplotlib.pyplot as plt
-	plt.plot(a)
-	plt.ylabel('some numbers')
-	plt.show()
+# if __name__ ==  '__main__':
+#
+# 	openclplatform = 1
+# 	opencldevice = 0
+# 	openclkernel = 'kernels/broomhead.cl'
+# 	solver = 0
+# 	orbits = 1
+# 	nequat = 6
+# 	nparams = 9
+# 	nnoi = 3
+# 	dt = 1e-7
+# 	tspan = 6
+# 	ksteps = 4000
+# 	localgroupsize = 0
+#
+# 	pop=1
+# 	#initx = numpy.array([5,1], ndmin=2)
+# 	# initx = numpy.zeros((1,1))
+# 	# print(type(initx))
+# 	# print(initx[0].size)
+# 	# print(initx)
+#
+#
+# 	initx = numpy.array([0, 0, 0, 0, 0, 0.7])
+# 	#print(type(initx))
+#
+# 	params = numpy.array([120, 1.5, 0.0045, 0.05, 600, 9, 0, 0.002, 0])
+# 	#pop=size(x_params,1)
+#
+# 	nnoiseprocesses = 3
+#
+# 	sodecl(openclplatform, opencldevice, openclkernel,
+# 				initx, params, solver,
+# 				orbits, nequat, nnoiseprocesses,
+# 				dt, tspan, ksteps, localgroupsize)
+#
+# 	f = open("sodecloutput.bin", "r")
+# 	a = numpy.fromfile(f, dtype=numpy.float)
+#
+# 	import matplotlib.pyplot as plt
+# 	plt.plot(a)
+# 	plt.ylabel('some numbers')
+# 	plt.show()
