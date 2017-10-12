@@ -5,10 +5,9 @@
 #  See accompanying file LICENSE.txt
 # ---------------------------------------------------------------------------//
 
-import numpy
 import os
 import subprocess
-import platform
+import numpy
 
 # Calls the SODECL executable.
 #
