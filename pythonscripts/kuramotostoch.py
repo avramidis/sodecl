@@ -76,7 +76,8 @@ if __name__ == '__main__':
 
     import matplotlib.pyplot as plt
     plt.plot(a[0, :])
-    plt.ylabel('some numbers')
+    plt.xlabel('Time')
+    plt.ylabel('Value')
     plt.show()
 
     # return end - start
