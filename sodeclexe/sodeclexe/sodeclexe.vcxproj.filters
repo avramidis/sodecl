@@ -83,5 +83,29 @@
     <None Include="..\..\sodecl\kernels\kuramoto.cl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\..\sodecl\kernels\broomhead.cl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\sodecl\kernels\broomhead_small.cl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\sodecl\kernels\NoiseBroomhead.cl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\sodecl\kernels\ode_system.cl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\sodecl\kernels\rk.cl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\sodecl\kernels\rk6var.cl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\sodecl\kernels\solver_caller_rk.cl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\sodecl\kernels\solver_caller_var.cl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

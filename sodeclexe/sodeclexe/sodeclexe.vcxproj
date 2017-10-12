@@ -126,6 +126,7 @@ copy /Y "$(TargetDir)getresults.m" "$(SolutionDir)..\matlabscripts\getresults.m"
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)..\sodecl;$(AMDAPPSDKROOT)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <FloatingPointModel>Precise</FloatingPointModel>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -137,6 +138,7 @@ copy /Y "$(TargetDir)getresults.m" "$(SolutionDir)..\matlabscripts\getresults.m"
       <Command>copy /Y "$(SolutionDir)..\sodecl\kernels\*.cl" "$(TargetDir)kernels\*.cl" 
 copy /Y "$(TargetDir)sodecl.m" "$(SolutionDir)..\matlabscripts\sodecl.m"
 copy /Y "$(TargetDir)getresults.m" "$(SolutionDir)..\matlabscripts\getresults.m" 
+copy /Y "$(TargetPath)" "$(SolutionDir)..\pythonscripts\" 
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -160,7 +162,8 @@ copy /Y "$(TargetDir)getresults.m" "$(SolutionDir)..\matlabscripts\getresults.m"
       <Command>copy /Y "$(SolutionDir)..\sodecl\kernels\*.cl" "$(TargetDir)kernels\*.cl" 
 copy /Y "$(TargetDir)sodecl.m" "$(SolutionDir)..\matlabscripts\sodecl.m"
 copy /Y "$(TargetDir)getresults.m" "$(SolutionDir)..\matlabscripts\getresults.m" 
-</Command>
+copy /Y "$(TargetPath)" "$(SolutionDir)..\pythonscripts\" 
+copy /Y "$(SolutionDir)..\sodecl\kernels\*.cl" "$(SolutionDir)..\pythonscripts\kernels\*.cl" </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -181,12 +184,20 @@ copy /Y "$(TargetDir)getresults.m" "$(SolutionDir)..\matlabscripts\getresults.m"
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\README.md" />
+    <None Include="..\..\sodecl\kernels\broomhead.cl" />
+    <None Include="..\..\sodecl\kernels\broomhead_small.cl" />
     <None Include="..\..\sodecl\kernels\euler.cl" />
     <None Include="..\..\sodecl\kernels\ie.cl" />
     <None Include="..\..\sodecl\kernels\im.cl" />
     <None Include="..\..\sodecl\kernels\kuramoto.cl" />
+    <None Include="..\..\sodecl\kernels\NoiseBroomhead.cl" />
+    <None Include="..\..\sodecl\kernels\ode_system.cl" />
+    <None Include="..\..\sodecl\kernels\rk.cl" />
     <None Include="..\..\sodecl\kernels\rk4.cl" />
+    <None Include="..\..\sodecl\kernels\rk6var.cl" />
     <None Include="..\..\sodecl\kernels\solver_caller.cl" />
+    <None Include="..\..\sodecl\kernels\solver_caller_rk.cl" />
+    <None Include="..\..\sodecl\kernels\solver_caller_var.cl" />
     <None Include="..\..\sodecl\kernels\stochasticeuler.cl" />
     <None Include="..\..\sodecl\kernels\stochastic_solver_caller.cl" />
   </ItemGroup>

@@ -162,7 +162,7 @@ namespace sodecl
 			for (int i = 0; i < m_num_equat; i++)
 			{
 				//m_outputPattern[i] = i+1;
-				m_outputPattern[i] = 0;
+				m_outputPattern[i] = 1;
 			}
 			m_outputPattern[0] = 1;
 
@@ -1268,7 +1268,7 @@ namespace sodecl
 					int e = m_outputPattern[jo];
 					if (e > 0)
 					{
-						for (int ji = 0; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
+						for (int ji = jo; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
 						{
 							if (m_output_type == sodecl::output_Type::File)
 							{
@@ -1291,7 +1291,7 @@ namespace sodecl
 				int e = m_outputPattern[jo];
 				if (e > 0)
 				{
-					for (int ji = 0; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
+					for (int ji = jo; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
 					{
 						if (m_output_type == sodecl::output_Type::File)
 						{
