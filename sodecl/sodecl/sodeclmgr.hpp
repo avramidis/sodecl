@@ -520,8 +520,6 @@ namespace sodecl
 				std::cout << "Error opening file";
 			}
 
-			
-
 			//std::string str;
 			//t.seekg(0, std::ios::end);
 			//str.reserve(t.tellg());
@@ -1229,7 +1227,6 @@ namespace sodecl
 			cl_int err;
 			for (int j = 0; j < (m_int_time / (m_dt * m_kernel_steps)); j++)
 			{
-
 				//std::cout << "Running kernel.." << std::endl;
 				//// Read buffer g into a local list
 				////err = clEnqueueReadBuffer(m_command_queues[0], m_mem_t0, CL_TRUE, 0, m_list_size * sizeof(cl_double), t_out, 0, NULL, NULL);
