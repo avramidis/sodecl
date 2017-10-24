@@ -21,7 +21,6 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	//_CrtSetBreakAlloc(170);
-	//sodecl::timer start_timer;
 
 	int a_platform;											 /**< platform - OpenCL platform number */
 
@@ -150,7 +149,19 @@ int main(int argc, char* argv[])
 		return 0;
 	}
 
-	sodecl::sodeclmgr *mysodeclmgr = new sodecl::sodeclmgr("kernels", &a_system[0], a_solver, a_dt, a_tspan, a_ksteps, a_equats, a_nparams, a_nnoi, a_orbits, sodecl::output_Type::File);
+	sodecl::sodeclmgr *mysodeclmgr = new sodecl::sodeclmgr("kernels", 
+															&a_system[0], 
+															a_solver, 
+															a_dt, 
+															a_tspan, 
+															a_ksteps, 
+															a_equats, 
+															a_nparams, 
+															a_nnoi, 
+															a_orbits, 
+															sodecl::output_Type::File);
+
+
 
 	mysodeclmgr->set_outputfile("sodecloutput.bin");
 
