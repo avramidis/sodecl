@@ -16,16 +16,16 @@ if __name__ == '__main__':
 
     start = time.time()
 
-    orbits=8
+    #orbits=8
     #orbits=512
     #orbits=5120
     #orbits=25600
     #orbits=40960
-    #orbits=81920
+    orbits=81920
     #orbits=163840
     #orbits = 327680
 
-    openclplatform = 1
+    openclplatform = 0
     opencldevice = 0
     openclkernel = 'kernels/kuramoto.cl'
     solver = 0
@@ -35,7 +35,7 @@ if __name__ == '__main__':
     dt = 5e-2
     tspan = 200
     ksteps = 40
-    localgroupsize = 0
+    localgroupsize = 256
 
     # Initialise initial state of the system
     initx = numpy.ndarray((orbits, nequat))
@@ -74,10 +74,10 @@ if __name__ == '__main__':
     if numpy.isnan(numpy.sum(numpy.sum(a))):
     	raise RuntimeError("NaN present!")
 
-    import matplotlib.pyplot as plt
-    plt.plot(a[0, :])
-    plt.xlabel('Time')
-    plt.ylabel('Value')
-    plt.show()
+    # import matplotlib.pyplot as plt
+    # plt.plot(a[0, :])
+    # plt.xlabel('Time')
+    # plt.ylabel('Value')
+    # plt.show()
 
     # return end - start
