@@ -87,20 +87,15 @@ def sodecl(openclplatform, opencldevice, openclkernel,
                      str(tspan),
                      str(ksteps),
                      str(localgroupsize)]
+                     
     try:
-        # print(runcommandstr)
-
-        # Run the exe without output
-        # process = subprocess.Popen(runcommandstr[0], cwd='.', stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-        # stdout, stderr = process.communicate()
-
-        # Run the exe with output
-        #process = subprocess.Popen(runcommandstr, cwd='.', shell=True)
-        # subprocess.run(runcommandstr, shell=False, check=True)  # doesn't capture output
-
-        subprocess.check_output(runcommandstr, shell=False)
-
-        # os.system(runcommandstr)
+        print(runcommandstr)
+        process = subprocess.run(runcommandstr, shell=False, check=False)
+        if process.returncode != 0:
+            print("\n")
+            print("Error: Failed to call SODECL!")
+            print("\n")
+            exit()
 
     except FileNotFoundError:
         print("\n")
