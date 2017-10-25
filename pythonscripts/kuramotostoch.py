@@ -14,7 +14,7 @@ import sodecl
 if __name__ == '__main__':
 #def runbench(orbits):
 
-    start = time.time()
+    start_time = time.time()
 
     #orbits=8
     #orbits=512
@@ -62,8 +62,8 @@ if __name__ == '__main__':
                   orbits, nequat, nnoi,
                   dt, tspan, ksteps, localgroupsize)
 
-    end = time.time()
-    print("Simulation execution time: ", end - start, " seconds.")
+    end_time = time.time()
+    print("Simulation execution time: ", end_time - start_time, " seconds.")
 
     if numpy.isnan(numpy.sum(numpy.sum(results))):
     	raise RuntimeError("NaN present!")
