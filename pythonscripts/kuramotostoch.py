@@ -5,11 +5,11 @@
 #  See accompanying file LICENSE.txt
 # ---------------------------------------------------------------------------//
 
+import random
+import time
 import numpy
 import numpy.matlib
-import random
 import sodecl
-import time
 
 if __name__ == '__main__':
 #def runbench(orbits):
@@ -20,14 +20,14 @@ if __name__ == '__main__':
     #orbits=512
     #orbits=5120
     #orbits=25600
-    #orbits=40960
-    orbits=81920
+    orbits=40960
+    #orbits=81920
     #orbits=163840
     #orbits = 327680
 
     openclplatform = 0
     opencldevice = 1
-    openclkernel = 'kernels/kuramoto.cl'
+    openclkernel = 'kuramoto.cl'
     solver = 0
     nequat = 20
     nparams = nequat
