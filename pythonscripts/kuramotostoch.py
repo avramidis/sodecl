@@ -58,15 +58,15 @@ if __name__ == '__main__':
     nparams = numpy.concatenate((params, noise), axis=1)
 
     results = sodecl.sodecl(openclplatform, opencldevice, openclkernel,
-                  initx, params, solver,
-                  orbits, nequat, nnoi,
-                  dt, tspan, ksteps, localgroupsize)
+                            initx, params, solver,
+                            orbits, nequat, nnoi,
+                            dt, tspan, ksteps, localgroupsize)
 
     end_time = time.time()
     print("Simulation execution time: ", end_time - start_time, " seconds.")
 
     if numpy.isnan(numpy.sum(numpy.sum(results))):
-    	raise RuntimeError("NaN present!")
+        raise RuntimeError("NaN present!")
 
     # import matplotlib.pyplot as plt
     # plt.plot(a[0, :])
