@@ -69,8 +69,6 @@ if __name__ == '__main__':
     end = time.time()
     print("Simulation execution time: ", end - start, " seconds.")
 
-    # print("NaN present: " + str(numpy.isnan(numpy.sum(numpy.sum(a)))))
-
     if numpy.isnan(numpy.sum(numpy.sum(a))):
     	raise RuntimeError("NaN present!")
 
