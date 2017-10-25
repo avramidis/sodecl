@@ -8,6 +8,7 @@
 import os
 import subprocess
 import numpy
+import numpy.matlib
 
 # Calls the SODECL executable.
 #

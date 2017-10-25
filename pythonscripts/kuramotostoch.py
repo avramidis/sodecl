@@ -8,7 +8,7 @@
 import random
 import time
 import numpy
-import numpy.matlib
+#import numpy.matlib
 import sodecl
 
 if __name__ == '__main__':
