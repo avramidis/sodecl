@@ -97,6 +97,12 @@ def sodecl(openclplatform, opencldevice, openclkernel,
             print("\n")
             exit()
 
+        with open('sodecloutput.bin', 'r') as infile:
+            results = numpy.fromfile(infile, dtype=numpy.float)
+            results = results.reshape(orbits*nequat, 
+                                      int(results.shape[0] / (orbits*nequat)), 
+                                      order='F')
+
     except FileNotFoundError:
         print("\n")
         print("Error: The SODECL executable was not found or cannot be executed!")
@@ -119,4 +125,4 @@ def sodecl(openclplatform, opencldevice, openclkernel,
     #     print("\n")
     #     raise
 
-    return 1
+    return results

@@ -57,19 +57,15 @@ if __name__ == '__main__':
 
     nparams = numpy.concatenate((params, noise), axis=1)
 
-    sodecl.sodecl(openclplatform, opencldevice, openclkernel,
+    results = sodecl.sodecl(openclplatform, opencldevice, openclkernel,
                   initx, params, solver,
                   orbits, nequat, nnoi,
                   dt, tspan, ksteps, localgroupsize)
 
-    f = open("sodecloutput.bin", "r")
-    a = numpy.fromfile(f, dtype=numpy.float)
-    a = a.reshape(orbits*20, int(a.shape[0] / (orbits*20)), order='F')
-
     end = time.time()
     print("Simulation execution time: ", end - start, " seconds.")
 
-    if numpy.isnan(numpy.sum(numpy.sum(a))):
+    if numpy.isnan(numpy.sum(numpy.sum(results))):
     	raise RuntimeError("NaN present!")
 
     # import matplotlib.pyplot as plt
