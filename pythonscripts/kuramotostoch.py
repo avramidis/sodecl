@@ -26,7 +26,7 @@ if __name__ == '__main__':
     #orbits = 327680
 
     openclplatform = 0
-    opencldevice = 0
+    opencldevice = 1
     openclkernel = 'kernels/kuramoto.cl'
     solver = 0
     nequat = 20
@@ -35,7 +35,7 @@ if __name__ == '__main__':
     dt = 5e-2
     tspan = 200
     ksteps = 40
-    localgroupsize = 256
+    localgroupsize = 8
 
     # Initialise initial state of the system
     initx = numpy.ndarray((orbits, nequat))
