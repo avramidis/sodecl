@@ -1211,6 +1211,10 @@ namespace sodecl
 			//}
 
 			local = m_local_group_size;
+			if (m_local_group_size>m_list_size)
+			{
+				local = m_local_group_size;
+			}
 
 			//cout << "The local group size is: " << local << endl;
 			m_log->write("The local group size is: ");
