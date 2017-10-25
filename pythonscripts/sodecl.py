@@ -89,7 +89,7 @@ def sodecl(openclplatform, opencldevice, openclkernel,
                      str(localgroupsize)]
                      
     try:
-        print(runcommandstr)
+        #print(runcommandstr)
         process = subprocess.run(runcommandstr, shell=False, check=False)
         if process.returncode != 0:
             print("\n")
