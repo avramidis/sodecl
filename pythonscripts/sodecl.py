@@ -109,20 +109,5 @@ def sodecl(openclplatform, opencldevice, openclkernel,
         print("Possible fix: Make sure that the executable path is present and it has execute permision.")
         print("\n")
         raise
-    # else:
-    #     process.wait()
-
-    # try:
-    #     #file_object = open('logs/logfile' + os.path.basename(runpath) + '.txt', 'w')
-    #     with open(runpath + '/simulatorconsolelogfile.txt', 'w') as file_object:
-    #         file_object.write(stdout)
-    #     with open(runpath + '/simulatorerrorlogfile.txt', 'w') as file_object:
-    #         file_object.write(stderr)
-    # except FileNotFoundError:
-    #     print("\n")
-    #     print("Error: A logfile was not found or cannot be accessed!")
-    #     print("Possible fix: Make sure that the path is correct.")
-    #     print("\n")
-    #     raise
 
     return results
