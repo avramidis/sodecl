@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{708919C5-28D4-441B-B745-9687164DB8A9}</ProjectGuid>
     <RootNamespace>sodeclexe</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.10586.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -112,8 +112,8 @@ copy /Y "$(TargetDir)getresults.m" "$(SolutionDir)..\matlabscripts\getresults.m"
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(SolutionDir)..\sodecl\kernels\*.cl" "$(TargetDir)kernels\*.cl" 
-copy /Y "$(TargetDir)sodecl.m" "$(SolutionDir)..\matlabscripts\sodecl.m"
-copy /Y "$(TargetDir)getresults.m" "$(SolutionDir)..\matlabscripts\getresults.m" 
+copy /Y "$(SolutionDir)..\matlabscripts\sodecl.m" "$(TargetDir)sodecl.m" 
+copy /Y "$(SolutionDir)..\matlabscripts\getresults.m" "$(TargetDir)getresults.m" 
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
