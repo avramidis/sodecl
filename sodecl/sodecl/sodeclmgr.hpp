@@ -186,7 +186,7 @@ namespace sodecl
 
 			// Add default OpenCL build options
 			m_build_options.push_back(build_Option::FastRelaxedMath);
-			//m_build_options.push_back(build_Option::stdCL20);
+			m_build_options.push_back(build_Option::stdCL20);
 			//m_build_options.push_back(build_Option::stdCL21);
 
 			m_local_group_size = 0;
@@ -1234,7 +1234,6 @@ namespace sodecl
 				//std::cout << "Running kernel.." << std::endl;
 				//// Read buffer g into a local list
 				////err = clEnqueueReadBuffer(m_command_queues[0], m_mem_t0, CL_TRUE, 0, m_list_size * sizeof(cl_double), t_out, 0, NULL, NULL);
-
 				err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0, m_list_size * sizeof(cl_double)* m_num_equat, orbits_out, 0, NULL, NULL);
 				
 				try
