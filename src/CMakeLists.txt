@@ -3,6 +3,7 @@
 # author Eleftherios Avramidis
 
 cmake_minimum_required (VERSION 3.6.2)
+project(sodecl VERSION 0.1 LANGUAGES CXX)
 
 # Add all warnings compile options
 if (MSVC)
