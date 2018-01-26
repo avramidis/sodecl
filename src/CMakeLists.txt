@@ -2,7 +2,7 @@
 # MIT License
 # author Eleftherios Avramidis
 
-cmake_minimum_required (VERSION 3.6.2)
+cmake_minimum_required (VERSION 3.5.1)
 project(sodecl VERSION 0.1 LANGUAGES CXX)
 
 # Add all warnings compile options
@@ -11,6 +11,8 @@ if (MSVC)
 else()
 	add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
+
+set (CMAKE_CXX_STANDARD 11)
 
 add_executable(sodecl sodecl.cpp)
 
