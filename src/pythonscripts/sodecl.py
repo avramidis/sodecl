@@ -73,7 +73,7 @@ def sodecl(openclplatform, opencldevice, openclkernel,
     else:
         solver2user = 0
 
-    runcommandstr = ['./sodeclexe.exe',
+    runcommandstr = ['./sodecl.exe',
                      str(openclplatform),
                      str(opencldevice),
                      openclkernel,
