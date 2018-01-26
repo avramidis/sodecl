@@ -9,6 +9,7 @@ import os
 import subprocess
 import numpy
 import numpy.matlib
+import platform
 
 # Calls the SODECL executable.
 #
@@ -72,8 +73,13 @@ def sodecl(openclplatform, opencldevice, openclkernel,
             solver2user = 1
     else:
         solver2user = 0
-
-    runcommandstr = ['./sodecl.exe',
+	
+	if platform.system()=='windows':
+		sodeclexename='./sodecl.exe'
+	else:
+		sodeclexename='./sodecl'
+		
+    runcommandstr = [sodeclexename,
                      str(openclplatform),
                      str(opencldevice),
                      openclkernel,
