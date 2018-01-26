@@ -8,25 +8,15 @@
 import random
 import time
 import numpy
-#import numpy.matlib
 import sodecl
 
 if __name__ == '__main__':
-#def runbench(orbits):
 
     start_time = time.time()
 
-    #orbits=8
-    #orbits=512
-    #orbits=5120
-    #orbits=25600
-    orbits=40960
-    #orbits=81920
-    #orbits=163840
-    #orbits = 327680
-
+    orbits=8
     openclplatform = 0
-    opencldevice = 1
+    opencldevice = 0
     openclkernel = 'kuramoto.cl'
     solver = 0
     nequat = 20
