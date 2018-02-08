@@ -1,7 +1,7 @@
 # SODECL
 
 SODECL is a library of ordinary differential equation (ODE) and stochastic differential equation (SDE) solvers in OpenCL. 
-Using SODECL the user can calculate the integration orbits of a ODE or SDE system for a large number of different parameter values.  
+Using SODECL the user can calculate the integration orbits of a ODE or SDE system for a large number of different parameter values.
 
 One example of the usefullness of SODECL is the fitting an ODE system representing a biological model to experimental data.  When optimising an ODE biological model using for example genetic algorithms the ODE model has to be calculated for a large number of different parameter values combinations. ODECL accelerates the calculation of these ODE model orbit integrations by taking advantage of all the cores of a CPU or the parallel capabilities of a GPU. 
 
@@ -24,12 +24,6 @@ To pull the repository from github use the following command in a terminal
 git clone https://github.com/avramidis/sodecl.git
 ```
 
-To generate the makefile for compiling SODECL you will need cmake. To install cmake on Ubuntu use the following command in a terminal
-
-```
-sudo apt install cmake
-```
-
 You will need lsb-core, to install it you the following command in a terminal
 
 ```
@@ -48,6 +42,12 @@ You will need to install the OpenCL library. To do that use the following comman
 
 ```
 sudo apt install ocl-icd-opencl-dev
+```
+
+To generate the makefile for compiling SODECL you will need cmake. To install cmake on Ubuntu use the following command in a terminal
+
+```
+sudo apt install cmake
 ```
 
 ### Installing
