@@ -50,6 +50,12 @@ To generate the makefile for compiling SODECL you will need cmake. To install cm
 sudo apt install cmake
 ```
 
+To use the Python wrapper a number of module must be installed. To install these modules use the following commands in a terminal
+
+```
+sudo apt-get install python3-numpy
+```
+
 ### Installing
 
 A step by step series of examples that tell you have to get a development env running
