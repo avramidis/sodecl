@@ -13,12 +13,12 @@ TEST_CASE("Query OpenCL platforms")
         
         if (platforms_num == -1) 
         {
-            FAIL("Failed to count the OpenCL platforms! Try to reinstall OpenCL.");
+            FAIL("Failed to count the OpenCL platforms! Try to reinstall OpenCL runtime(s) for your device(s).");
         }
 
         if (platforms_num == 0) 
         {
-            FAIL("No OpenCL platforms! Try to reinstall OpenCL.");
+            FAIL("No OpenCL platforms! Try to reinstall OpenCL runtime(s) for your device(s).");
         }
     }
 }
