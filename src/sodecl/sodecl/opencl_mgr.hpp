@@ -23,12 +23,19 @@ class opencl_mgr
     cl_uint m_selected_opencl_device;                       /**< The index of the selected sodecl::device object in m_devices vector of selected platform */
     device_Type m_selected_opencl_device_type;              /**< Selected OpenCL device type */
 
+    // Log mechanisms
+    clog*	m_log;				/**< Pointer for log */ 
+
   public:
     /**
      * @brief Default constructor.
      * 
      */
-    opencl_mgr(){};
+    opencl_mgr()
+    {
+        // Initialise the clog object
+		m_log = clog::getInstance();
+    };
 
     /**
      * @brief Destructor.
@@ -41,6 +48,8 @@ class opencl_mgr
             delete i;
         }
         m_opencl_platforms.clear();
+
+        delete m_log;
     };
 
     /**
@@ -117,8 +126,7 @@ class opencl_mgr
         if (platform_num < 0 || platform_num > m_opencl_platform_count)
         {
             //cerr << "Selected platform number is out of bounds." << std::endl;
-            // m_log->write("Selected platform number is out of bounds.\n");
-
+            m_log->write("Selected platform number is out of bounds.\n");
             return 0;
         }
 
@@ -126,7 +134,7 @@ class opencl_mgr
         if (device_num < 0 || device_num > m_opencl_platforms[platform_num]->get_device_count())
         {
             //cerr << "Selected device number is out of bounds." << std::endl;
-            // m_log->write("Selected device number is out of bounds.\n");
+            m_log->write("Selected device number is out of bounds.\n");
             return 0;
         }
 
@@ -136,26 +144,26 @@ class opencl_mgr
             if (m_opencl_platforms[platform_num]->m_devices[device_num]->type() != (cl_device_type)device_type)
             {
                 //cerr << "Selected device is not of the type selected." << std::endl;
-                // m_log->write("Selected device is not of the type selected.\n");
+                m_log->write("Selected device is not of the type selected.\n");
                 return 0;
             }
         }
 
         //std::cout << "Selected platform: " << m_platforms[platform_num]->name().c_str() << std::endl;
         //std::cout << "Device name: " << m_platforms[platform_num]->m_devices[device_num]->name().c_str() << std::endl;
-        ////std::cout << "Device type: " << m_platforms[platform_num]->m_devices[device_num]->type() << std::endl;
+        //std::cout << "Device type: " << m_platforms[platform_num]->m_devices[device_num]->type() << std::endl;
 
-        // m_log->write("Selected platform name: ");
-        // m_log->write(m_platforms[platform_num]->name().c_str());
-        // m_log->write("\n");
+        m_log->write("Selected platform name: ");
+        m_log->write(m_opencl_platforms[platform_num]->name().c_str());
+        m_log->write("\n");
 
-        // m_log->write("Selected device name: ");
-        // m_log->write(m_platforms[platform_num]->m_devices[device_num]->name().c_str());
-        // m_log->write("\n");
+        m_log->write("Selected device name: ");
+        m_log->write(m_opencl_platforms[platform_num]->m_devices[device_num]->name().c_str());
+        m_log->write("\n");
 
-        // m_log->write("Selected device OpenCL version: ");
-        // m_log->write(m_platforms[platform_num]->m_devices[device_num]->version().c_str());
-        // m_log->write("\n");
+        m_log->write("Selected device OpenCL version: ");
+        m_log->write(m_opencl_platforms[platform_num]->m_devices[device_num]->version().c_str());
+        m_log->write("\n");
 
         m_selected_opencl_platform = platform_num;
         m_selected_opencl_device = device_num;
