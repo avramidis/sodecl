@@ -15,7 +15,6 @@ endif()
 set (CMAKE_CXX_STANDARD 11)
 
 add_executable(sodecl sodecl.cpp)
-
 add_executable(sodecl_tests tests/sodecl_tests.cpp)
 
 # Add include directories for OpenCL and sodecl
@@ -27,6 +26,7 @@ FIND_PACKAGE(OpenCL REQUIRED)
 
 LINK_DIRECTORIES(${OpenCL_LIBRARY})
 TARGET_LINK_LIBRARIES(sodecl ${OpenCL_LIBRARIES})
+TARGET_LINK_LIBRARIES(sodecl_tests ${OpenCL_LIBRARIES})
 
 MESSAGE(STATUS "CMAKE_CURRENT_BINARY_DIR: " ${CMAKE_CURRENT_BINARY_DIR})
 MESSAGE(STATUS "CMAKE_CURRENT_SOURCE_DIR : " ${CMAKE_CURRENT_SOURCE_DIR})
