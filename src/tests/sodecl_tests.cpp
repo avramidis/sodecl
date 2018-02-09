@@ -36,3 +36,21 @@ TEST_CASE("Query OpenCL platforms")
         }
     }
 }
+
+TEST_CASE("Choose OpenCL device")
+{
+    SECTION("Choose the first OpenCL device of the first OpenCL platform")
+    {
+        sodecl::opencl_mgr m_opencl_mgr;
+        int platforms_num = m_opencl_mgr.get_opencl_platform_count();
+        int status_value = m_opencl_mgr.create_opencl_platforms();
+
+        status_value = m_opencl_mgr.choose_opencl_device(0, sodecl::device_Type::ALL, 0);
+
+        CHECK(status_value == 1);
+        if (status_value == -1) 
+        {
+            FAIL("Failed to choose the OpenCL device selected!");
+        }
+    }
+}
