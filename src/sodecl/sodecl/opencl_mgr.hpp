@@ -74,6 +74,7 @@ class opencl_mgr
     /**
      * @brief Creates all sodecl::platform objects.
      * 
+     * @return      int         The number of OpenCL platforms available. Returns -1 if the operation failed.
      */
     int create_opencl_platforms()
     {
@@ -81,9 +82,19 @@ class opencl_mgr
 
         // get all OpenCL platforms
         cl_int err = clGetPlatformIDs(m_opencl_platform_count, cpPlatform, nullptr);
-        if (err != CL_SUCCESS)
+
+        if (err == CL_INVALID_VALUE)
         {
+            std::cerr << "Supplied values to the function for getting the OpenCL platform IDs are invalid." << std::endl;
             delete[] cpPlatform;
+            return -1;
+        }
+
+        if (err == CL_OUT_OF_HOST_MEMORY)
+        {
+            std::cerr << "There was a failure to allocate resources required by the OpenCL implementation on the host." << std::endl;
+            delete[] cpPlatform;
+            return -1;
         }
 
         for (cl_uint i = 0; i < m_opencl_platform_count; i++)
@@ -91,6 +102,8 @@ class opencl_mgr
             m_opencl_platforms.push_back(new platform(cpPlatform[i]));
         }
         delete[] cpPlatform;
+
+        return 1;
     }
 };
 }
