@@ -29,4 +29,6 @@
 #include <sodecl/platform.hpp>
 #include <sodecl/sodeclmgr.hpp>
 
+#include <sodecl/opencl_mgr.hpp>
+
 #endif // SODECL_MAINCL_HPP
