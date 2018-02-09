@@ -62,4 +62,4 @@ class solver_interface
 };
 }
 
-#endif // SODECL_SOLVER_HPP
+#endif // SODECL_SOLVERINTERFACE_HPP
