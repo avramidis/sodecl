@@ -51,10 +51,8 @@ class opencl_mgr
      */
     int get_opencl_platform_count()
     {
-        cl_uint opencl_platform_count;
-
         // get platform count
-        cl_int err = clGetPlatformIDs(0, nullptr, &opencl_platform_count);
+        cl_int err = clGetPlatformIDs(0, nullptr, &m_opencl_platform_count);
         
         if (err == CL_INVALID_VALUE)
         {
@@ -68,7 +66,7 @@ class opencl_mgr
             return -1;
         }
 
-        return (int)opencl_platform_count;
+        return (int)m_opencl_platform_count;
     }
 
     /**
