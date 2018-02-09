@@ -16,6 +16,8 @@ set (CMAKE_CXX_STANDARD 11)
 
 add_executable(sodecl sodecl.cpp)
 
+add_executable(sodecl_tests tests/sodecl_tests.cpp)
+
 # Add include directories for OpenCL and sodecl
 include_directories("${PROJECT_BINARY_DIR}/../src/include")
 include_directories("${PROJECT_BINARY_DIR}/../src/sodecl")
