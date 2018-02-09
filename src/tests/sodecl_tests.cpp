@@ -9,7 +9,7 @@ TEST_CASE("Query OpenCL platforms")
     {
         sodecl::opencl_mgr m_opencl_mgr;
 
-        int platforms_num = m_opencl_mgr.get_platform_count();
+        int platforms_num = m_opencl_mgr.get_opencl_platform_count();
         
         if (platforms_num == -1) 
         {

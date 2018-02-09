@@ -49,7 +49,7 @@ class opencl_mgr
      * 
      * @return      int         The number of OpenCL platforms available. Returns -1 if the operation failed.
      */
-    int get_platform_count()
+    int get_opencl_platform_count()
     {
         cl_uint opencl_platform_count;
 
