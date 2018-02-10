@@ -54,3 +54,22 @@ TEST_CASE("Choose OpenCL device")
         }
     }
 }
+
+TEST_CASE("Create OpenCL context")
+{
+    SECTION("Create OpenCL context")
+    {
+        sodecl::opencl_mgr m_opencl_mgr;
+        int platforms_num = m_opencl_mgr.get_opencl_platform_count();
+        int status_value = m_opencl_mgr.create_opencl_platforms();
+        status_value = m_opencl_mgr.choose_opencl_device(0, sodecl::device_Type::ALL, 0);
+
+        status_value = m_opencl_mgr.create_context();
+
+        CHECK(status_value == 1);
+        if (status_value == -1) 
+        {
+            FAIL("Failed to create the OpenCL context for the selected platform and device!");
+        }
+    }
+}
