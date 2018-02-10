@@ -54,6 +54,18 @@ class solver_interface
     virtual int write_buffers(cl_command_queue commands, int list_size, int equat_num, int param_num) = 0;
 
     /**
+     * Setups the selected ODE or SDE solver OpenCL kernel source.
+     *
+     * @return 1 if the operations were succcessfull or 0 if they were unsuccessful
+     */
+    /**
+     * @brief Setups the selected ODE or SDE solver OpenCL kernel source.
+     * 
+     * @return  int         Returns 1 if the operations were succcessfull or 0 if they were unsuccessful.
+     */
+    virtual int setup_solver() = 0;
+
+    /**
      * @brief Executes the ODE or SDE solver on the selected OpenCL device.
      * 
      * @return  int         Returns 1 if the operations were succcessfull or 0 if they were unsuccessful.
