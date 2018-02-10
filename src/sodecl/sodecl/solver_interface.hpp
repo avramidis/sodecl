@@ -70,7 +70,7 @@ class solver_interface
      * 
      * @return  int         Returns 1 if the operations were succcessfull or 0 if they were unsuccessful.
      */
-    virtual int run_ode_solver() = 0;
+    virtual int run_solver() = 0;
 };
 }
 
