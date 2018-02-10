@@ -17,14 +17,30 @@ class opencl_mgr
 	* OPENCL HARDWARE SECTION VARIABLES
 	*/
 
-    cl_uint m_opencl_platform_count;                        /**< Number of OpenCL platforms */
-    std::vector<sodecl::platform *> m_opencl_platforms;     /**< Vector which stores the sodecl::platform objects. One object for each OpenCL platform */
-    cl_uint m_selected_opencl_platform;                     /**< The index of the selected sodecl::platform object in the m_platforms vector */
-    cl_uint m_selected_opencl_device;                       /**< The index of the selected sodecl::device object in m_devices vector of selected platform */
-    device_Type m_selected_opencl_device_type;              /**< Selected OpenCL device type */
+    cl_uint m_opencl_platform_count;                    /**< Number of OpenCL platforms */
+    std::vector<sodecl::platform *> m_opencl_platforms; /**< Vector which stores the sodecl::platform objects. One object for each OpenCL platform */
+    cl_uint m_selected_opencl_platform;                 /**< The index of the selected sodecl::platform object in the m_platforms vector */
+    cl_uint m_selected_opencl_device;                   /**< The index of the selected sodecl::device object in m_devices vector of selected platform */
+    device_Type m_selected_opencl_device_type;          /**< Selected OpenCL device type */
+
+    /********************************************************************************************
+    OPENCL SOFTWARE SECTION VARIABLES
+    */
+
+    std::vector<cl_context> m_contexts;             /**< OpenCL command contexts vector */
+    std::vector<cl_command_queue> m_command_queues; /**< OpenCL command queues vector */
+    std::vector<char> m_kernel_sources;             /**< Char vector which stores the OpenCL kernel source string. @todo store multiple kernel source strings */
+    std::string m_build_options_str;                /**< Char vector which stores the OpenCL build options string */
+    std::vector<build_Option> m_build_options;      /**< build_Option vector which stores the OpenCL build options selection */
+    char *m_source_str;                             /**< OpenCL kernel string */
+    string m_kernel_path_str;                       /**< OpenCL kernels solvers path */
+    size_t m_source_size;                           /**< OpenCL kernel string size */
+    std::vector<cl_program> m_programs;             /**< OpenCL programs vector */
+    std::vector<cl_kernel> m_kernels;               /**< OpenCL kernels vector */
+    int m_local_group_size;                         /**< OpenCL device local group size */
 
     // Log mechanisms
-    clog*	m_log;				/**< Pointer for log */ 
+    clog *m_log; /**< Pointer for log */
 
   public:
     /**
@@ -34,7 +50,7 @@ class opencl_mgr
     opencl_mgr()
     {
         // Initialise the clog object
-		m_log = clog::getInstance();
+        m_log = clog::getInstance();
     };
 
     /**
@@ -168,6 +184,25 @@ class opencl_mgr
         m_selected_opencl_platform = platform_num;
         m_selected_opencl_device = device_num;
         m_selected_opencl_device_type = device_type;
+
+        return 1;
+    }
+
+    /**
+     * @brief Create OpenCL context for the selected OpenCL platform and OpenCL device.
+     * 
+     * @return  int  Returns 1 if the operations were succcessfull or 0 if they were unsuccessful.
+     */
+    int create_context()
+    {
+        cl_int err;
+        cl_context context = clCreateContext(NULL, 1, &(m_opencl_platforms[m_selected_opencl_platform]->m_devices[m_selected_opencl_device]->m_device_id), NULL, NULL, &err);
+        if (err != CL_SUCCESS)
+        {
+            std::cerr << "Error: Failed to create context! " << err << std::endl;
+            return 0;
+        }
+        m_contexts.push_back(context);
 
         return 1;
     }
