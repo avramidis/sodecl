@@ -134,7 +134,7 @@ class opencl_mgr
      * @param	platform_num	Index of selected OpenCL platform
      * @param	device_type		OpenCL device type
      * @param	device_num		Index of selected OpenCL device in the selected OpenCL platform
-     * @return  int             Returns 1 if the operations were succcessfull or 0 if they were unsuccessful.
+     * @return  int             Returns 1 if the operations were succcessful or 0 if they were unsuccessful.
      */
     int choose_opencl_device(cl_uint platform_num, device_Type device_type, cl_uint device_num)
     {
@@ -191,7 +191,7 @@ class opencl_mgr
     /**
      * @brief Create OpenCL context for the selected OpenCL platform and OpenCL device.
      * 
-     * @return  int  Returns 1 if the operations were succcessfull or 0 if they were unsuccessful.
+     * @return  int  Returns 1 if the operations were succcessful or 0 if they were unsuccessful.
      */
     int create_context()
     {
