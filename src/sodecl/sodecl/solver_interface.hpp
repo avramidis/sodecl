@@ -34,17 +34,17 @@ class solver_interface
     OPENCL SOFTWARE SECTION VARIABLES
     */
 
-    std::vector<cl_context>			m_contexts;				/**< OpenCL command contexts vector */
-    std::vector<cl_command_queue>	m_command_queues;		/**< OpenCL command queues vector */
-    std::vector<char>				m_kernel_sources;		/**< Char vector which stores the OpenCL kernel source string. @todo store multiple kernel source strings */
-    std::string						m_build_options_str;	/**< Char vector which stores the OpenCL build options string */
-    std::vector<build_Option>		m_build_options;		/**< build_Option vector which stores the OpenCL build options selection */
-    char*							m_source_str;			/**< OpenCL kernel string */
-    string							m_kernel_path_str;		/**< OpenCL kernels solvers path */
-    size_t							m_source_size;			/**< OpenCL kernel string size */
-    std::vector<cl_program>			m_programs;				/**< OpenCL programs vector */
-    std::vector<cl_kernel>			m_kernels;				/**< OpenCL kernels vector */
-    int								m_local_group_size;		/**< OpenCL device local group size */
+    std::vector<cl_context>         m_contexts;             /**< OpenCL command contexts vector */
+    std::vector<cl_command_queue>   m_command_queues;       /**< OpenCL command queues vector */
+    std::vector<char>               m_kernel_sources;       /**< Char vector which stores the OpenCL kernel source string. @todo store multiple kernel source strings */
+    std::string                     m_build_options_str;    /**< Char vector which stores the OpenCL build options string */
+    std::vector<build_Option>       m_build_options;        /**< build_Option vector which stores the OpenCL build options selection */
+    char*                           m_source_str;           /**< OpenCL kernel string */
+    string                          m_kernel_path_str;      /**< OpenCL kernels solvers path */
+    size_t                          m_source_size;          /**< OpenCL kernel string size */
+    std::vector<cl_program>         m_programs;             /**< OpenCL programs vector */
+    std::vector<cl_kernel>          m_kernels;              /**< OpenCL kernels vector */
+    int                             m_local_group_size;     /**< OpenCL device local group size */
 
     /**
      * @brief Default constructor.
