@@ -12,6 +12,7 @@ namespace sodecl
  */
 class solver_interface
 {
+  public:
     /**
      * @brief Default constructor.
      * 
