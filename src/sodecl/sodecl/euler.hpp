@@ -13,28 +13,36 @@ namespace sodecl
 class euler : public solver_interface
 {
   public:
-    /********************************************************************************************
-    ODE SOLVER SECTION VARIABLES
-    */
-
-    char*			m_ode_system_string;			/**< ODE system OpenCL function */
-    solver_Type		m_solver;						/**< ODE solver type */ 
-    double			m_dt;							/**< Solver (initial) time step in seconds */ 
-    double			m_int_time;						/**< Time units to integrate the ODE system */ 
-    int				m_kernel_steps;					/**< Number of step the solver with perform in each kernel call */ 
-    int				m_num_dt_steps;					/**< Number of dt steps for the state of the ODE system to be saved */
-    int				m_list_size;					/**< Number of ODE system parameter combinations */ 
-    int				m_num_equat;					/**< Number of ODE system equations */ 
-    int				m_num_params;					/**< Number of ODE system parameters */ 
-    output_Type		m_output_type;					/**< Type of output (binary file or array) */ 
-    int*			m_outputPattern;				/**< Array which holds the output pattern. E.g. if the system has 3 equations the array {1,2,3}   
-                                                        will write to the output file the results of the 1st then 2nd and then 3rd state variable */
-
     /**
-     * @brief Default constructor.
+     * @brief Constructor for the Euler solver. 
      * 
+     * @param kernel_path_str   Path to the SODECL OpenCL kernel source files.
+     * @param ode_system_str    Path to the OpenCL ODE system source file.
+     * @param dt                ODE solver time step size.
+     * @param int_time          Length of time in seconds the the ODE system with be integrated for.
+     * @param kernel_steps      Number of steps the ODE solver will perform in each OpenCL device call.
+     * @param num_equat         Number of equations of the ODE system.
+     * @param num_params        Number of parameters of the ODE system.
+     * @param list_size         Number of orbits to be integrated for the ODE system
+     * @param output_type       Specifies the location where the output of the integration of the ODE system will be stored.
      */
-    euler() : solver_interface()
+    euler(string        kernel_path_str,
+          char*         ode_system_str,
+          double        dt,
+          double        int_time,
+          int           kernel_steps,
+          int           num_equat,
+          int           num_params,
+          int           list_size,
+          output_Type   output_type) : solver_interface(kernel_path_str,
+                                                      ode_system_str,
+                                                      dt,
+                                                      int_time,
+                                                      kernel_steps,
+                                                      num_equat,
+                                                      num_params,
+                                                      list_size,
+                                                      output_type)
     {
     }
 
@@ -119,7 +127,7 @@ class euler : public solver_interface
 
         //cout << "Read the Runge-Kutta solver" << endl;
         kernelsolverpath_char.append("/solver_caller.cl");
-    
+
         //std::cout << kernelsolverpath_char << std::endl;
         read_kernel_file(&kernelsolverpath_char[0]);
         add_string_to_kernel_sources("\n");
