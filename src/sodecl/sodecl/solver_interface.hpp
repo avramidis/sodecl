@@ -13,6 +13,23 @@ namespace sodecl
 class solver_interface
 {
   public:
+    
+    /********************************************************************************************
+    OPENCL SOFTWARE SECTION VARIABLES
+    */
+
+    std::vector<cl_context>			m_contexts;				/**< OpenCL command contexts vector */
+    std::vector<cl_command_queue>	m_command_queues;		/**< OpenCL command queues vector */
+    std::vector<char>				m_kernel_sources;		/**< Char vector which stores the OpenCL kernel source string. @todo store multiple kernel source strings */
+    std::string						m_build_options_str;	/**< Char vector which stores the OpenCL build options string */
+    std::vector<build_Option>		m_build_options;		/**< build_Option vector which stores the OpenCL build options selection */
+    char*							m_source_str;			/**< OpenCL kernel string */
+    string							m_kernel_path_str;		/**< OpenCL kernels solvers path */
+    size_t							m_source_size;			/**< OpenCL kernel string size */
+    std::vector<cl_program>			m_programs;				/**< OpenCL programs vector */
+    std::vector<cl_kernel>			m_kernels;				/**< OpenCL kernels vector */
+    int								m_local_group_size;		/**< OpenCL device local group size */
+
     /**
      * @brief Default constructor.
      * 
@@ -72,6 +89,74 @@ class solver_interface
      * @return  int         Returns 1 if the operations were succcessful or 0 if they were unsuccessful.
      */
     virtual int run_solver() = 0;
+
+  protected:
+    
+    /**
+     * @brief Reads an OpenCL function or kernel file.
+     * 
+     * @param   filename    OpenCL file to read.
+     */
+    void read_kernel_file(char *filename)
+    {
+        std::ifstream t(filename);
+
+        if (t.is_open())
+        {
+            t.seekg(0, std::ios::end);
+            size_t size = t.tellg();
+            std::string str(size, ' ');
+            t.seekg(0);
+            t.read(&str[0], size);
+            t.close();
+
+            m_source_size = str.length();
+
+            for (int i = 0; i < m_source_size; i++)
+            {
+                m_kernel_sources.push_back(str[i]);
+            }
+        }
+        else
+        {
+            std::cerr << "Error opening file";
+        }
+    }
+
+    /**
+     * @brief Adds the string str to the vector which stores the kernel string (i.e. OpenCL kernel code).
+     * 
+     * @param   str     The sting to be pushed in the OpenCL kernel code vector.
+     * @return  int     Returns 1 if the operations were succcessful or 0 if they were unsuccessful.
+     */
+    int add_string_to_kernel_sources(string str)
+    {
+        // TODO: Add code to catch an exception in case the operation fails
+        for (size_t i = 0; i < str.length(); i++)
+        {
+            m_kernel_sources.push_back(str[i]);
+        }
+
+        return 1;
+    }
+
+    /**
+     * @brief Converts a double to string.
+     * 
+     * @param   x           Double number which will be coverted to string.
+     * @return  string      A string of the converted double number.
+     */
+    string double2string(double x)
+    {
+        // @todo Add code to catch an exception in the unlikely case of the conversion fails
+        std::string s;
+        {
+            std::ostringstream ss;
+            ss << x;
+            s = ss.str();
+        }
+        return s;
+    }
 };
 }
 
