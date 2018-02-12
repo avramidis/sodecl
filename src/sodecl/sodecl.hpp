@@ -32,4 +32,6 @@
 #include <sodecl/opencl_mgr.hpp>
 #include <sodecl/solver_interface.hpp>
 
+#include <sodecl/euler.hpp>
+
 #endif // SODECL_MAINCL_HPP
