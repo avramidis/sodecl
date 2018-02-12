@@ -33,6 +33,8 @@ MESSAGE(STATUS "CMAKE_CURRENT_SOURCE_DIR : " ${CMAKE_CURRENT_SOURCE_DIR})
 MESSAGE(STATUS "PROJECT_NAME  : " ${PROJECT_NAME})
 MESSAGE(STATUS "CMAKE_COMMAND  : " ${CMAKE_COMMAND})
 
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/tests")
+
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
                     # Copy MATLAB scripts and OpenCL kernels to the MATLAB interface folder
 					COMMAND ${CMAKE_COMMAND} -E copy_directory 
@@ -56,7 +58,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 					"${CMAKE_SOURCE_DIR}/include/Random123" 
 					"${CMAKE_CURRENT_BINARY_DIR}/pythonscripts/Random123"
 					
-					# Copy executable to the MATLAB and Python interfaces folders
+					# Copy executables to the MATLAB and Python interfaces folders
 					COMMAND ${CMAKE_COMMAND} -E copy 
 					"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}*" 
 					"${CMAKE_CURRENT_BINARY_DIR}/matlabscripts/"
@@ -64,13 +66,25 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 					"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}*" 
 					"${CMAKE_CURRENT_BINARY_DIR}/pythonscripts/"
 
-                    # Copy OpenCL kernels to the build folder
+                    # Copy OpenCL kernels to the build tests folder
                     COMMAND ${CMAKE_COMMAND} -E copy_directory 
 					"${CMAKE_SOURCE_DIR}/sodecl/kernels" 
-					"${CMAKE_CURRENT_BINARY_DIR}/kernels"
+					"${CMAKE_CURRENT_BINARY_DIR}/tests/kernels"
 					COMMAND ${CMAKE_COMMAND} -E copy_directory 
 					"${CMAKE_SOURCE_DIR}/include/Random123" 
-					"${CMAKE_CURRENT_BINARY_DIR}/Random123"
+					"${CMAKE_CURRENT_BINARY_DIR}/tests/Random123"
+                    COMMAND ${CMAKE_COMMAND} -E copy
+					"${CMAKE_SOURCE_DIR}/tests/kuramoto.cl" 
+					"${CMAKE_CURRENT_BINARY_DIR}/tests/"
+
+                    # Copy executables to the tests folder
+                    COMMAND ${CMAKE_COMMAND} -E copy 
+					"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}*" 
+					"${CMAKE_CURRENT_BINARY_DIR}/tests/"
+
+                    # Remove executables from the build folder
+                    COMMAND ${CMAKE_COMMAND} -E remove 
+					"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}*"
 					
 					COMMENT "Copying support files to build directory"
 					) 
