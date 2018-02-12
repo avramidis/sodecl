@@ -69,7 +69,14 @@ class solver_interface
                      int            list_size,
                      output_Type    output_type)
     {
-
+        m_ode_system_string = ode_system_str;
+        m_dt = dt;
+        m_int_time = int_time;
+        m_kernel_steps = kernel_steps;
+        m_list_size = list_size;
+        m_num_equat = num_equat;
+        m_num_params = num_params;
+        m_output_type = output_type;
     }
 
     /**
