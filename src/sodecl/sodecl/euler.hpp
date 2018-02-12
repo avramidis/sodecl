@@ -7,13 +7,14 @@ namespace sodecl
 {
 
 /**
- * @brief Abstract class that acts as an interface for the implementation of different ODE or SDE solvers.
+ * @brief Class that implements the functions needed for the Euler solver.
  * 
  */
 class euler : public solver_interface
 {
+  public:
     /********************************************************************************************
-    ODE SOLVERS SECTION VARIABLES
+    ODE SOLVER SECTION VARIABLES
     */
 
     char*			m_ode_system_string;			/**< ODE system OpenCL function */
