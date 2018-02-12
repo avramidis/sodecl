@@ -73,3 +73,24 @@ TEST_CASE("Create OpenCL context")
         }
     }
 }
+
+// TEST_CASE("Create OpenCL kernel")
+// {
+//     SECTION("Create Euler solver kernel")
+//     {
+//         sodecl::opencl_mgr m_opencl_mgr;
+//         int platforms_num = m_opencl_mgr.get_opencl_platform_count();
+//         int status_value = m_opencl_mgr.create_opencl_platforms();
+//         status_value = m_opencl_mgr.choose_opencl_device(0, sodecl::device_Type::ALL, 0);
+//         status_value = m_opencl_mgr.create_context();
+
+//         sodecl::euler m_euler; 
+//         status_value = m_euler.create_kernel_string();
+
+//         CHECK(status_value == 1);
+//         if (status_value == -1) 
+//         {
+//             FAIL("Failed to create the OpenCL kernel string for the Euler solver!");
+//         }
+//     }
+// }
