@@ -34,6 +34,7 @@ MESSAGE(STATUS "PROJECT_NAME  : " ${PROJECT_NAME})
 MESSAGE(STATUS "CMAKE_COMMAND  : " ${CMAKE_COMMAND})
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
+                    # Copy MATLAB scripts and OpenCL kernels to the MATLAB interface folder
 					COMMAND ${CMAKE_COMMAND} -E copy_directory 
 					"${CMAKE_SOURCE_DIR}/matlabscripts" 
 					"${CMAKE_CURRENT_BINARY_DIR}/matlabscripts"
@@ -44,7 +45,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 					"${CMAKE_SOURCE_DIR}/include/Random123" 
 					"${CMAKE_CURRENT_BINARY_DIR}/matlabscripts/Random123"
 					
-					
+					# Copy python scripts and OpenCL kernels to the Python interface folder
 					COMMAND ${CMAKE_COMMAND} -E copy_directory 
 					"${CMAKE_SOURCE_DIR}/pythonscripts" 
 					"${CMAKE_CURRENT_BINARY_DIR}/pythonscripts"
@@ -62,6 +63,14 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 					COMMAND ${CMAKE_COMMAND} -E copy 
 					"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}*" 
 					"${CMAKE_CURRENT_BINARY_DIR}/pythonscripts/"
+
+                    # Copy OpenCL kernels to the build folder
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory 
+					"${CMAKE_SOURCE_DIR}/sodecl/kernels" 
+					"${CMAKE_CURRENT_BINARY_DIR}/kernels"
+					COMMAND ${CMAKE_COMMAND} -E copy_directory 
+					"${CMAKE_SOURCE_DIR}/include/Random123" 
+					"${CMAKE_CURRENT_BINARY_DIR}/Random123"
 					
 					COMMENT "Copying support files to build directory"
 					) 
