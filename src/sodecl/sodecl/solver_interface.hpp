@@ -13,6 +13,22 @@ namespace sodecl
 class solver_interface
 {
   public:
+
+    /********************************************************************************************
+    ODE SOLVER SECTION VARIABLES
+    */
+    
+    char*			m_ode_system_string;			/**< ODE system OpenCL function */ 
+    double			m_dt;							/**< Solver (initial) time step in seconds */ 
+    double			m_int_time;						/**< Time units to integrate the ODE system */ 
+    int				m_kernel_steps;					/**< Number of step the solver with perform in each kernel call */ 
+    int				m_num_dt_steps;					/**< Number of dt steps for the state of the ODE system to be saved */
+    int				m_list_size;					/**< Number of ODE system parameter combinations */ 
+    int				m_num_equat;					/**< Number of ODE system equations */ 
+    int				m_num_params;					/**< Number of ODE system parameters */ 
+    output_Type		m_output_type;					/**< Type of output (binary file or array) */ 
+    int*			m_outputPattern;				/**< Array which holds the output pattern. E.g. if the system has 3 equations the array {1,2,3}   
+                                                        will write to the output file the results of the 1st then 2nd and then 3rd state variable */
     
     /********************************************************************************************
     OPENCL SOFTWARE SECTION VARIABLES
