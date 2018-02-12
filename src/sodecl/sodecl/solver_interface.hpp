@@ -17,7 +17,7 @@ class solver_interface
     /********************************************************************************************
     ODE SOLVER SECTION VARIABLES
     */
-    
+
     char*			m_ode_system_string;			/**< ODE system OpenCL function */ 
     double			m_dt;							/**< Solver (initial) time step in seconds */ 
     double			m_int_time;						/**< Time units to integrate the ODE system */ 
@@ -49,8 +49,28 @@ class solver_interface
     /**
      * @brief Default constructor.
      * 
+     * @param kernel_path_str   Path to the SODECL OpenCL kernel source files.
+     * @param ode_system_str    Path to the OpenCL ODE system source file.
+     * @param dt                ODE solver time step size.
+     * @param int_time          Length of time in seconds the the ODE system with be integrated for.
+     * @param kernel_steps      Number of steps the ODE solver will perform in each OpenCL device call.
+     * @param num_equat         Number of equations of the ODE system.
+     * @param num_params        Number of parameters of the ODE system.
+     * @param list_size         Number of orbits to be integrated for the ODE system
+     * @param output_type       Specifies the location where the output of the integration of the ODE system will be stored.
      */
-    solver_interface(){};
+    solver_interface(string         kernel_path_str,
+                     char*          ode_system_str,
+                     double         dt,
+                     double         int_time,
+                     int            kernel_steps,
+                     int            num_equat,
+                     int            num_params,
+                     int            list_size,
+                     output_Type    output_type)
+    {
+
+    }
 
     /**
      * @brief Virtual destructor.
