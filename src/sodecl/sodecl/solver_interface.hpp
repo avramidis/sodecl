@@ -33,7 +33,7 @@ class solver_interface
     /********************************************************************************************
     OPENCL SOFTWARE SECTION VARIABLES
     */
-
+    opencl_mgr*                     m_opencl_mgr;           /**< Pointer to the object with the OpenCL operations */
     std::vector<cl_context>         m_contexts;             /**< OpenCL command contexts vector */
     std::vector<cl_command_queue>   m_command_queues;       /**< OpenCL command queues vector */
     std::vector<char>               m_kernel_sources;       /**< Char vector which stores the OpenCL kernel source string. @todo store multiple kernel source strings */
@@ -45,6 +45,12 @@ class solver_interface
     std::vector<cl_program>         m_programs;             /**< OpenCL programs vector */
     std::vector<cl_kernel>          m_kernels;              /**< OpenCL kernels vector */
     int                             m_local_group_size;     /**< OpenCL device local group size */
+    int                             m_platform_count;       /**< Number of OpenCL platforms */
+
+    // ODE solvers OpenCL buffers
+    cl_mem	m_mem_y0;				/**< OpenCL memory buffer which stores the phase state of each integration output step */ 
+    cl_mem	m_mem_params;			/**< OpenCL memory buffer which stores the parameter values of each integration orbit of the ODE system */ 
+    char*	m_outputfile_str;		/**< Path to the results output file */
 
     /**
      * @brief Default constructor.
@@ -77,6 +83,33 @@ class solver_interface
         m_num_equat = num_equat;
         m_num_params = num_params;
         m_output_type = output_type;
+
+        m_opencl_mgr = new opencl_mgr();
+
+        m_outputPattern = new int[m_num_equat];
+        for (int i = 0; i < m_num_equat; i++)
+        {
+            //m_outputPattern[i] = i+1;
+            m_outputPattern[i] = 1;
+        }
+        m_outputPattern[0] = 1;
+
+        // Find the host's platforms
+        // get the number of platforms in the system
+        m_platform_count = m_opencl_mgr->get_opencl_platform_count();
+        if (m_platform_count == -1)
+        {
+            cerr << "Error getting OpenCL planform number!" << endl;
+        }
+
+        // create all sodecl::platform objects, one for each OpenCL platform
+        m_opencl_mgr->create_opencl_platforms();
+
+        // Add default OpenCL build options
+        m_build_options.push_back(build_Option::FastRelaxedMath);
+        //m_build_options.push_back(build_Option::stdCL20);
+
+        m_local_group_size = 0;
     }
 
     /**
