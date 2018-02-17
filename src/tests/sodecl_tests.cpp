@@ -3,7 +3,7 @@
 #include "catch.hpp"
 #include "sodecl.hpp"
 
-TEST_CASE("Query OpenCL platforms")
+TEST_CASE("Test OpenCL platforms.")
 {
     SECTION("Count OpenCL platforms test.")
     {
@@ -37,9 +37,9 @@ TEST_CASE("Query OpenCL platforms")
     }
 }
 
-TEST_CASE("Choose OpenCL device")
+TEST_CASE("Test choosing the first OpenCL device.")
 {
-    SECTION("Choose the first OpenCL device of the first OpenCL platform")
+    SECTION("Choose the first OpenCL device of the first OpenCL platform.")
     {
         sodecl::opencl_mgr m_opencl_mgr;
         int platforms_num = m_opencl_mgr.get_opencl_platform_count();
@@ -55,9 +55,9 @@ TEST_CASE("Choose OpenCL device")
     }
 }
 
-TEST_CASE("Create OpenCL context")
+TEST_CASE("Test creation of OpenCL context.")
 {
-    SECTION("Create OpenCL context")
+    SECTION("Create OpenCL context.")
     {
         sodecl::opencl_mgr m_opencl_mgr;
         int platforms_num = m_opencl_mgr.get_opencl_platform_count();
@@ -74,9 +74,9 @@ TEST_CASE("Create OpenCL context")
     }
 }
 
-TEST_CASE("Create OpenCL kernel")
+TEST_CASE("Test creation of OpenCL kernel.")
 {
-    SECTION("Create Euler solver kernel")
+    SECTION("Create Euler solver kernel.")
     {
         sodecl::opencl_mgr m_opencl_mgr;
         int platforms_num = m_opencl_mgr.get_opencl_platform_count();
