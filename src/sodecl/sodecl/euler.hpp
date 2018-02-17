@@ -159,6 +159,21 @@ class euler : public solver_interface
      */
     int create_buffers(cl_context context, int list_size, int equat_num, int param_num)
     {
+        cl_int errcode;
+
+        m_mem_y0 = clCreateBuffer(context, CL_MEM_READ_WRITE, list_size * sizeof(cl_double)*equat_num, NULL, &errcode);
+        if (errcode != CL_SUCCESS)
+        {
+            return 0;
+        }
+
+        m_mem_params = clCreateBuffer(context, CL_MEM_READ_ONLY, list_size * sizeof(cl_double)*param_num, NULL, &errcode);
+        if (errcode != CL_SUCCESS)
+        {
+            return 0;
+        }
+
+        return 0;
     }
 
     /**
@@ -172,6 +187,32 @@ class euler : public solver_interface
      */
     int write_buffers(cl_command_queue commands, int list_size, int equat_num, int param_num)
     {
+        int err = 0;
+
+        cl_double *temp = new cl_double[m_list_size*m_num_equat];
+        for (int orbit = 0; orbit < list_size; orbit++)
+        {
+            int k = orbit * m_num_equat;
+            for (int ieq = 0; ieq < m_num_equat; ieq++)
+            {
+                int i = k + ieq;
+                temp[i] = m_y0[orbit*equat_num + ieq];
+            }
+        }
+
+        err |= clEnqueueWriteBuffer(commands, m_mem_y0, CL_TRUE, 0, list_size * sizeof(cl_double)*equat_num, temp, 0, NULL, NULL);
+
+        delete[] temp;
+
+        err |= clEnqueueWriteBuffer(commands, m_mem_params, CL_TRUE, 0, list_size * sizeof(cl_double)*param_num, m_params, 0, NULL, NULL);
+
+        if (err != CL_SUCCESS)
+        {
+            std::cout << "Error: Failed to write to source array!" << std::endl;
+            return 0;
+        }
+
+        return 1;
     }
 
     /**
