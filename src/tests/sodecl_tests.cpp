@@ -88,8 +88,17 @@ TEST_CASE("Test creation of OpenCL kernel.")
         int number_of_states = 4;
         int number_of_params = 6;
         cl_double *y0 = new cl_double[number_of_orbits*number_of_states];
-        cl_double *params = new cl_double[number_of_orbits*number_of_params];
+        for (int i=0; i<number_of_orbits*number_of_states; ++i)
+        {
+            y0[i]=0;
+        }
 
+        cl_double *params = new cl_double[number_of_orbits*number_of_params];
+        for (int i=0; i<number_of_orbits*number_of_params; ++i)
+        {
+            params[i]=0;
+        }
+        
         sodecl::euler m_euler("kernels",
                               "kuramoto.cl",
                               0.05,
