@@ -3,3 +3,13 @@ language: cpp
 before_install:
 - sudo apt-get update -qq
 - sudo apt-get install -qq ocl-icd-opencl-dev
+
+# Compiler selection
+compiler:
+- gcc
+
+# Build steps
+script:
+  - mkdir build
+  - cd build
+  - cmake .. && make && make test
