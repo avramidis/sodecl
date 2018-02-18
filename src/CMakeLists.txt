@@ -2,7 +2,7 @@
 # MIT License
 # author Eleftherios Avramidis
 
-cmake_minimum_required (VERSION 2.8.7)
+cmake_minimum_required (VERSION 2.8)
 
 # Set a default build type for single-configuration
 # CMake generators if no build type is set.
