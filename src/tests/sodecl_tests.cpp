@@ -84,6 +84,12 @@ TEST_CASE("Test creation of OpenCL kernel.")
         status_value = m_opencl_mgr.choose_opencl_device(0, sodecl::device_Type::ALL, 0);
         status_value = m_opencl_mgr.create_context();
 
+        int number_of_orbits = 10;
+        int number_of_states = 4;
+        int number_of_params = 6;
+        cl_double *y0 = new cl_double[number_of_orbits*number_of_states];
+        cl_double *params = new cl_double[number_of_orbits*number_of_params];
+
         sodecl::euler m_euler("kernels",
                               "kuramoto.cl",
                               0.05,
@@ -92,7 +98,9 @@ TEST_CASE("Test creation of OpenCL kernel.")
                               3,
                               3,
                               1,
-                              sodecl::output_Type::File);
+                              sodecl::output_Type::File,
+                              y0,
+                              params);
 
         status_value = m_euler.create_kernel_string();
 

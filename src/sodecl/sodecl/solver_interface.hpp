@@ -29,7 +29,10 @@ class solver_interface
     output_Type     m_output_type;          /**< Type of output (binary file or array) */
     int*            m_outputPattern;        /**< Array which holds the output pattern. E.g. if the system has 3 equations the array {1,2,3}   
                                                  will write to the output file the results of the 1st then 2nd and then 3rd state variable */
-
+    // arrays with the state of the system for each parameter combination
+    cl_double*	m_y0;			/**< Client memory buffer which stores the phase state of each integration output step */  
+    cl_double*	m_params;		/**< Client memory buffer which stores the parameter values of each integration orbit of the ODE system */ 
+    
     /********************************************************************************************
     OPENCL SOFTWARE SECTION VARIABLES
     */
@@ -48,10 +51,16 @@ class solver_interface
     int                             m_platform_count;       /**< Number of OpenCL platforms */
 
     // ODE solvers OpenCL buffers
+    cl_mem	m_mem_t0;				/**< OpenCL memory buffer which stores the time value of each integration output step */ 
     cl_mem	m_mem_y0;				/**< OpenCL memory buffer which stores the phase state of each integration output step */ 
     cl_mem	m_mem_params;			/**< OpenCL memory buffer which stores the parameter values of each integration orbit of the ODE system */ 
+    cl_mem	m_mem_dt;				/**< OpenCL memory buffer which stores the time step for each integration orbit of the ODE system */ 
+    cl_mem	m_mem_rcounter;			/**< OpenCL memory buffer which stores the counters for each workitem for the random number generation */ 
     char*	m_outputfile_str;		/**< Path to the results output file */
 
+    // Log mechanisms
+    clog*	m_log;				/**< Pointer for log */
+    
     /**
      * @brief Default constructor.
      * 
@@ -64,6 +73,8 @@ class solver_interface
      * @param num_params        Number of parameters of the ODE system.
      * @param list_size         Number of orbits to be integrated for the ODE system
      * @param output_type       Specifies the location where the output of the integration of the ODE system will be stored.
+     * @param y0                Client memory buffer which stores the phase state of each integration output step.
+     * @param params            Client memory buffer which stores the parameter values of each integration orbit of the ODE system.
      */
     solver_interface(string         kernel_path_str,
                      char*          ode_system_str,
@@ -73,7 +84,9 @@ class solver_interface
                      int            num_equat,
                      int            num_params,
                      int            list_size,
-                     output_Type    output_type)
+                     output_Type    output_type,
+                     cl_double*     y0,
+                     cl_double*     params)
     {
         m_ode_system_string = ode_system_str;
         m_dt = dt;
@@ -83,6 +96,9 @@ class solver_interface
         m_num_equat = num_equat;
         m_num_params = num_params;
         m_output_type = output_type;
+
+        m_y0 = y0;
+        m_params = params;
 
         m_opencl_mgr = new opencl_mgr();
 

@@ -26,7 +26,7 @@ class euler : public solver_interface
      * @param list_size         Number of orbits to be integrated for the ODE system
      * @param output_type       Specifies the location where the output of the integration of the ODE system will be stored.
      */
-    euler(string        kernel_path_str,
+    euler(string kernel_path_str,
           char*         ode_system_str,
           double        dt,
           double        int_time,
@@ -34,15 +34,19 @@ class euler : public solver_interface
           int           num_equat,
           int           num_params,
           int           list_size,
-          output_Type   output_type) : solver_interface(kernel_path_str,
-                                                      ode_system_str,
-                                                      dt,
-                                                      int_time,
-                                                      kernel_steps,
-                                                      num_equat,
-                                                      num_params,
-                                                      list_size,
-                                                      output_type)
+          output_Type   output_type,
+          cl_double*    y0,
+          cl_double*    params) : solver_interface( kernel_path_str,
+                                                    ode_system_str,
+                                                    dt,
+                                                    int_time,
+                                                    kernel_steps,
+                                                    num_equat,
+                                                    num_params,
+                                                    list_size,
+                                                    output_type,
+                                                    y0,
+                                                    params)
     {
     }
 
