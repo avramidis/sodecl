@@ -4,8 +4,6 @@
 
 cmake_minimum_required (VERSION 3.5.1)
 
-enable_testing()
-
 # Set a default build type for single-configuration
 # CMake generators if no build type is set.
 IF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
@@ -31,7 +29,8 @@ set (CMAKE_CXX_STANDARD 11)
 add_executable(sodecl sodecl.cpp)
 add_executable(sodecl_tests tests/sodecl_tests.cpp)
 
-add_test(MyTest sodecl_tests)
+enable_testing()
+add_test(MyTest ${PROJECT_BINARY_DIR}/tests/sodecl_tests)
 
 # Add include directories for OpenCL and sodecl
 include_directories("${PROJECT_BINARY_DIR}/../src/include")
@@ -49,9 +48,7 @@ MESSAGE(STATUS "CMAKE_CURRENT_SOURCE_DIR : " ${CMAKE_CURRENT_SOURCE_DIR})
 MESSAGE(STATUS "PROJECT_NAME  : " ${PROJECT_NAME})
 MESSAGE(STATUS "CMAKE_COMMAND  : " ${CMAKE_COMMAND})
 
-file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/tests")
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
+add_custom_command(TARGET sodecl POST_BUILD 
                     # Copy MATLAB scripts and OpenCL kernels to the MATLAB interface folder
 					COMMAND ${CMAKE_COMMAND} -E copy_directory 
 					"${CMAKE_SOURCE_DIR}/matlabscripts" 
@@ -79,9 +76,20 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 					"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}*" 
 					"${CMAKE_CURRENT_BINARY_DIR}/matlabscripts/"
 					COMMAND ${CMAKE_COMMAND} -E copy 
-					"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}*" 
+					"${CMAKE_CURRENT_BINARY_DIR}/sodecl" 
 					"${CMAKE_CURRENT_BINARY_DIR}/pythonscripts/"
 
+                    # Remove executables from the build folder
+                    COMMAND ${CMAKE_COMMAND} -E remove 
+					"${CMAKE_CURRENT_BINARY_DIR}/sodecl"
+					
+					COMMENT "Copying support files to build directory"
+					) 
+
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/tests")
+
+add_custom_command(TARGET sodecl_tests POST_BUILD 
+                    
                     # Copy OpenCL kernels to the build tests folder
                     COMMAND ${CMAKE_COMMAND} -E copy_directory 
 					"${CMAKE_SOURCE_DIR}/sodecl/kernels" 
@@ -93,14 +101,18 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 					"${CMAKE_SOURCE_DIR}/tests/kuramoto.cl" 
 					"${CMAKE_CURRENT_BINARY_DIR}/tests/"
 
-                    # Copy executables to the tests folder
+                    # Copy test executable to the tests folder
                     COMMAND ${CMAKE_COMMAND} -E copy 
 					"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}*" 
 					"${CMAKE_CURRENT_BINARY_DIR}/tests/"
 
+                    COMMAND ${CMAKE_COMMAND} -E copy 
+					"${CMAKE_CURRENT_BINARY_DIR}/sodecl_tests" 
+					"${CMAKE_CURRENT_BINARY_DIR}/tests/"
+
                     # Remove executables from the build folder
                     COMMAND ${CMAKE_COMMAND} -E remove 
-					"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}*"
+					"${CMAKE_CURRENT_BINARY_DIR}/sodecl_tests"
 					
 					COMMENT "Copying support files to build directory"
 					) 
