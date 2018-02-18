@@ -4,6 +4,8 @@
 
 cmake_minimum_required (VERSION 3.5.1)
 
+enable_testing()
+
 # Set a default build type for single-configuration
 # CMake generators if no build type is set.
 IF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
@@ -28,6 +30,8 @@ set (CMAKE_CXX_STANDARD 11)
 
 add_executable(sodecl sodecl.cpp)
 add_executable(sodecl_tests tests/sodecl_tests.cpp)
+
+add_test(MyTest sodecl_tests)
 
 # Add include directories for OpenCL and sodecl
 include_directories("${PROJECT_BINARY_DIR}/../src/include")
