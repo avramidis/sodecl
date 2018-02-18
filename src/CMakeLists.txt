@@ -30,7 +30,7 @@ add_executable(sodecl sodecl.cpp)
 add_executable(sodecl_tests tests/sodecl_tests.cpp)
 
 enable_testing()
-add_test(MyTest ${PROJECT_BINARY_DIR}/tests/sodecl_tests)
+add_test(sodecl_test ${PROJECT_BINARY_DIR}/tests/sodecl_tests)
 
 # Add include directories for OpenCL and sodecl
 include_directories("${PROJECT_BINARY_DIR}/../src/include")
