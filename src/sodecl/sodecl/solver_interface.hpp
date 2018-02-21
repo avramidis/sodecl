@@ -88,6 +88,9 @@ class solver_interface
                      cl_double*     y0,
                      cl_double*     params)
     {
+        // Initialise the clog object
+		m_log = clog::getInstance();
+
         m_ode_system_string = ode_system_str;
         m_dt = dt;
         m_int_time = int_time;

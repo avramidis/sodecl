@@ -59,13 +59,13 @@ class opencl_mgr
      */
     ~opencl_mgr()
     {
-        for (auto i : m_opencl_platforms)
-        {
-            delete i;
-        }
-        m_opencl_platforms.clear();
+        // for (auto i : m_opencl_platforms)
+        // {
+        //     delete i;
+        // }
+        // m_opencl_platforms.clear();
 
-        delete m_log;
+        // delete m_log;
     };
 
     /**
