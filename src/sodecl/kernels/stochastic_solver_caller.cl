@@ -8,19 +8,17 @@
 __kernel void solver_caller(__global double *t0,
 	__global double *y0,
 	__global double *params_g,
-	__global int *counter_g)
+	__global double *counter_g)
 {
 	int i = get_global_id(0);
 
 	double dtsqrt = sqrt(_m_dt_);
 
-	//double t;
 	double y[_numeq_];
 	double detterm[_numeq_];
 	double params[_numpar_];
 	double noise[_numnoi_];
 
-	//t = t0[i];
 	#pragma unroll 1
 	for (int ieq = 0; ieq < _numeq_; ieq++)
 	{
@@ -31,10 +29,6 @@ __kernel void solver_caller(__global double *t0,
 	{
 		params[ipar] = params_g[i * _numpar_ + ipar];
 	}
-
-	// Noise generators
-	//int counter;
-	//counter = counter_g[i];
 
 	threefry2x64_key_t rk = { { i, 0xf00dcafe } };
 	threefry2x64_ctr_t rc = { { 0, 0xdecafbad } };	
@@ -84,11 +78,9 @@ __kernel void solver_caller(__global double *t0,
 		}
 	}
 
-	//t0[i] = t;
 	#pragma unroll 1
 	for (int ieq = 0; ieq < _numeq_; ieq++)
 	{
 		y0[i * _numeq_ + ieq] = y[ieq];
 	}
-	//counter_g[i] = counter;
 }
