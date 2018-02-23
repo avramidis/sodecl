@@ -14,7 +14,7 @@ if __name__ == '__main__':
     orbit_set = [512, 5120, 25600, 40960, 81920, 163840, 327680]
     #orbit_set = [512, 5120]
     nequat_set = [3, 10, 20]
-    repetitions = 3
+    repetitions = 8
 
     openclplatform = 0
     opencldevice = 0
@@ -23,11 +23,10 @@ if __name__ == '__main__':
     dt = 5e-2
     tspan = 200
     ksteps = 40
-    localgroupsize = 8
+    localgroupsize = 0
 
     runtimes = numpy.zeros((len(nequat_set), len(orbit_set), repetitions+1))
 
-    orbits = 512
     nequat_count = 0
     for nequat in nequat_set:
         orbits_count = 0
