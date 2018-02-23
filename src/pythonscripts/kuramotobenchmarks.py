@@ -11,8 +11,8 @@ import numpy
 import sodecl
 
 if __name__ == '__main__':
-    # orbit_set = [512, 5120, 25600, 40960, 81920, 163840, 327680]
-    orbit_set = [512, 5120]
+    orbit_set = [512, 5120, 25600, 40960, 81920, 163840, 327680]
+    #orbit_set = [512, 5120]
     nequat_set = [3, 10, 20]
     repetitions = 3
 
