@@ -26,8 +26,8 @@ endif()
 
 set (CMAKE_CXX_STANDARD 11)
 
-add_executable(sodecl sodecl.cpp)
-add_executable(sodecl_tests tests/sodecl_tests.cpp)
+add_executable(sodecl src/sodecl.cpp)
+add_executable(sodecl_tests src/tests/sodecl_tests.cpp)
 
 enable_testing()
 add_test(sodecl_test ${PROJECT_BINARY_DIR}/tests/sodecl_tests)
