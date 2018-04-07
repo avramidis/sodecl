@@ -74,10 +74,7 @@ def sodecl(openclplatform, opencldevice, openclkernel,
     else:
         solver2user = 0
 
-    if platform.system()=='windows':
-    	sodeclexename='./sodecl.exe'
-    else:
-    	sodeclexename='./sodecl'
+    sodeclexename='./sodecl.exe'
 
     runcommandstr = [sodeclexename,
                      str(openclplatform),
