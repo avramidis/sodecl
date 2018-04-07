@@ -226,6 +226,7 @@ class euler : public solver_interface
      */
     int setup_solver()
     {
+		return 0;
     }
 
     /**
@@ -235,6 +236,7 @@ class euler : public solver_interface
      */
     int run_solver()
     {
+		return 0;
     }
 };
 }
