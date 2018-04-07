@@ -68,7 +68,7 @@ To generate the makefiles use the following commands in a terminal in the sodecl
 ```
 mkdir build
 cd build
-cmake ../src/.
+cmake ..
 ```
 
 To build SODECL use the following command
