@@ -12,11 +12,10 @@ import sodecl
 
 if __name__ == '__main__':
     orbit_set = [512, 5120, 25600, 40960, 81920, 163840, 327680]
-    #orbit_set = [512, 5120]
     nequat_set = [3, 10, 20]
     repetitions = 8
 
-    openclplatform = 0
+    openclplatform = 2
     opencldevice = 0
     openclkernel = 'kuramoto.cl'
     solver = 0    
@@ -33,6 +32,10 @@ if __name__ == '__main__':
         for orbits in orbit_set:
             reps_count = 0
             for reps in range(repetitions):
+                print("nequat: ", nequat_set[nequat_count])
+                print("norbits: ", orbit_set[orbits_count])
+                print("rep: ", reps)
+                
                 time.sleep(1)
                 start_time = time.time()
                 
@@ -72,7 +75,8 @@ if __name__ == '__main__':
 
                 runtimes[nequat_count][orbits_count][reps_count] = end_time - start_time
                 reps_count = reps_count + 1
-            
+                print("")
+
             runtimes[nequat_count][orbits_count][reps_count] = numpy.mean(runtimes[nequat_count][orbits_count][0:repetitions-1])
             
             orbits_count = orbits_count + 1

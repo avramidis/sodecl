@@ -15,7 +15,7 @@ if __name__ == '__main__':
     start_time = time.time()
 
     orbits=8
-    openclplatform = 0
+    openclplatform = 1
     opencldevice = 0
     openclkernel = 'kuramoto.cl'
     solver = 0
