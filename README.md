@@ -2,7 +2,7 @@
 
 [![license: MIT](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/avramidis/sodecl/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/avramidis/sodecl.svg?branch=master)](https://travis-ci.org/avramidis/sodecl)
-[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/avramimidis/sodecl/issues)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/avramidis/sodecl/issues)
 
 SODECL is a library of ordinary differential equation (ODE) and stochastic differential equation (SDE) solvers in OpenCL. 
 Using SODECL the user can calculate the integration orbits of a ODE or SDE system for a large number of different parameter values.
