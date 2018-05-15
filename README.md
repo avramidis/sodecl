@@ -7,7 +7,7 @@
 SODECL is a library of ordinary differential equation (ODE) and stochastic differential equation (SDE) solvers in OpenCL. 
 Using SODECL the user can calculate the integration orbits of a ODE or SDE system for a large number of different parameter values.
 
-One example of the usefullness of SODECL is the fitting an ODE system representing a biological model to experimental data.  When optimising an ODE biological model using for example genetic algorithms the ODE model has to be calculated for a large number of different parameter values combinations. ODECL accelerates the calculation of these ODE model orbit integrations by taking advantage of all the cores of a CPU or the parallel capabilities of a GPU. 
+One example of the usefullness of SODECL is the fitting an ODE system representing a biological model to experimental data.  When optimising an ODE biological model using for example genetic algorithms the ODE model has to be calculated for a large number of different parameter values combinations. SODECL accelerates the calculation of these ODE model orbit integrations by taking advantage of all the cores of a CPU or the parallel capabilities of a GPU.
 
 ## Getting Started
 
