@@ -33,8 +33,6 @@ else()
 endif()
 
 set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(sodecl_bin "${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl.cpp")
 add_executable(sodecl_tests "${CMAKE_CURRENT_SOURCE_DIR}/src/tests/sodecl_tests.cpp")
@@ -117,7 +115,7 @@ add_custom_command(TARGET sodecl_tests POST_BUILD
 
                     # Copy test executable to the tests folder
                     COMMAND ${CMAKE_COMMAND} -E copy 
-					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/sodecl_tests.exe" 
+					"${CMAKE_CURRENT_BINARY_DIR}/sodecl_tests.exe" 
 					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
 
                     # COMMAND ${CMAKE_COMMAND} -E copy 
