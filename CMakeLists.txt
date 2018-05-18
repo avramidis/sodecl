@@ -1,14 +1,22 @@
-# 25/01/2018
-# MIT License
-# author Eleftherios Avramidis
+#---------------------------------------------------------------------------//
+# Copyright (c) 2015 Eleftherios Avramidis <el.avramidis@gmail.com>
+#
+# Distributed under The MIT License (MIT)
+# See accompanying file LICENSE.txt
+#---------------------------------------------------------------------------//
 
 cmake_minimum_required (VERSION 3.2.2)
 
-# Set a default build type for single-configuration
-# CMake generators if no build type is set.
-IF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
-    SET(CMAKE_BUILD_TYPE Release)
-ENDIF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
+set(default_build_type "Release")
+
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
+  set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE
+      STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
+    "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+endif()
 
 # Select flags.
 SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
@@ -28,7 +36,7 @@ set (CMAKE_CXX_STANDARD 11)
 
 add_executable(sodecl_bin "${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl.cpp")
 
-if (MSVC)
+if (WIN32)
 	set_target_properties(sodecl_bin PROPERTIES OUTPUT_NAME "sodecl")
 else()
 	set_target_properties(sodecl_bin PROPERTIES OUTPUT_NAME "sodecl.exe")
@@ -42,7 +50,6 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/include")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl")
 
 FIND_PACKAGE(OpenCL REQUIRED)
-#INCLUDE_DIRECTORIES(${OpenCL_INCLUDE_DIRS}) 
 
 LINK_DIRECTORIES(${OpenCL_LIBRARY})
 TARGET_LINK_LIBRARIES(sodecl_bin ${OpenCL_LIBRARIES})
@@ -51,8 +58,7 @@ MESSAGE(STATUS "CMAKE_CURRENT_BINARY_DIR: " ${CMAKE_CURRENT_BINARY_DIR})
 MESSAGE(STATUS "CMAKE_CURRENT_SOURCE_DIR : " ${CMAKE_CURRENT_SOURCE_DIR})
 MESSAGE(STATUS "PROJECT_NAME  : " ${PROJECT_NAME})
 MESSAGE(STATUS "CMAKE_COMMAND  : " ${CMAKE_COMMAND})
-MESSAGE(STATUS "PROJECT_NAME  : " ${PROJECT_NAME})
- 
+MESSAGE(STATUS "CONFIGURATION  : " ${CMAKE_BUILD_TYPE})
 
 add_custom_command(	TARGET sodecl_bin
 					POST_BUILD 
@@ -80,16 +86,13 @@ add_custom_command(	TARGET sodecl_bin
 					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/pythonscripts/Random123"
 					
 					# Copy executables to the MATLAB and Python interfaces folders
-					COMMAND ${CMAKE_COMMAND} -E copy 
-					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/sodecl.exe" 
-					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/matlabscripts/"
-					COMMAND ${CMAKE_COMMAND} -E copy 
-					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/sodecl.exe" 
+					COMMAND ${CMAKE_COMMAND} -E copy
+					"${CMAKE_CURRENT_BINARY_DIR}/sodecl.exe"
 					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/pythonscripts/"
 
-                    # Remove executables from the build folder
-                    # COMMAND ${CMAKE_COMMAND} -E remove 
-					# "${CMAKE_CURRENT_BINARY_DIR}/sodecl"
+					COMMAND ${CMAKE_COMMAND} -E copy
+					"${CMAKE_CURRENT_BINARY_DIR}/sodecl.exe"
+					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/matlabscripts/"
 					
 					COMMENT "Copying support files to build directory"
 					) 
