@@ -23,7 +23,7 @@ SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
 SET(CMAKE_CXX_FLAGS_RELEASE "-O2")
 SET(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g")
 
-project(sodecl VERSION 0.1 LANGUAGES CXX)
+project(sodecl VERSION 0.1.0 LANGUAGES CXX)
 
 # Add all warnings compile options
 if (MSVC)
@@ -32,14 +32,19 @@ else()
 	add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-set (CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(sodecl_bin "${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl.cpp")
+add_executable(sodecl_tests "${CMAKE_CURRENT_SOURCE_DIR}/src/tests/sodecl_tests.cpp")
 
 if (WIN32)
 	set_target_properties(sodecl_bin PROPERTIES OUTPUT_NAME "sodecl")
+	set_target_properties(sodecl_tests PROPERTIES OUTPUT_NAME "sodecl_tests")
 else()
 	set_target_properties(sodecl_bin PROPERTIES OUTPUT_NAME "sodecl.exe")
+	set_target_properties(sodecl_tests PROPERTIES OUTPUT_NAME "sodecl_tests.exe")
 endif()
 
 enable_testing()
@@ -53,6 +58,7 @@ FIND_PACKAGE(OpenCL REQUIRED)
 
 LINK_DIRECTORIES(${OpenCL_LIBRARY})
 TARGET_LINK_LIBRARIES(sodecl_bin ${OpenCL_LIBRARIES})
+TARGET_LINK_LIBRARIES(sodecl_tests ${OpenCL_LIBRARIES})
 
 MESSAGE(STATUS "CMAKE_CURRENT_BINARY_DIR: " ${CMAKE_CURRENT_BINARY_DIR})
 MESSAGE(STATUS "CMAKE_CURRENT_SOURCE_DIR : " ${CMAKE_CURRENT_SOURCE_DIR})
@@ -96,3 +102,31 @@ add_custom_command(	TARGET sodecl_bin
 					
 					COMMENT "Copying support files to build directory"
 					) 
+	
+add_custom_command(TARGET sodecl_tests POST_BUILD 
+                    # Copy OpenCL kernels to the build tests folder
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory 
+					"${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl/kernels" 
+					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/kernels"
+					COMMAND ${CMAKE_COMMAND} -E copy_directory 
+					"${CMAKE_CURRENT_SOURCE_DIR}/src/include/Random123" 
+					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/Random123"
+                    COMMAND ${CMAKE_COMMAND} -E copy
+					"${CMAKE_CURRENT_SOURCE_DIR}/src/tests/kuramoto.cl" 
+					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
+
+                    # Copy test executable to the tests folder
+                    COMMAND ${CMAKE_COMMAND} -E copy 
+					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/sodecl_tests.exe" 
+					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
+
+                    # COMMAND ${CMAKE_COMMAND} -E copy 
+					# "${CMAKE_CURRENT_BINARY_DIR}/src/sodecl_tests" 
+					# "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
+
+                    # Remove executables from the build folder
+                    # COMMAND ${CMAKE_COMMAND} -E remove 
+					# "${CMAKE_CURRENT_BINARY_DIR}/sodecl_tests"
+					
+					COMMENT "Copying support files to build directory"
+) 
