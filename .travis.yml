@@ -12,4 +12,4 @@ compiler:
 script:
   - mkdir build
   - cd build
-  - cmake .. && make && ctest
+  - cmake .. && make && ctest --verbose
