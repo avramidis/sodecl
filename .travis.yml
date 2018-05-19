@@ -2,8 +2,7 @@ language: cpp
 
 before_install:
 - sudo apt-get update -qq
-#- sudo apt-get install -qq ocl-icd-opencl-dev
-- sudo apt-get install -qq pocl
+- sudo apt-get install -qq ocl-icd-opencl-dev
 
 # Compiler selection
 compiler:
