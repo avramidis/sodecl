@@ -37,42 +37,42 @@ TEST_CASE("Test OpenCL platforms.")
     }
 }
 
-TEST_CASE("Test choosing the first OpenCL device.")
-{
-    SECTION("Choose the first OpenCL device of the first OpenCL platform.")
-    {
-        sodecl::opencl_mgr m_opencl_mgr;
-        int platforms_num = m_opencl_mgr.get_opencl_platform_count();
-        int status_value = m_opencl_mgr.create_opencl_platforms();
+// TEST_CASE("Test choosing the first OpenCL device.")
+// {
+//     SECTION("Choose the first OpenCL device of the first OpenCL platform.")
+//     {
+//         sodecl::opencl_mgr m_opencl_mgr;
+//         int platforms_num = m_opencl_mgr.get_opencl_platform_count();
+//         int status_value = m_opencl_mgr.create_opencl_platforms();
 
-        status_value = m_opencl_mgr.choose_opencl_device(0, sodecl::device_Type::ALL, 0);
+//         status_value = m_opencl_mgr.choose_opencl_device(0, sodecl::device_Type::ALL, 0);
 
-        CHECK(status_value == 1);
-        if (status_value == -1) 
-        {
-            FAIL("Failed to choose the OpenCL device selected!");
-        }
-    }
-}
+//         CHECK(status_value == 1);
+//         if (status_value == -1) 
+//         {
+//             FAIL("Failed to choose the OpenCL device selected!");
+//         }
+//     }
+// }
 
-TEST_CASE("Test creation of OpenCL context.")
-{
-    SECTION("Create OpenCL context.")
-    {
-        sodecl::opencl_mgr m_opencl_mgr;
-        int platforms_num = m_opencl_mgr.get_opencl_platform_count();
-        int status_value = m_opencl_mgr.create_opencl_platforms();
-        status_value = m_opencl_mgr.choose_opencl_device(0, sodecl::device_Type::ALL, 0);
+// TEST_CASE("Test creation of OpenCL context.")
+// {
+//     SECTION("Create OpenCL context.")
+//     {
+//         sodecl::opencl_mgr m_opencl_mgr;
+//         int platforms_num = m_opencl_mgr.get_opencl_platform_count();
+//         int status_value = m_opencl_mgr.create_opencl_platforms();
+//         status_value = m_opencl_mgr.choose_opencl_device(0, sodecl::device_Type::ALL, 0);
 
-        status_value = m_opencl_mgr.create_context();
+//         status_value = m_opencl_mgr.create_context();
 
-        CHECK(status_value == 1);
-        if (status_value == -1) 
-        {
-            FAIL("Failed to create the OpenCL context for the selected platform and device!");
-        }
-    }
-}
+//         CHECK(status_value == 1);
+//         if (status_value == -1) 
+//         {
+//             FAIL("Failed to create the OpenCL context for the selected platform and device!");
+//         }
+//     }
+// }
 
 // TEST_CASE("Test creation of OpenCL kernel.")
 // {
