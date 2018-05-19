@@ -68,8 +68,8 @@ add_custom_command(	TARGET sodecl_bin
 					POST_BUILD 
                     # Copy MATLAB scripts and OpenCL kernels to the MATLAB interface folder
 					COMMAND ${CMAKE_COMMAND} -E copy_directory 
-					${CMAKE_CURRENT_SOURCE_DIR}/src/matlabscripts
-					${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/matlabscripts
+					"${CMAKE_CURRENT_SOURCE_DIR}/src/matlabscripts"
+					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/matlabscripts"
 
 					COMMAND ${CMAKE_COMMAND} -E copy_directory 
 					"${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl/kernels" 
@@ -90,41 +90,41 @@ add_custom_command(	TARGET sodecl_bin
 					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/pythonscripts/Random123"
 					
 					# Copy executables to the MATLAB and Python interfaces folders
-					COMMAND ${CMAKE_COMMAND} -E copy
-					"${CMAKE_CURRENT_BINARY_DIR}/sodecl.exe"
-					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/pythonscripts/"
+					COMMAND ${CMAKE_COMMAND} -E copy 
+					"$<TARGET_FILE:sodecl_bin>"
+					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/pythonscripts/sodecl.exe"
 
 					COMMAND ${CMAKE_COMMAND} -E copy
-					"${CMAKE_CURRENT_BINARY_DIR}/sodecl.exe"
+					"$<TARGET_FILE:sodecl_bin>"
 					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/matlabscripts/"
 					
 					COMMENT "Copying support files to build directory"
 					) 
 	
-add_custom_command(TARGET sodecl_tests POST_BUILD 
-                    # Copy OpenCL kernels to the build tests folder
-                    COMMAND ${CMAKE_COMMAND} -E copy_directory 
-					"${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl/kernels" 
-					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/kernels"
-					COMMAND ${CMAKE_COMMAND} -E copy_directory 
-					"${CMAKE_CURRENT_SOURCE_DIR}/src/include/Random123" 
-					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/Random123"
-                    # COMMAND ${CMAKE_COMMAND} -E copy
-					# "${CMAKE_CURRENT_SOURCE_DIR}/src/tests/kuramoto.cl" 
-					# "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
+# add_custom_command(TARGET sodecl_tests POST_BUILD 
+#                     # Copy OpenCL kernels to the build tests folder
+#                     COMMAND ${CMAKE_COMMAND} -E copy_directory 
+# 					"${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl/kernels" 
+# 					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/kernels"
+# 					COMMAND ${CMAKE_COMMAND} -E copy_directory 
+# 					"${CMAKE_CURRENT_SOURCE_DIR}/src/include/Random123" 
+# 					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/Random123"
+#                     # COMMAND ${CMAKE_COMMAND} -E copy
+# 					# "${CMAKE_CURRENT_SOURCE_DIR}/src/tests/kuramoto.cl" 
+# 					# "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
 
-                    # Copy test executable to the tests folder
-                    COMMAND ${CMAKE_COMMAND} -E copy 
-					"${CMAKE_CURRENT_BINARY_DIR}/sodecl_tests.exe" 
-					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
+#                     # Copy test executable to the tests folder
+#                     COMMAND ${CMAKE_COMMAND} -E copy 
+# 					"${CMAKE_CURRENT_BINARY_DIR}/sodecl_tests.exe" 
+# 					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
 
-                    # COMMAND ${CMAKE_COMMAND} -E copy 
-					# "${CMAKE_CURRENT_BINARY_DIR}/src/sodecl_tests" 
-					# "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
+#                     # COMMAND ${CMAKE_COMMAND} -E copy 
+# 					# "${CMAKE_CURRENT_BINARY_DIR}/src/sodecl_tests" 
+# 					# "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
 
-                    # Remove executables from the build folder
-                    # COMMAND ${CMAKE_COMMAND} -E remove 
-					# "${CMAKE_CURRENT_BINARY_DIR}/sodecl_tests"
+#                     # Remove executables from the build folder
+#                     # COMMAND ${CMAKE_COMMAND} -E remove 
+# 					# "${CMAKE_CURRENT_BINARY_DIR}/sodecl_tests"
 					
-					COMMENT "Copying support files to build directory"
-) 
+# 					COMMENT "Copying support files to build directory"
+# ) 
