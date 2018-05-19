@@ -1,15 +1,17 @@
 language: cpp
 
-dist: trusty
-sudo: required
+os: osx
 
-before_install:
-- sudo apt-get update -qq
-- sudo apt-get install -y ocl-icd-opencl-dev
+# dist: trusty
+# sudo: required
+
+# before_install:
+# - sudo apt-get update -qq
+# - sudo apt-get install -y ocl-icd-opencl-dev
 
 # Compiler selection
-compiler:
-- gcc
+# compiler:
+# - gcc
 
 # Build steps
 script:
