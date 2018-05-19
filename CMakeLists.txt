@@ -37,16 +37,18 @@ set(CMAKE_CXX_STANDARD 14)
 add_executable(sodecl_bin "${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl.cpp")
 add_executable(sodecl_tests "${CMAKE_CURRENT_SOURCE_DIR}/src/tests/sodecl_tests.cpp")
 
+enable_testing()
+
 if (WIN32)
 	set_target_properties(sodecl_bin PROPERTIES OUTPUT_NAME "sodecl")
 	set_target_properties(sodecl_tests PROPERTIES OUTPUT_NAME "sodecl_tests")
+	add_test(sodecl_test ${PROJECT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/tests/sodecl_tests)
 else()
 	set_target_properties(sodecl_bin PROPERTIES OUTPUT_NAME "sodecl.exe")
 	set_target_properties(sodecl_tests PROPERTIES OUTPUT_NAME "sodecl_tests.exe")
+	add_test(sodecl_test ${PROJECT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/tests/sodecl_tests.exe)
 endif()
 
-enable_testing()
-add_test(sodecl_test ${PROJECT_BINARY_DIR}/tests/sodecl_tests)
 
 # Add include directories for OpenCL and sodecl
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/include")
@@ -92,7 +94,7 @@ add_custom_command(	TARGET sodecl_bin
 					# Copy executables to the MATLAB and Python interfaces folders
 					COMMAND ${CMAKE_COMMAND} -E copy 
 					"$<TARGET_FILE:sodecl_bin>"
-					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/pythonscripts/sodecl.exe"
+					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/pythonscripts/"
 
 					COMMAND ${CMAKE_COMMAND} -E copy
 					"$<TARGET_FILE:sodecl_bin>"
@@ -101,30 +103,30 @@ add_custom_command(	TARGET sodecl_bin
 					COMMENT "Copying support files to build directory"
 					) 
 	
-# add_custom_command(TARGET sodecl_tests POST_BUILD 
-#                     # Copy OpenCL kernels to the build tests folder
-#                     COMMAND ${CMAKE_COMMAND} -E copy_directory 
-# 					"${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl/kernels" 
-# 					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/kernels"
-# 					COMMAND ${CMAKE_COMMAND} -E copy_directory 
-# 					"${CMAKE_CURRENT_SOURCE_DIR}/src/include/Random123" 
-# 					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/Random123"
-#                     # COMMAND ${CMAKE_COMMAND} -E copy
-# 					# "${CMAKE_CURRENT_SOURCE_DIR}/src/tests/kuramoto.cl" 
-# 					# "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
+add_custom_command(TARGET sodecl_tests POST_BUILD 
+                    # Copy OpenCL kernels to the build tests folder
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory 
+					"${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl/kernels" 
+					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/kernels"
+					COMMAND ${CMAKE_COMMAND} -E copy_directory 
+					"${CMAKE_CURRENT_SOURCE_DIR}/src/include/Random123" 
+					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/Random123"
+                    # COMMAND ${CMAKE_COMMAND} -E copy
+					# "${CMAKE_CURRENT_SOURCE_DIR}/src/tests/kuramoto.cl" 
+					# "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
 
-#                     # Copy test executable to the tests folder
-#                     COMMAND ${CMAKE_COMMAND} -E copy 
-# 					"${CMAKE_CURRENT_BINARY_DIR}/sodecl_tests.exe" 
-# 					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
+                    # Copy test executable to the tests folder
+                    COMMAND ${CMAKE_COMMAND} -E copy 
+					"$<TARGET_FILE:sodecl_tests>" 
+					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
 
-#                     # COMMAND ${CMAKE_COMMAND} -E copy 
-# 					# "${CMAKE_CURRENT_BINARY_DIR}/src/sodecl_tests" 
-# 					# "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
+                    # COMMAND ${CMAKE_COMMAND} -E copy 
+					# "${CMAKE_CURRENT_BINARY_DIR}/src/sodecl_tests" 
+					# "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
 
-#                     # Remove executables from the build folder
-#                     # COMMAND ${CMAKE_COMMAND} -E remove 
-# 					# "${CMAKE_CURRENT_BINARY_DIR}/sodecl_tests"
+                    # Remove executables from the build folder
+                    # COMMAND ${CMAKE_COMMAND} -E remove 
+					# "${CMAKE_CURRENT_BINARY_DIR}/sodecl_tests"
 					
-# 					COMMENT "Copying support files to build directory"
-# ) 
+					COMMENT "Copying support files to build directory"
+) 
