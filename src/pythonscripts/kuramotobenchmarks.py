@@ -15,7 +15,7 @@ if __name__ == '__main__':
     nequat_set = [3, 10, 20]
     repetitions = 8
 
-    openclplatform = 2
+    openclplatform = 0
     opencldevice = 0
     openclkernel = 'kuramoto.cl'
     solver = 0    

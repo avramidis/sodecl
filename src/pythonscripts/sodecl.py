@@ -99,6 +99,7 @@ def sodecl(openclplatform, opencldevice, openclkernel,
             print("\n")
             print("Error: Failed to call SODECL!")
             print("\n")
+            print(process.stderr)
             exit()
 
         with open('sodecloutput.bin', 'r') as infile:
