@@ -1,4 +1,4 @@
-language: cpp, python
+language: cpp python
 
 os: osx
 
