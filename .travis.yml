@@ -1,4 +1,4 @@
-language: cpp python
+language: cpp
 
 os: osx
 
@@ -8,9 +8,12 @@ python:
 # dist: trusty
 # sudo: required
 
-# before_install:
+before_install:
 # - sudo apt-get update -qq
 # - sudo apt-get install -y ocl-icd-opencl-dev
+- export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+- brew install python3
+- pip3 install numpy
 
 # Compiler selection
 # compiler:
