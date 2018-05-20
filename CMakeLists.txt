@@ -111,14 +111,20 @@ add_custom_command(TARGET sodecl_tests POST_BUILD
 					COMMAND ${CMAKE_COMMAND} -E copy_directory 
 					"${CMAKE_CURRENT_SOURCE_DIR}/src/include/Random123" 
 					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/Random123"
-                    # COMMAND ${CMAKE_COMMAND} -E copy
-					# "${CMAKE_CURRENT_SOURCE_DIR}/src/tests/kuramoto.cl" 
-					# "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
+                    COMMAND ${CMAKE_COMMAND} -E copy
+					"${CMAKE_CURRENT_SOURCE_DIR}/src/tests/kuramoto.cl" 
+					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
 
                     # Copy test executable to the tests folder
                     COMMAND ${CMAKE_COMMAND} -E copy 
 					"$<TARGET_FILE:sodecl_tests>" 
 					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
+					COMMAND ${CMAKE_COMMAND} -E copy 
+					"${CMAKE_CURRENT_SOURCE_DIR}/src/tests/sodecl_python_tests.py" 
+					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests"
+					COMMAND ${CMAKE_COMMAND} -E copy
+					"$<TARGET_FILE:sodecl_bin>"
+					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests"
 
                     # COMMAND ${CMAKE_COMMAND} -E copy 
 					# "${CMAKE_CURRENT_BINARY_DIR}/src/sodecl_tests" 
