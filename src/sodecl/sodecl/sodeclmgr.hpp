@@ -367,7 +367,6 @@ namespace sodecl
 		*/
 		void create_platforms()
 		{
-			//cl_uint platform_count = get_platform_count();
 			cl_platform_id *cpPlatform = new cl_platform_id[m_platform_count];
 
 			// get all platforms
@@ -375,26 +374,10 @@ namespace sodecl
 			if (err != CL_SUCCESS)
 			{
 				delete[] cpPlatform;
-				//return NULL;
 			}
 
-			//std::vector<cl_platform_id> m_platform_ids;
-
-			//// populate vector with cl_platform_ids
-			//for (cl_uint i = 0; i < m_platform_count; i++)
-			//{
-			//	m_platform_ids.push_back(cpPlatform[i]);
-			//}
-
-			//for (auto &i : m_platform_ids)
-			//{
-			//	m_platforms.push_back(new platform(i));
-			//}
-
-			//for (int i = 0; i < m_platform_ids.size(); i++)
 			for (cl_uint i = 0; i < m_platform_count; i++)
 			{
-				//m_platforms.push_back(new platform(m_platform_ids.at(i)));
 				m_platforms.push_back(new platform(cpPlatform[i]));
 			}
 			delete[] cpPlatform;
@@ -492,14 +475,7 @@ namespace sodecl
 		*/
 		void read_kernel_file(char* filename)
 		{
-
-			//std::ifstream t(filename, std::ifstream::in);
-			
-			//std::string str((std::istreambuf_iterator<char>(t)),
-				//std::istreambuf_iterator<char>());
-
 			std::ifstream t(filename);
-
 			if (t.is_open()) {
 				t.seekg(0, std::ios::end);
 				size_t size = t.tellg();
@@ -519,25 +495,6 @@ namespace sodecl
 				// show message:
 				std::cout << "Error opening file";
 			}
-
-			//std::string str;
-			//t.seekg(0, std::ios::end);
-			//str.reserve(t.tellg());
-			//t.seekg(0, std::ios::beg);
-
-			//str.assign((std::istreambuf_iterator<char>(t)),
-			//	std::istreambuf_iterator<char>());
-
-
-			//std::string str;
-			//if (t)
-			//{
-			//	t.seekg(0, std::ios::end);
-			//	str.resize(t.tellg());
-			//	t.seekg(0, std::ios::beg);
-			//	t.read(&str[0], str.size());
-			//	t.close();
-			//}
 		}
 
 		/**
