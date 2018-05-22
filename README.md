@@ -141,6 +141,9 @@ Compute results runtime: 0.0690873sec.
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
+## How to cite SODECL
+To cite SODECL please cite the URL and the DOI of the release version you used.
+
 ## Acknowledgments
 
 * The Random123 library found at https://www.deshawresearch.com/resources_random123.html is used
