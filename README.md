@@ -144,7 +144,7 @@ Compute results runtime: 0.0690873sec.
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ## How to cite SODECL
-To cite SODECL please cite the URL and the DOI of the release version you used. The DOI of the latest release if at the badge of this README.md file.
+To cite SODECL please cite the URL and the DOI of the release version you used. The DOI of the latest release is at the badge at the top of this README.md file.
 
 ## Acknowledgments
 
