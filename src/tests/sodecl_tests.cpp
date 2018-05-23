@@ -64,7 +64,7 @@ TEST_CASE("Test creation of OpenCL context.")
         int status_value = m_opencl_mgr.create_opencl_platforms();
         status_value = m_opencl_mgr.choose_opencl_device(0, sodecl::device_Type::ALL, 0);
 
-        status_value = m_opencl_mgr.create_context();
+        status_value = m_opencl_mgr.create_opencl_context();
 
         CHECK(status_value == 1);
         if (status_value == -1) 

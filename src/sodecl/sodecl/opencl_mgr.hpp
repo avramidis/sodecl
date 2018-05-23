@@ -191,7 +191,7 @@ class opencl_mgr
      * 
      * @return  int  Returns 1 if the operations were succcessful or 0 if they were unsuccessful.
      */
-    int create_context()
+    int create_opencl_context()
     {
         cl_int err;
         cl_context context = clCreateContext(NULL, 1, &(m_opencl_platforms[m_selected_opencl_platform]->m_devices[m_selected_opencl_device]->m_device_id), NULL, NULL, &err);
