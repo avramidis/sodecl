@@ -19,7 +19,7 @@ before_install:
   - sudo ./install.sh -s ../travisci/intelOpenCLSilent.cfg
   - cd ..
   - sudo ldconfig
-  #- pip3 install numpy
+  - pip3 install numpy
 
 
 # Compiler selection
@@ -31,5 +31,5 @@ script:
   - mkdir build
   - cd build
   - cmake .. && make && ctest --verbose
-  # - cd Release/tests
-  # - python3 sodecl_python_tests.py
+  - cd Release/tests
+  - python3 sodecl_python_tests.py
