@@ -10,8 +10,6 @@ sudo: required
 sudo: true
 
 before_install:
-  - cat /proc/cpuinfo
-  - lsb_release -a
   - sudo apt-get update -qq
   - sudo apt-get install lsb-core
   #- sudo apt-get install ocl-icd-opencl-dev -y
