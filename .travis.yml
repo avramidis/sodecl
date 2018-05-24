@@ -12,7 +12,7 @@ sudo: true
 before_install:
   # - sudo apt-get update -qq
   # - sudo apt-get install ocl-icd-opencl-dev -y
-  - sudo apt install olsb-core -y
+  - sudo apt-get install olsb-core
   - wget http://registrationcenter-download.intel.com/akdlm/irc_nas/12556/opencl_runtime_16.1.2_x64_rh_6.4.0.37.tgz
   - tar -xvzf opencl_runtime_16.1.2_x64_rh_6.4.0.37.tgz
   - cd opencl_runtime_16.1.2_x64_rh_6.4.0.37
