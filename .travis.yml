@@ -6,6 +6,7 @@ python:
   - "3.6"
 
 dist: precise
+sudo: required
 sudo: true
 
 before_install:
@@ -15,7 +16,7 @@ before_install:
 
 # Compiler selection
 compiler:
-- gcc
+  - gcc
 
 # Build steps
 script:
