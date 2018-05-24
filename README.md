@@ -33,7 +33,7 @@ git clone https://github.com/avramidis/sodecl.git
 You will need lsb-core, to install it you the following command in a terminal
 
 ```
-sudo apt install olsb-core
+sudo apt install lsb-core
 ```
 
 You will need the OpenCL Runtime for Intel Core and Intel Xeon Processors to run SODECL on an Intel CPU. The runtime can be downloaded from https://software.intel.com/en-us/articles/opencl-drivers#latest_CPU_runtime. In the folder with the downloaded tgz file use the following commands in a terminal
