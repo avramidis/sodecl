@@ -1,6 +1,6 @@
 language: python
 python:
-  - "3.6.3"
+  - "3.6"
 
 matrix:
   include:
@@ -23,7 +23,7 @@ matrix:
         - export PATH=/usr/local/bin:/usr/local/sbin:$PATH
         - brew upgrade python
         - pip3 install numpy
-        
+
 compiler:
   - gcc
   - clang
