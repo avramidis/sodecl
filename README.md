@@ -84,7 +84,7 @@ To run an example using the Python wrapper use the following commands in a termi
 
 
 ```
-cd pythonscripts
+cd Release\pythonscripts
 python3 kuramotostoch.py
 ```
 

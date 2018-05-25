@@ -1,23 +1,35 @@
-language: cpp
 
-os: osx
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+      language: python
+      python:
+        - "3.6.3"
+      before_install:
+        - sudo apt-get update -qq
+        - sudo apt-get install lsb-core
+        - sudo apt-get install ocl-icd-opencl-dev -y
+        - wget http://registrationcenter-download.intel.com/akdlm/irc_nas/12556/opencl_runtime_16.1.2_x64_rh_6.4.0.37.tgz
+        - tar -xvzf opencl_runtime_16.1.2_x64_rh_6.4.0.37.tgz
+        - cd opencl_runtime_16.1.2_x64_rh_6.4.0.37
+        - sudo ./install.sh -s ../travisci/intelOpenCLSilent.cfg
+        - cd ..
+        - sudo ldconfig
+        - pip3 install numpy
+    - os: osx
+      language: generic
+      python:
+        - "3.6.3"
+      before_install:
+        - export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+        - brew upgrade python
+        - pip3 install numpy
 
-python:
-  - "3.6"
-
-# dist: trusty
-# sudo: required
-
-before_install:
-# - sudo apt-get update -qq
-# - sudo apt-get install -y ocl-icd-opencl-dev
-- export PATH=/usr/local/bin:/usr/local/sbin:$PATH
-- brew upgrade python
-- pip3 install numpy
-
-# Compiler selection
-# compiler:
-# - gcc
+compiler:
+  - gcc
+  - clang
 
 # Build steps
 script:
