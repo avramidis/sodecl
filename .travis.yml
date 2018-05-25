@@ -1,12 +1,12 @@
-language: python
-python:
-  - "3.6"
 
 matrix:
   include:
     - os: linux
       dist: trusty
       sudo: required
+      language: python
+      python:
+        - "3.6.3"
       before_install:
         - sudo apt-get update -qq
         - sudo apt-get install lsb-core
@@ -19,6 +19,9 @@ matrix:
         - sudo ldconfig
         - pip3 install numpy
     - os: osx
+      language: generic
+      python:
+        - "3.6.3"
       before_install:
         - export PATH=/usr/local/bin:/usr/local/sbin:$PATH
         - brew upgrade python
