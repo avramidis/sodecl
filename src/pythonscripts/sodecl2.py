@@ -43,22 +43,13 @@ def sodecl2(openclplatform, opencldevice, openclkernel,
     if os.path.exists('sodecloutput.bin'):
         os.remove('sodecloutput.bin')
 
-    if os.path.exists('x_t0.bin'):
-        os.remove('x_t0.bin')
-
-    if os.path.exists('x_y0.bin'):
-        os.remove('x_y0.bin')
-
-    if os.path.exists('x_params.bin'):
-        os.remove('x_params.bin')
-
     t0 = numpy.array([0])
     t0 = numpy.matlib.repmat(t0, orbits, 1)
-    t0.tofile('x_t0.bin')
-    initx.tofile('x_y0.bin')
-    params.tofile('x_params.bin')
-
     nparams = params[0].size
+
+    t0=t0.flatten()
+    initx=initx.flatten()
+    params=params.flatten()
 
     if nnoiseprocesses == 0:
         solvers = {'se': 0,
@@ -75,23 +66,22 @@ def sodecl2(openclplatform, opencldevice, openclkernel,
     else:
         solver2user = 0
 
-    # sodecl.sodeclcall()
-    sodecl.sodeclcall(openclplatform,
-                     opencldevice,
-                     openclkernel,
-                     "x_y0.bin",
-                     "x_params.bin",
-                     solver2user,
-                     orbits,
-                     nequat,
-                     nparams,
-                     nnoiseprocesses,
-                     dt,
-                     tspan,
-                     ksteps,
-                     localgroupsize)
+    sodecl.sodeclcall(  t0,
+                        initx,
+                        params,
+                        openclplatform,
+                        opencldevice,
+                        openclkernel,
+                        solver2user,
+                        orbits,
+                        nequat,
+                        nparams,
+                        nnoiseprocesses,
+                        dt,
+                        tspan,
+                        ksteps,
+                        localgroupsize)
 
-                    
     try:
 
         with open('sodecloutput.bin', 'r') as infile:
@@ -107,4 +97,4 @@ def sodecl2(openclplatform, opencldevice, openclkernel,
         print("\n")
         raise
 
-    return 0
+    return 1

@@ -34,7 +34,10 @@ endif()
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(sodecl_bin "${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl.cpp")
+add_subdirectory(pybind11-2.2.3)
+pybind11_add_module(sodecl_bin "${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl.cpp")
+
+#add_executable(sodecl_bin "${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl.cpp")
 add_executable(sodecl_tests "${CMAKE_CURRENT_SOURCE_DIR}/src/tests/sodecl_tests.cpp")
 
 enable_testing()
@@ -56,9 +59,20 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl")
 
 FIND_PACKAGE(OpenCL REQUIRED)
 
+FIND_PACKAGE(PythonLibs REQUIRED)
+
+include_directories(${PYTHON_INCLUDE_PATH})
+MESSAGE(STATUS "PYTHON_INCLUDE_DIRS  : " ${PYTHON_INCLUDE_PATH})
+MESSAGE(STATUS "PYTHON_LIBRARIES  : " ${PYTHON_LIBRARIES})
+
+
 LINK_DIRECTORIES(${OpenCL_LIBRARY})
-TARGET_LINK_LIBRARIES(sodecl_bin ${OpenCL_LIBRARIES})
+TARGET_LINK_LIBRARIES(sodecl_bin PRIVATE ${OpenCL_LIBRARIES})
 TARGET_LINK_LIBRARIES(sodecl_tests ${OpenCL_LIBRARIES})
+
+#TARGET_LINK_LIBRARIES(sodecl_bin ${PYTHON_LIBRARIES})
+#TARGET_LINK_LIBRARIES(sodecl_tests ${PYTHON_LIBRARIES})
+
 
 MESSAGE(STATUS "CMAKE_CURRENT_BINARY_DIR: " ${CMAKE_CURRENT_BINARY_DIR})
 MESSAGE(STATUS "CMAKE_CURRENT_SOURCE_DIR : " ${CMAKE_CURRENT_SOURCE_DIR})

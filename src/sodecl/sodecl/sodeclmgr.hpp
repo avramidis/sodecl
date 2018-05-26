@@ -199,15 +199,18 @@ namespace sodecl
 		*/
 		~sodeclmgr()
 		{
-			//delete m_ode_system_string;
-			//delete m_output;
-			//delete m_source_str;
+			// delete m_ode_system_string;
+			// delete m_output;
+			// delete m_source_str;
 
-			//delete[] m_ode_system_string;  // This is a string literals. That means it has static storage duration (not dynamically allocated).
+			// delete[] m_ode_system_string;  // This is a string literals. That means it has static storage duration (not dynamically allocated).
+			
+			/////////////////////////////////////////////////
+
 			delete m_t0;
 			delete m_y0;
 			delete m_params;
-			//delete m_dts;
+			////delete m_dts;
 			if (m_num_noi > 0)
 			{
 				delete[] m_rcounter;
@@ -426,7 +429,7 @@ namespace sodecl
 		{
 			cl_int err;
 			cl_context context = clCreateContext(NULL, 1, &(m_platforms[m_selected_platform]->m_devices[m_selected_device]->m_device_id), NULL, NULL, &err);
-			if (err != CL_SUCCESS)
+			if (err != (cl_int)CL_SUCCESS)
 			{
 				std::cout << "Error: Failed to create context! " << err << std::endl;
 				return 0;
@@ -435,7 +438,6 @@ namespace sodecl
 
 			//std::cout << "Size of m_contexts : " << m_contexts.size() << std::endl;
 			return 1;
-
 		}
 
 		/**
