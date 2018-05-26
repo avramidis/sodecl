@@ -39,7 +39,8 @@ namespace sodecl
 		*/
 	public:
 		
-		cl_double*	m_output;			/**< Output */
+		//cl_double*	m_output;			/**< Output */
+		std::vector<cl_double> m_output;
 		int			m_output_size;		/**< Output size */
 
 	private:
@@ -1229,12 +1230,12 @@ namespace sodecl
 					{
 						for (int ji = jo; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
 						{
-							if (m_output_type == sodecl::output_Type::File)
-							{
-								output_stream.write((char *)(&orbits_out[ji]), sizeof(cl_double));
-								//cout << orbits_out[ji] << endl;
-							}
-							//output_data[count] = g[ji];
+							// if (m_output_type == sodecl::output_Type::File)
+							// {
+							// 	output_stream.write((char *)(&orbits_out[ji]), sizeof(cl_double));
+							// 	//cout << orbits_out[ji] << endl;
+							// }
+							m_output.push_back(orbits_out[ji]);
 							//count++;
 							//cout << g[ji] << endl;
 						}
@@ -1252,12 +1253,12 @@ namespace sodecl
 				{
 					for (int ji = jo; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
 					{
-						if (m_output_type == sodecl::output_Type::File)
-						{
-							output_stream.write((char *)(&orbits_out[ji]), sizeof(cl_double));
-							//cout << orbits_out[ji] << endl;
-						}
-						//output_data[count] = g[ji];
+						// if (m_output_type == sodecl::output_Type::File)
+						// {
+						// 	output_stream.write((char *)(&orbits_out[ji]), sizeof(cl_double));
+						// 	//cout << orbits_out[ji] << endl;
+						// }
+						m_output.push_back(orbits_out[ji]);
 						//count++;
 						//cout << g[ji] << endl;
 					}

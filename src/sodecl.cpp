@@ -23,7 +23,7 @@
 
 using namespace std;
 
-int sodeclcall( std::vector<double> &a_t0,
+std::vector<cl_double> sodeclcall( std::vector<double> &a_t0,
                 std::vector<double> &a_y0,
                 std::vector<double> &a_params,
                 int a_platform, 
@@ -60,7 +60,8 @@ int sodeclcall( std::vector<double> &a_t0,
         break;
     default:
         std::cout << "Unknown SDE solver selection." << std::endl;
-        return 0;
+        std::vector<cl_double> myvector(0);
+        return myvector;
     }
 
 	sodecl::sodeclmgr *mysodeclmgr = new sodecl::sodeclmgr("kernels", 
@@ -97,15 +98,19 @@ int sodeclcall( std::vector<double> &a_t0,
 	int ret = mysodeclmgr->setup_ode_solver();
     if (ret == 0)
     {
-        return 0;
+        std::vector<cl_double> myvector(0);
+        return myvector;
     }
     
-	 mysodeclmgr->run_ode_solver();
+	mysodeclmgr->run_ode_solver();
+
+
+    return mysodeclmgr->m_output;
 
     // The delete mysodeclmgr call breaks pybind11 for some reason
 	//delete mysodeclmgr;
 
-	return 1;
+	//return 1;
 }
 
 PYBIND11_MODULE(sodecl, m) {

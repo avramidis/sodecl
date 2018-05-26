@@ -66,7 +66,7 @@ def sodecl2(openclplatform, opencldevice, openclkernel,
     else:
         solver2user = 0
 
-    sodecl.sodeclcall(  t0,
+    results = sodecl.sodeclcall(  t0,
                         initx,
                         params,
                         openclplatform,
@@ -81,20 +81,24 @@ def sodecl2(openclplatform, opencldevice, openclkernel,
                         tspan,
                         ksteps,
                         localgroupsize)
+    
+    #results = numpy.fromfile(infile, dtype=numpy.float)
+    results = numpy.array(results)
+    results = results.reshape(orbits*nequat, int(results.shape[0] / (orbits*nequat)), order='F')
 
-    try:
+    # try:
 
-        with open('sodecloutput.bin', 'r') as infile:
-            results = numpy.fromfile(infile, dtype=numpy.float)
-            results = results.reshape(orbits*nequat, 
-                                      int(results.shape[0] / (orbits*nequat)), 
-                                      order='F')
+    #     with open('sodecloutput.bin', 'r') as infile:
+    #         results = numpy.fromfile(infile, dtype=numpy.float)
+    #         results = results.reshape(orbits*nequat, 
+    #                                   int(results.shape[0] / (orbits*nequat)), 
+    #                                   order='F')
 
-    except FileNotFoundError:
-        print("\n")
-        print("Error: The SODECL executable was not found or cannot be executed!")
-        print("Possible fix: Make sure that the executable path is present and it has execute permision.")
-        print("\n")
-        raise
+    # except FileNotFoundError:
+    #     print("\n")
+    #     print("Error: The SODECL executable was not found or cannot be executed!")
+    #     print("Possible fix: Make sure that the executable path is present and it has execute permision.")
+    #     print("\n")
+    #     raise
 
-    return 1
+    return results
