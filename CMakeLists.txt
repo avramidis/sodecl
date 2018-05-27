@@ -34,7 +34,7 @@ endif()
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_subdirectory(pybind11-2.2.3)
+add_subdirectory(pybind11)
 pybind11_add_module(sodecl_bin "${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl.cpp")
 
 #add_executable(sodecl_bin "${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl.cpp")
