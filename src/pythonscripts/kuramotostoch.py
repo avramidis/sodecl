@@ -58,10 +58,10 @@ if __name__ == '__main__':
     if numpy.isnan(numpy.sum(numpy.sum(results))):
         raise RuntimeError("NaN present!")
 
-    import matplotlib.pyplot as plt
-    plt.plot(results[0, :])
-    plt.xlabel('Time')
-    plt.ylabel('Value')
-    plt.show()
+    # import matplotlib.pyplot as plt
+    # plt.plot(results[0, :])
+    # plt.xlabel('Time')
+    # plt.ylabel('Value')
+    # plt.show()
 
     # return end - start

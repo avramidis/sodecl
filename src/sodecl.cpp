@@ -113,7 +113,7 @@ std::vector<cl_double> sodeclcall( std::vector<double> &a_t0,
 	//return 1;
 }
 
-PYBIND11_MODULE(sodecl, m) {
+PYBIND11_MODULE(sodecl_interface, m) {
     m.doc() = "sodecl plugin"; // optional module docstring
 
     m.def("sodeclcall", &sodeclcall, "A function that integrates a SDE/ODE system.");
