@@ -10,7 +10,7 @@ import subprocess
 import numpy
 import numpy.matlib
 import platform
-import sodecl
+import sodecl_interface
 
 # Calls the SODECL executable.
 #
@@ -66,7 +66,7 @@ def sodecl2(openclplatform, opencldevice, openclkernel,
     else:
         solver2user = 0
 
-    results = sodecl.sodeclcall(  t0,
+    results = sodecl_interface.sodeclcall(  t0,
                         initx,
                         params,
                         openclplatform,

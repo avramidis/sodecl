@@ -43,7 +43,7 @@ add_executable(sodecl_tests "${CMAKE_CURRENT_SOURCE_DIR}/src/tests/sodecl_tests.
 enable_testing()
 
 if (WIN32)
-	set_target_properties(sodecl_bin PROPERTIES OUTPUT_NAME "sodecl")
+	set_target_properties(sodecl_bin PROPERTIES OUTPUT_NAME "sodecl_interface")
 	set_target_properties(sodecl_tests PROPERTIES OUTPUT_NAME "sodecl_tests")
 	add_test(sodecl_test ${PROJECT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/tests/sodecl_tests)
 else()
