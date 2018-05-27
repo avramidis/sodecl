@@ -35,7 +35,7 @@ import sodecl_interface
 #  @exception           		FileNotFoundError if the executable file is not found.
 
 
-def sodecl2(openclplatform, opencldevice, openclkernel,
+def sodecl(openclplatform, opencldevice, openclkernel,
            initx, params, sodesolver,
            orbits, nequat, nnoiseprocesses,
            dt, tspan, ksteps, localgroupsize):

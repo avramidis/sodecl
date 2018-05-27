@@ -8,7 +8,7 @@
 import random
 import time
 import numpy
-import sodecl2
+import sodecl
 
 if __name__ == '__main__':
 
@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
     nparams = numpy.concatenate((params, noise), axis=1)
 
-    results = sodecl2.sodecl2(openclplatform, opencldevice, openclkernel,
+    results = sodecl.sodecl(openclplatform, opencldevice, openclkernel,
                               initx, params, solver,
                               orbits, nequat, nnoi,
                               dt, tspan, ksteps, localgroupsize)
