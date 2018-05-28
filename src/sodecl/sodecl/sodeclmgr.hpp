@@ -200,9 +200,9 @@ namespace sodecl
 			
 			/////////////////////////////////////////////////
 
-			delete m_t0;
-			delete m_y0;
-			delete m_params;
+			// delete m_t0;
+			// delete m_y0;
+			// delete m_params;
 			////delete m_dts;
 			if (m_num_noi > 0)
 			{

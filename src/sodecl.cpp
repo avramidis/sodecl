@@ -103,16 +103,14 @@ std::vector<cl_double> sodeclcall( std::vector<double> &a_t0,
 	mysodeclmgr->run_ode_solver();
 
 
-    return mysodeclmgr->m_output;
-
     // The delete mysodeclmgr call breaks pybind11 for some reason
 	//delete mysodeclmgr;
 
-	//return 1;
+    return mysodeclmgr->m_output;
 }
 
 PYBIND11_MODULE(sodecl_interface, m) {
-    m.doc() = "sodecl plugin"; // optional module docstring
+    m.doc() = "sodecl plugin";
 
     m.def("sodeclcall", &sodeclcall, "A function that integrates a SDE/ODE system.");
 }
