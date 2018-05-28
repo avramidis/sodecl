@@ -38,10 +38,9 @@ namespace sodecl
 		VARIABLES SECTION
 		*/
 	public:
-		
-		//cl_double*	m_output;			/**< Output */
-		std::vector<cl_double> m_output;
-		int			m_output_size;		/**< Output size */
+
+		std::vector<cl_double> m_output;	/**< Integration output */
+		int			m_output_size;			/**< Output size */
 
 	private:
 
@@ -177,13 +176,6 @@ namespace sodecl
 
 			// create all sodecl::platform objects, one for each OpenCL platform
 			create_platforms();
-
-			// This is used for the variable time step solvers
-			//m_dts = new cl_double[m_list_size];
-			//for (int i = 0; i < m_list_size; i++)
-			//{
-			//	m_dts[i] = m_dt;
-			//}
 
 			// Add default OpenCL build options
 			//m_build_options.push_back(build_Option::FastRelaxedMath);
@@ -347,16 +339,6 @@ namespace sodecl
 		/******************************************************************************************
 		SOFTWARE SECTION
 		*/
-
-		/**
-		*  Sets the path of the output file to a private variable. If the file does not exist it is created.
-		*
-		* @param	outputfile_str	Path and filename to the output file
-		*/
-		void set_outputfile(char *outputfile_str)
-		{
-			m_outputfile_str = outputfile_str;
-		}
 
 	private:
 
@@ -1181,9 +1163,6 @@ namespace sodecl
 			m_log->write((double)local);
 			m_log->write("\n");
 
-			//cl_double *output_data = new cl_double[m_list_size * m_int_time / m_dt / m_kernel_steps];
-			//m_output_size = m_list_size * m_int_time / m_dt / m_kernel_steps / m_kernel_steps_multiplier;
-
 			timer start_timer;
 
 			// Run the initial values to the output file.
@@ -1230,14 +1209,7 @@ namespace sodecl
 					{
 						for (int ji = jo; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
 						{
-							// if (m_output_type == sodecl::output_Type::File)
-							// {
-							// 	output_stream.write((char *)(&orbits_out[ji]), sizeof(cl_double));
-							// 	//cout << orbits_out[ji] << endl;
-							// }
 							m_output.push_back(orbits_out[ji]);
-							//count++;
-							//cout << g[ji] << endl;
 						}
 					}
 				}
@@ -1253,14 +1225,7 @@ namespace sodecl
 				{
 					for (int ji = jo; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
 					{
-						// if (m_output_type == sodecl::output_Type::File)
-						// {
-						// 	output_stream.write((char *)(&orbits_out[ji]), sizeof(cl_double));
-						// 	//cout << orbits_out[ji] << endl;
-						// }
 						m_output.push_back(orbits_out[ji]);
-						//count++;
-						//cout << g[ji] << endl;
 					}
 				}
 			}
@@ -1356,22 +1321,6 @@ namespace sodecl
 				return 0;
 			}
 			//std::cout << "Data written to buffers." << std::endl;
-
-			//if (create_dt_buffer(m_contexts[0], m_command_queues[0], m_list_size) == 0)
-			//{
-			//	std::cout << "Failed to create the OpenCL dt buffer." << std::endl;
-			//	return 0;
-			//}
-			//std::cout << "dt buffer created." << std::endl;
-
-			//if (write_dt_buffer(m_command_queues[0], m_list_size) == 0)
-			//{
-			//	std::cout << "Failed to write the data to the OpenCL dt buffer." << std::endl;
-			//	return 0;
-			//}
-			//std::cout << "Data written to dt buffer." << std::endl;
-
-			//std::cout << "Number of kernels: " << m_kernels.size() << std::endl;
 
 			// assign the inputs to kernel
 			if (set_kernel_args(m_kernels[0]) == 0)

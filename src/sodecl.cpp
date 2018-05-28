@@ -76,8 +76,6 @@ std::vector<cl_double> sodeclcall( std::vector<double> &a_t0,
 															a_orbits, 
 															sodecl::output_Type::File);
 
-	mysodeclmgr->set_outputfile("sodecloutput.bin");
-
 	int success;
 
 	// Choose device
