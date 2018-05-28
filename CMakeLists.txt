@@ -37,42 +37,34 @@ set(CMAKE_CXX_STANDARD 14)
 add_subdirectory(pybind11)
 pybind11_add_module(sodecl_bin "${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl.cpp")
 
-#add_executable(sodecl_bin "${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl.cpp")
 add_executable(sodecl_tests "${CMAKE_CURRENT_SOURCE_DIR}/src/tests/sodecl_tests.cpp")
 
 enable_testing()
 
+set_target_properties(sodecl_bin PROPERTIES OUTPUT_NAME "sodecl_interface")
+
 if (WIN32)
-	set_target_properties(sodecl_bin PROPERTIES OUTPUT_NAME "sodecl_interface")
 	set_target_properties(sodecl_tests PROPERTIES OUTPUT_NAME "sodecl_tests")
 	add_test(sodecl_test ${PROJECT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/tests/sodecl_tests)
 else()
-	set_target_properties(sodecl_bin PROPERTIES OUTPUT_NAME "sodecl_interface")
 	set_target_properties(sodecl_tests PROPERTIES OUTPUT_NAME "sodecl_tests.exe")
 	add_test(sodecl_test ${PROJECT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/tests/sodecl_tests.exe)
 endif()
-
 
 # Add include directories for OpenCL and sodecl
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/include")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl")
 
 FIND_PACKAGE(OpenCL REQUIRED)
-
 FIND_PACKAGE(PythonLibs REQUIRED)
 
 include_directories(${PYTHON_INCLUDE_PATH})
 MESSAGE(STATUS "PYTHON_INCLUDE_DIRS  : " ${PYTHON_INCLUDE_PATH})
 MESSAGE(STATUS "PYTHON_LIBRARIES  : " ${PYTHON_LIBRARIES})
 
-
 LINK_DIRECTORIES(${OpenCL_LIBRARY})
 TARGET_LINK_LIBRARIES(sodecl_bin PRIVATE ${OpenCL_LIBRARIES})
 TARGET_LINK_LIBRARIES(sodecl_tests ${OpenCL_LIBRARIES})
-
-#TARGET_LINK_LIBRARIES(sodecl_bin ${PYTHON_LIBRARIES})
-#TARGET_LINK_LIBRARIES(sodecl_tests ${PYTHON_LIBRARIES})
-
 
 MESSAGE(STATUS "CMAKE_CURRENT_BINARY_DIR: " ${CMAKE_CURRENT_BINARY_DIR})
 MESSAGE(STATUS "CMAKE_CURRENT_SOURCE_DIR : " ${CMAKE_CURRENT_SOURCE_DIR})
@@ -139,14 +131,6 @@ add_custom_command(TARGET sodecl_tests POST_BUILD
 					COMMAND ${CMAKE_COMMAND} -E copy
 					"$<TARGET_FILE:sodecl_bin>"
 					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests"
-
-                    # COMMAND ${CMAKE_COMMAND} -E copy 
-					# "${CMAKE_CURRENT_BINARY_DIR}/src/sodecl_tests" 
-					# "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
-
-                    # Remove executables from the build folder
-                    # COMMAND ${CMAKE_COMMAND} -E remove 
-					# "${CMAKE_CURRENT_BINARY_DIR}/sodecl_tests"
 					
 					COMMENT "Copying support files to build directory"
 ) 
