@@ -63,5 +63,3 @@ if __name__ == '__main__':
     # plt.xlabel('Time')
     # plt.ylabel('Value')
     # plt.show()
-
-    # return end - start

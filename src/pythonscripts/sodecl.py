@@ -30,18 +30,12 @@ import sodecl_interface
 #  @param ksteps       			is the number of SODE solver step for each call to the OpenCL device.
 #  @param localgroupsize       	is the size of the OpenCL local group size.
 #
-#  @return              		the code from the execution command. If the call of the executable is successful then 0 is returned.
-#
-#  @exception           		FileNotFoundError if the executable file is not found.
-
+#  @return              		the integration results.
 
 def sodecl(openclplatform, opencldevice, openclkernel,
            initx, params, sodesolver,
            orbits, nequat, nnoiseprocesses,
            dt, tspan, ksteps, localgroupsize):
-
-    if os.path.exists('sodecloutput.bin'):
-        os.remove('sodecloutput.bin')
 
     t0 = numpy.array([0])
     t0 = numpy.matlib.repmat(t0, orbits, 1)
@@ -81,24 +75,8 @@ def sodecl(openclplatform, opencldevice, openclkernel,
                         tspan,
                         ksteps,
                         localgroupsize)
-    
-    #results = numpy.fromfile(infile, dtype=numpy.float)
+
     results = numpy.array(results)
     results = results.reshape(orbits*nequat, int(results.shape[0] / (orbits*nequat)), order='F')
-
-    # try:
-
-    #     with open('sodecloutput.bin', 'r') as infile:
-    #         results = numpy.fromfile(infile, dtype=numpy.float)
-    #         results = results.reshape(orbits*nequat, 
-    #                                   int(results.shape[0] / (orbits*nequat)), 
-    #                                   order='F')
-
-    # except FileNotFoundError:
-    #     print("\n")
-    #     print("Error: The SODECL executable was not found or cannot be executed!")
-    #     print("Possible fix: Make sure that the executable path is present and it has execute permision.")
-    #     print("\n")
-    #     raise
 
     return results
