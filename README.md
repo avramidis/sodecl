@@ -150,5 +150,6 @@ To cite SODECL please cite the URL and the DOI of the release version you used. 
 
 * The Random123 library found at https://www.deshawresearch.com/resources_random123.html is used
 * The Catch2 unit testing library found at https://github.com/catchorg/Catch2 is used
+* The pybind11 library found at https://github.com/pybind/pybind11 is used
 * This readme file is based on the template found at https://gist.github.com/PurpleBooth/109311bb0361f32d87a2
-* The initial work on this library was done as part of a PhD work presented in the publication Avramidis, Eleftherios, and Ozgur E. Akman. "Optimisation of an exemplar oculomotor model using multi-objective genetic algorithms executed on a GPU-CPU combination." BMC systems Biology 11.1 (2017): 40. DOI: 10.1186/s12918-017-0416-2 
+* The initial work on this library was done as part of a PhD work presented in the publication Avramidis, Eleftherios, and Ozgur E. Akman. "Optimisation of an exemplar oculomotor model using multi-objective genetic algorithms executed on a GPU-CPU combination." BMC systems Biology 11.1 (2017): 40. DOI: 10.1186/s12918-017-0416-2
