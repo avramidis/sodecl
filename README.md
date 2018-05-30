@@ -29,9 +29,10 @@ To clone the repository from github use the following command in a terminal
 ```
 git clone https://github.com/avramidis/sodecl.git
 ```
-You will need pybind11, to clone the repository use the following command in a terminal
+You will need pybind11, to clone the repository in the sodecl folder use the following commands in a terminal
 
 ```
+cd sodecl
 git clone https://github.com/pybind/pybind11.git
 ```
 
