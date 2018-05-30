@@ -45,7 +45,7 @@ sudo apt install lsb-core
 You will need the OpenCL Runtime for Intel Core and Intel Xeon Processors to run SODECL on an Intel CPU. The runtime can be downloaded from https://software.intel.com/en-us/articles/opencl-drivers#latest_CPU_runtime. In the folder with the downloaded tgz file use the following commands in a terminal
 
 ```
-tar zxvf opencl_runtime_16.1.2_x64_sles_6.4.0.37.tgz
+tar -zxvf opencl_runtime_16.1.2_x64_sles_6.4.0.37.tgz
 cd opencl_runtime_16.1.2_x64_sles_6.4.0.37
 sudo ./install_GUI.sh
 ```
