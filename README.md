@@ -24,10 +24,15 @@ sudo apt update
 sudo apt install git
 ```
 
-To pull the repository from github use the following command in a terminal
+To clone the repository from github use the following command in a terminal
 
 ```
 git clone https://github.com/avramidis/sodecl.git
+```
+You will need pybind11, to clone the repository use the following command in a terminal
+
+```
+git clone https://github.com/pybind/pybind11.git
 ```
 
 You will need lsb-core, to install it you the following command in a terminal
