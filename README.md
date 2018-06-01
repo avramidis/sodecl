@@ -1,7 +1,7 @@
 # SODECL
 
 [![license: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/avramidis/sodecl/blob/master/LICENSE)
-![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)
+![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg)
 [![Build Status](https://travis-ci.org/avramidis/sodecl.svg?branch=master)](https://travis-ci.org/avramidis/sodecl)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/avramidis/sodecl/issues)
 [![DOI](https://zenodo.org/badge/49196982.svg)](https://zenodo.org/badge/latestdoi/49196982)
