@@ -40,7 +40,8 @@ script:
   - cmake .. && make && ctest --verbose
   - cd Release/tests
   - python3 sodecl_python_tests.py
-  - cd ../../..
+  #- cd ../../..
+  - cd ${TRAVIS_BUILD_DIR}
   - ./get_code_cov.sh
   
 after_success: 
