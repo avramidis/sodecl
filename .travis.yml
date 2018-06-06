@@ -41,7 +41,7 @@ script:
   - cd Release/tests
   - python3 sodecl_python_tests.py
   - cd ../../..
-  - ./get_code_cov.sh
+  - sudo ./get_code_cov.sh
   
 after_success: 
  - bash <(curl -s https://codecov.io/bash)
