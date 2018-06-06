@@ -28,7 +28,6 @@ matrix:
         - brew upgrade python
         - pip3 install numpy
         - git clone https://github.com/pybind/pybind11.git
-        - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 90
 
 compiler:
   - gcc

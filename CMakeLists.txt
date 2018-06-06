@@ -29,7 +29,7 @@ project(sodecl VERSION 0.1.0 LANGUAGES CXX)
 if (MSVC)
 	add_compile_options(/W4)
 else()
-	add_compile_options(-Wall -Wextra -Wpedantic)
+	add_compile_options(-Wall -Wextra -Wpedantic -fprofile-arcs -ftest-coverage)
 endif()
 
 set(CMAKE_CXX_STANDARD 14)
