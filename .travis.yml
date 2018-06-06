@@ -19,7 +19,6 @@ matrix:
         - sudo ldconfig
         - pip3 install numpy
         - git clone https://github.com/pybind/pybind11.git
-        - gcov
     - os: osx
       language: generic
       python:
