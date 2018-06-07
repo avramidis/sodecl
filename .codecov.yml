@@ -30,5 +30,4 @@ ignore:
     - "src/matlabscripts/.*"
     - "src/pythonscripts/.*"
     - "src/tests/.*"
-    - "src/sodecl.cpp"
     - "pybind11/.*"
