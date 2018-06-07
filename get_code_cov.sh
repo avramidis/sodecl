@@ -1,5 +1,5 @@
 #!/bin/bash
-for filename in `find . | egrep '\.cpp'`; 
+for filename in `find src/sodecl/. | egrep '\.hpp'`; 
 do 
-  gcov-5 -n -o . $filename > /dev/null; 
+  gcov -n -o . $filename > /dev/null; 
 done

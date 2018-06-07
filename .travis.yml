@@ -19,16 +19,15 @@ matrix:
         - sudo ldconfig
         - pip3 install numpy
         - git clone https://github.com/pybind/pybind11.git
-    - os: osx
-      language: generic
-      python:
-        - "3.6.3"
-      before_install:
-        - export PATH=/usr/local/bin:/usr/local/sbin:$PATH
-        - brew upgrade python
-        - pip3 install numpy
-        - git clone https://github.com/pybind/pybind11.git
-        - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 90
+    # - os: osx
+    #   language: generic
+    #   python:
+    #     - "3.6.3"
+    #   before_install:
+    #     - export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+    #     - brew upgrade python
+    #     - pip3 install numpy
+    #     - git clone https://github.com/pybind/pybind11.git
 
 compiler:
   - gcc
@@ -38,11 +37,16 @@ compiler:
 script:
   - mkdir build
   - cd build
-  - cmake .. && make && ctest --verbose
-  - cd Release/tests
+  - cmake .. -DCMAKE_BUILD_TYPE=Debug && make && ctest --verbose
+  - cd Debug/tests
   - python3 sodecl_python_tests.py
-  - cd ../../..
-  - ./get_code_cov.sh
+  #- cd ../../..
+  #- cd /home/travis/build/avramidis/sodecl/src/
+  #- ./get_code_cov.sh
   
 after_success: 
- - bash <(curl -s https://codecov.io/bash)
+ #- bash <(curl -s https://codecov.io/bash)
+     # Creating report
+  #- cd /home/travis/build/avramidis/sodecl/src/sodecl/
+  # Uploading report to CodeCov
+  - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
