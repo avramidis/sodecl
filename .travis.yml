@@ -42,7 +42,7 @@ script:
   - python3 sodecl_python_tests.py
   - cd ../../..
   #- cd /home/travis/build/avramidis/sodecl/src/
-  - ./get_code_cov.sh
+  #- ./get_code_cov.sh
   
 after_success: 
  #- bash <(curl -s https://codecov.io/bash)
