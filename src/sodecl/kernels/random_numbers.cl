@@ -22,7 +22,7 @@ __kernel void random_numbers(__global double *noise, __global double *counter)
     // Generate the noise values
     rc.v[0] = gi;
     rc.v[1] = counter[gi]; // some iteration number change between kernel calls.
-    counter[gi] = counter_g[gi] + 1;
+    counter[gi] = counter[gi] + 1;
     rr = threefry2x64(rc, rk);
 
     u0 = u01_open_open_64_53(rr.v[0]);
