@@ -5,9 +5,7 @@
 // See accompanying file LICENSE
 //---------------------------------------------------------------------------//
 
-__kernel void random_numbers(__global double *t0,
-	__global double *noise,
-	__global double *counter_g)
+__kernel void random_numbers(__global double *noise, __global double *counter)
 {
 	int gi = get_global_id(0);
     int i = gi*2;
@@ -23,10 +21,9 @@ __kernel void random_numbers(__global double *t0,
 
     // Generate the noise values
     rc.v[0] = gi;
-    rc.v[1] = counter_g[gi]; // some iteration number change between kernel calls.
-
+    rc.v[1] = counter[gi]; // some iteration number change between kernel calls.
+    counter[gi] = counter_g[gi] + 1;
     rr = threefry2x64(rc, rk);
-    counter_g[gi] = counter_g[gi] + 1;
 
     u0 = u01_open_open_64_53(rr.v[0]);
     u1 = u01_open_open_64_53(rr.v[1]);
