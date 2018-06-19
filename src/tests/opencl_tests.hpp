@@ -76,4 +76,24 @@ TEST_CASE("Test creation of OpenCL context.")
     }
 }
 
+TEST_CASE("Test creation of OpenCL program.")
+{
+    SECTION("Create OpenCL program.")
+    {
+        sodecl::opencl_mgr m_opencl_mgr;
+        int platforms_num = m_opencl_mgr.get_opencl_platform_count();
+        int status_value = m_opencl_mgr.create_opencl_platforms();
+        status_value = m_opencl_mgr.choose_opencl_device(0, sodecl::device_Type::ALL, 0);
+        status_value = m_opencl_mgr.create_opencl_context();
+
+        status_value = m_opencl_mgr.create_program();
+
+        CHECK(status_value == 1);
+        if (status_value == -1) 
+        {
+            FAIL("Failed to create the OpenCL program for the created context!");
+        }
+    }
+}
+
 #endif // SODECL_OPENLC_TESTS_HPP
