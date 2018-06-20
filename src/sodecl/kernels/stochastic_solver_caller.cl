@@ -34,7 +34,7 @@ __kernel void solver_caller(__global double *t0,
 	{
 		for (int in = 0; in < _numnoi_; in++)
 		{
-			noise[in] = noise_g[it+i*_numsteps_*_numnoi_];
+			noise[in] = noise_g[it+in+i*_numsteps_*_numnoi_];
 		}
 
 		// Call the solver
