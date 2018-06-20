@@ -76,6 +76,7 @@ namespace sodecl
 		cl_mem	m_mem_params;			/**< OpenCL memory buffer which stores the parameter values of each integration orbit of the ODE system */ 
 		cl_mem	m_mem_dt;				/**< OpenCL memory buffer which stores the time step for each integration orbit of the ODE system */ 
 		cl_mem	m_mem_rcounter;			/**< OpenCL memory buffer which stores the counters for each workitem for the random number generation */ 
+		cl_mem	m_mem_noise;			/**< OpenCL memory buffer which stores the random number that are needed by the SDE integration method */ 
 		char*	m_outputfile_str;		/**< Path to the results output file */
 
 		/********************************************************************************************
@@ -102,6 +103,7 @@ namespace sodecl
 		cl_double*	m_params;		/**< Client memory buffer which stores the parameter values of each integration orbit of the ODE system */ 
 		cl_double*	m_dts;			/**< Client memory buffer which stores the time step for each integration orbit of the ODE system */ 							
 		cl_double*	m_rcounter;		/**< Counter that counts the number of calls to the random number generator */ 
+		cl_double*	m_noise;		/**< Client memory buffer which stores the random number that are needed by the SDE integration method */ 
 
 		// Log mechanisms
 		clog*	m_log;				/**< Pointer for log */ 
@@ -156,6 +158,8 @@ namespace sodecl
 				{
 					m_rcounter[i] = unif(gen);
 				}
+
+				//m_noise = new double[m_list_size*m_num_noi*m_kernel_steps];
 			}
 			
 			m_outputPattern = new int[m_num_equat];
@@ -863,6 +867,12 @@ namespace sodecl
 			if (m_num_noi > 0)
 			{
 				m_mem_rcounter = clCreateBuffer(context, CL_MEM_READ_ONLY, list_size * sizeof(cl_double), NULL, &errcode);
+				if (errcode != CL_SUCCESS)
+				{
+					return 0;
+				}
+
+				m_mem_noise = clCreateBuffer(context, CL_MEM_READ_WRITE, m_num_noi * m_kernel_steps * m_list_size * sizeof(cl_double), NULL, &errcode);
 				if (errcode != CL_SUCCESS)
 				{
 					return 0;

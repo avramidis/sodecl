@@ -19,7 +19,7 @@ namespace sodecl
  */
 class opencl_source_mgr
 {
-  private:
+  protected:
     /********************************************************************************************
 	* GENERAL VARIABLES
 	*/
@@ -30,7 +30,6 @@ class opencl_source_mgr
     // Log mechanisms
     clog*                           m_log; /**< Pointer for log */
 
-  public:
     /**
      * @brief Default constructor.
      * 
@@ -74,7 +73,7 @@ class opencl_source_mgr
         }
         else {
             // show message:
-            std::cout << "Error opening file";
+            std::cout << "Error opening file " << filename << std::endl;
         }
     }
 

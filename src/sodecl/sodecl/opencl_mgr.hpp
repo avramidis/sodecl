@@ -29,10 +29,9 @@ class opencl_mgr
 
     std::vector<cl_context>             m_contexts;             /**< OpenCL command contexts vector */
     std::vector<cl_command_queue>       m_command_queues;       /**< OpenCL command queues vector */
-    std::vector<char>                   m_kernel_sources;       /**< Char vector which stores the OpenCL kernel source string. @todo store multiple kernel source strings */
+    std::vector<char*>                  m_kernel_sources;       /**< Char vector which stores the OpenCL kernel source string. @todo store multiple kernel source strings */
     std::string                         m_build_options_str;    /**< Char vector which stores the OpenCL build options string */
     std::vector<build_Option>           m_build_options;        /**< build_Option vector which stores the OpenCL build options selection */
-    char*                               m_source_str;           /**< OpenCL kernel string */
     string                              m_kernel_path_str;      /**< OpenCL kernels solvers path */
     size_t                              m_source_size;          /**< OpenCL kernel string size */
     std::vector<cl_program>             m_programs;             /**< OpenCL programs vector */
@@ -201,6 +200,32 @@ class opencl_mgr
             return 0;
         }
         m_contexts.push_back(context);
+
+        return 1;
+    }
+
+    /**
+    * Create OpenCL program for the selected OpenCL platform, OpenCL device and created OpenCL context.
+    *
+    * @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
+    */
+    int create_program()
+    {
+        const char *srcptr[] = { m_kernel_sources.at(0) };
+
+        //std::cout << "Size of string is: " << m_source_size << std::endl;
+
+        //cout << "Size of kernel " << m_source_size << endl;
+
+        cl_int err;
+        cl_program program = clCreateProgramWithSource(m_contexts.at(0), 1, srcptr, (const size_t *)&m_source_size, &err);
+        if (err != CL_SUCCESS)
+        {
+            return 0;
+        }
+
+        // Create OpenCL Program
+        m_programs.push_back(program);
 
         return 1;
     }

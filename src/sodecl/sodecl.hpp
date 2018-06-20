@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------//
-// Copyright (c) 2015 Eleftherios Avramidis <el.avramidis@gmail.com>
+// Copyright (c) 2015,2018 Eleftherios Avramidis <el.avramidis@gmail.com>
 //
 // Distributed under The MIT License (MIT)
 // See accompanying file LICENSE.txt
@@ -22,5 +22,8 @@
 #include <sodecl/platform.hpp>
 #include <sodecl/sodeclmgr.hpp>
 #include <sodecl/opencl_mgr.hpp>
+#include <sodecl/opencl_source_mgr.hpp>
+#include <sodecl/opencl_source_stochastic_euler.hpp>
+#include <sodecl/opencl_source_stochastic_noise.hpp>
 
 #endif // SODECL_MAINCL_HPP

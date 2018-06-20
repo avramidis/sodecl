@@ -3,7 +3,8 @@
 #include "catch.hpp"
 #include "sodecl.hpp"
 
-#include "opencl_tests.hpp"
+#include "opencl_kernel_strings_test.hpp"
+//#include "opencl_tests.hpp"
 
 
 // TEST_CASE("Test creation of OpenCL kernel.")
