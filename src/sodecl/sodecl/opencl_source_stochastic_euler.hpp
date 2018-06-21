@@ -9,7 +9,7 @@
 #define SODECL_OPENLC_SOURCE_STOCHASTIC_EULER_HPP
 
 #include "sodecl.hpp"
-#include "sodecl/opencl_source_mgr.hpp"
+#include "sodecl/opencl_source_interface.hpp"
 
 namespace sodecl
 {
@@ -18,7 +18,7 @@ namespace sodecl
  * @brief Abstract class that implements the functions needed for the creation of OpenCL source files.
  * 
  */
-class opencl_source_stochastic_euler : protected opencl_source_mgr
+class opencl_source_stochastic_euler : protected opencl_source_interface
 {
   private:
     /********************************************************************************************
