@@ -11,12 +11,9 @@
 
 __kernel void random_numbers(__global double *noise, __global double *counter)
 {
-	int gi = get_global_id(0);
-    // printf("%d ", gi);
-    
+	int gi = get_global_id(0);    
     int i = gi*2;
-    double dtsqrt = sqrt(_m_dt_);
-	
+    double dtsqrt = sqrt(_m_dt_);	
 
     threefry2x64_key_t rk = { { i, 0xf00dcafe } };
 	threefry2x64_ctr_t rc = { { 0, 0xdecafbad } };	
@@ -36,10 +33,4 @@ __kernel void random_numbers(__global double *noise, __global double *counter)
     u1 = u01_open_open_64_53(rr.v[1]);
     noise[i] = sqrt(-2 * log(u0)) * cos(2 * M_PI * u1)*dtsqrt;
     noise[i+1] = sqrt(-2 * log(u0)) * sin(2 * M_PI * u1)*dtsqrt;
-
-    // noise[0] = 1.00;
-    // noise[1] = 2.00;
-
-    // printf("noise[0] %f \n", noise[0]);
-    // printf("noise[1] %f \n", noise[1]);
 }

@@ -56,7 +56,7 @@ class stochastic_euler : public solver_interface
           string        kernel_path_str,
           char*         ode_system_str,
           double        dt,
-          double        int_time,
+          int           int_time,
           int           kernel_steps,
           int           num_equat,
           int           num_params,
@@ -125,44 +125,13 @@ class stochastic_euler : public solver_interface
 		*/
     int create_buffers(cl_context context, int norbits, int equat_num, int param_num)
     {
-        cl_int err_code;
-        m_mem_t0 = clCreateBuffer(context, CL_MEM_READ_WRITE, norbits * sizeof(cl_double), NULL, &err_code);
-        if (err_code != CL_SUCCESS)
-        {
-            std::cout << "Error: Failed to create OpenCL buffer 0!" << std::endl;
-            return 0;
-        }
+        m_mem_t0 = m_opencl_mgr->create_buffer(context, norbits, CL_MEM_READ_WRITE);
+        m_mem_y0 = m_opencl_mgr->create_buffer(context, norbits*equat_num, CL_MEM_READ_WRITE);
+        m_mem_params = m_opencl_mgr->create_buffer(context, norbits*param_num, CL_MEM_READ_WRITE);
+        m_mem_rcounter = m_opencl_mgr->create_buffer(context, norbits, CL_MEM_READ_WRITE);
+        m_mem_noise = m_opencl_mgr->create_buffer(context, m_num_noi * m_kernel_steps * norbits, CL_MEM_READ_WRITE);
 
-        m_mem_y0 = clCreateBuffer(context, CL_MEM_READ_WRITE, norbits * sizeof(cl_double) * equat_num, NULL, &err_code);
-        if (err_code != CL_SUCCESS)
-        {
-            std::cout << "Error: Failed to create OpenCL buffer 1!" << std::endl;
-            return 0;
-        }
-
-        m_mem_params = clCreateBuffer(context, CL_MEM_READ_ONLY, norbits * sizeof(cl_double) * param_num, NULL, &err_code);
-        if (err_code != CL_SUCCESS)
-        {
-            std::cout << "Error: Failed to create OpenCL buffer 2!" << std::endl;
-            return 0;
-        }
-
-        m_mem_rcounter = clCreateBuffer(context, CL_MEM_READ_WRITE, norbits * sizeof(cl_double), NULL, &err_code);
-        if (err_code != CL_SUCCESS)
-        {
-            std::cout << "Error: Failed to create OpenCL buffer 3!" << std::endl;
-            return 0;
-        }
-
-        m_mem_noise = clCreateBuffer(context, CL_MEM_READ_WRITE, m_num_noi * m_kernel_steps * norbits * sizeof(cl_double), NULL, &err_code);
-        if (err_code != CL_SUCCESS)
-        {
-            std::cout << "Error: Failed to create OpenCL buffer 4!" << std::endl;
-            std::cout << err_code << std::endl;
-            return 0;
-        }
-
-        return 1;
+        return 0;
     }
 
     /**
@@ -178,22 +147,9 @@ class stochastic_euler : public solver_interface
     {
         int err = 0;
 
-        cl_double *temp = new cl_double[m_list_size*m_num_equat];
-        for (int orbit = 0; orbit < list_size; orbit++)
-        {
-            int k = orbit * m_num_equat;
-            for (int ieq = 0; ieq < m_num_equat; ieq++)
-            {
-                int i = k + ieq;
-                temp[i] = m_y0[orbit*equat_num + ieq];
-            }
-        }
+        err |= clEnqueueWriteBuffer(commands, m_mem_y0, CL_TRUE, 0, list_size * equat_num * sizeof(cl_double), m_y0, 0, NULL, NULL);
 
-        err |= clEnqueueWriteBuffer(commands, m_mem_y0, CL_TRUE, 0, list_size * sizeof(cl_double)*equat_num, temp, 0, NULL, NULL);
-
-        delete[] temp;
-
-        err |= clEnqueueWriteBuffer(commands, m_mem_params, CL_TRUE, 0, list_size * sizeof(cl_double)*param_num, m_params, 0, NULL, NULL);
+        err |= clEnqueueWriteBuffer(commands, m_mem_params, CL_TRUE, 0, list_size * param_num * sizeof(cl_double), m_params, 0, NULL, NULL);
 
         if (err != CL_SUCCESS)
         {
@@ -209,19 +165,11 @@ class stochastic_euler : public solver_interface
      * 
      * @return  int         Returns 1 if the operations were succcessful or 0 if they were unsuccessful.
      */
-    int write_noise_buffer()
+    int write_buffer_noise()
     {
         int err = 0;
-
-        err = clEnqueueWriteBuffer(m_opencl_mgr->m_command_queue, m_mem_rcounter, CL_TRUE, 0, m_list_size * sizeof(cl_double), m_rcounter, 0, NULL, NULL);
-
-        if (err != CL_SUCCESS)
-        {
-            std::cout << "Error: Failed to write to source array!" << std::endl;
-            return 0;
-        }
-
-        return 1;
+        err = m_opencl_mgr->write_to_buffer(m_mem_rcounter, m_rcounter, m_list_size);
+        return err;
     }
 
     /**
@@ -235,19 +183,18 @@ class stochastic_euler : public solver_interface
     int set_kernel_args_noise(cl_kernel kernel)
     {
         // Set the arguments to the compute kernel
-        cl_int err = 0;
-        err = clSetKernelArg(kernel, 0, sizeof(cl_mem), &m_mem_noise);
-        err |= clSetKernelArg(kernel, 1, sizeof(cl_mem), &m_mem_rcounter);
-
-        if (err != CL_SUCCESS)
+        int err = 0;
+        err += m_opencl_mgr->set_kernel_arg(kernel, m_mem_noise, 0);
+        err += m_opencl_mgr->set_kernel_arg(kernel, m_mem_rcounter, 1);
+        if (err > 0)
         {
             std::cout << "Error: Failed to set kernel arguments! " << err << std::endl;
-            return 0;
+            return 1;
         }
-        return 1;
+        return 0;
     }
 
-        /**
+    /**
     * Sets OpenCL kernel arguments.
     *
     * @param	commands	OpenCL command queue
@@ -255,21 +202,19 @@ class stochastic_euler : public solver_interface
     *
     * @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
     */
-    int set_kernel_args(cl_kernel kernel)
+    int set_kernel_args_solver(cl_kernel kernel)
     {
-        // Set the arguments to the compute kernel
-        cl_int err = 0;
-        err = clSetKernelArg(kernel, 0, sizeof(cl_mem), &m_mem_t0);
-        err |= clSetKernelArg(kernel, 1, sizeof(cl_mem), &m_mem_y0);
-        err |= clSetKernelArg(kernel, 2, sizeof(cl_mem), &m_mem_params);
-        err |= clSetKernelArg(kernel, 3, sizeof(cl_mem), &m_mem_rcounter);
-
-        if (err != CL_SUCCESS)
+        int err = 0;
+        err += m_opencl_mgr->set_kernel_arg(kernel, m_mem_t0, 0);
+        err += m_opencl_mgr->set_kernel_arg(kernel, m_mem_y0, 1);
+        err += m_opencl_mgr->set_kernel_arg(kernel, m_mem_params, 2);
+        err += m_opencl_mgr->set_kernel_arg(kernel, m_mem_noise, 3);
+        if (err > 0)
         {
             std::cout << "Error: Failed to set kernel arguments! " << err << std::endl;
-            return 0;
+            return 1;
         }
-        return 1;
+        return 0;
     }
 
     /**
@@ -298,11 +243,13 @@ class stochastic_euler : public solver_interface
 
         // Build programs
         m_opencl_mgr->build_program(m_programs.at(0));
-        //m_opencl_mgr->build_program(m_programs.at(1));
+        m_opencl_mgr->build_program(m_programs.at(1));
 
         // Create the OpenCL buffers
         m_num_noi = 3;
         create_buffers(m_opencl_mgr->m_context, 10, 3, 3);
+
+        write_buffer_noise();
 
         // Create the OpenCL kernels
         // One for the noise numbers generation and one for the integration method
@@ -314,16 +261,16 @@ class stochastic_euler : public solver_interface
         }
         m_kernels.push_back(temp_kernel);
 
-        // temp_kernel = m_opencl_mgr->create_kernel("solver_caller", m_programs.at(1));
-        // if (temp_kernel==NULL)
-        // {
-        //     std::cout << "FU" << std::endl;
-        // }
-        // m_kernels.push_back(temp_kernel);
-
+        temp_kernel = m_opencl_mgr->create_kernel("solver_caller", m_programs.at(1));
+        if (temp_kernel==NULL)
+        {
+            std::cout << "FU" << std::endl;
+        }
+        m_kernels.push_back(temp_kernel);
 
         // Assign arguments to the kernels
         set_kernel_args_noise(m_kernels.at(0));
+        set_kernel_args_solver(m_kernels.at(1));
 
 		return 0;
     }
@@ -335,36 +282,26 @@ class stochastic_euler : public solver_interface
      */
     int run_solver()
     {
-        write_noise_buffer();
-
-        std::cout << "Run 0" << std::endl;
-
-        size_t global = size_t(20);
+        size_t global_noise = size_t(m_list_size*m_kernel_steps*m_num_noi);
+        size_t global_solver = size_t(m_list_size);
         size_t local;
 
         cl_int err;
-        err = clEnqueueNDRangeKernel(m_opencl_mgr->m_command_queue, m_kernels.at(0), 1, NULL, &global, NULL, 0, NULL, NULL);
-
-        //std::cout << err << std::endl;
-
-        std::cout << "Run 1" << std::endl;
-
+        err = clEnqueueNDRangeKernel(m_opencl_mgr->m_command_queue, m_kernels.at(0), 1, NULL, &global_noise, NULL, 0, NULL, NULL);
 		clFinish(m_opencl_mgr->m_command_queue);
-        std::cout << "Run 2" << std::endl;
+
+
+        err = clEnqueueNDRangeKernel(m_opencl_mgr->m_command_queue, m_kernels.at(1), 1, NULL, &global_solver, NULL, 0, NULL, NULL);
+		clFinish(m_opencl_mgr->m_command_queue);
 
         cl_double* orbits_out = new cl_double[m_num_noi * m_kernel_steps * m_list_size];
-
         err = clEnqueueReadBuffer(m_opencl_mgr->m_command_queue, m_mem_noise, CL_TRUE, 0, m_num_noi * m_kernel_steps * m_list_size * sizeof(cl_double), orbits_out, 0, NULL, NULL);
         clFinish(m_opencl_mgr->m_command_queue);
-        
-        std::cout << "Run 3" << std::endl;
 
         for (int i=0; i<10; i++)
         {
             std::cout << orbits_out[i] << std::endl;
         }
-
-        std::cout << "Run 4" << std::endl;
 
         m_log->toFile();
 

@@ -276,17 +276,53 @@ class opencl_mgr
      * @param	list_size	Size of the buffer in number of double values.
      * @return  cl_mem      Returns the cl_mem buffer if the operation was succcessful or 0 if they were unsuccessful.
      */
-    cl_mem create_buffer(cl_context context, int list_size)
+    cl_mem create_buffer(cl_context context, int list_size, cl_map_flags flags)
     {
         cl_int err_code;
-
-        cl_mem buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, list_size * sizeof(cl_double), NULL, &err_code);
+        cl_mem buffer = clCreateBuffer(context, flags, list_size * sizeof(cl_double), NULL, &err_code);
         if (err_code != CL_SUCCESS)
         {
             return NULL;
         }
 
         return buffer;
+    }
+
+    /* @brief Writes data in the OpenCL memory buffers.
+     * 
+     * @return  int         Returns 1 if the operations were succcessful or 0 if they were unsuccessful.
+     */
+    int write_to_buffer(cl_mem buffer, double* source, int list_size)
+    {
+        int err = 0;
+        err = clEnqueueWriteBuffer(m_command_queue, buffer, CL_TRUE, 0, list_size * sizeof(cl_double), source, 0, NULL, NULL);
+        if (err != CL_SUCCESS)
+        {
+            std::cout << "Error: Failed to write to source array!" << std::endl;
+            return 1;
+        }
+        return 0;
+    }
+
+    /**
+    * Sets OpenCL kernel argument.
+    *
+    * @param	commands	OpenCL command queue
+    * @param	list_size	Number of data points to be written in the OpenCL memory buffers
+    *
+    * @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
+    */
+    int set_kernel_arg(cl_kernel kernel, cl_mem buffer, int pos)
+    {
+        // Set the arguments to the compute kernel
+        cl_int err = 0;
+        err = clSetKernelArg(kernel, pos, sizeof(cl_mem), &buffer);
+        if (err != CL_SUCCESS)
+        {
+            std::cout << "Error: Failed to set kernel argument! " << err << std::endl;
+            return 1;
+        }
+        return 0;
     }
 
     /**
