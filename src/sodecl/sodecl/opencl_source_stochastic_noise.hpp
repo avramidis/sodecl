@@ -49,7 +49,7 @@ class opencl_source_stochastic_noise : protected opencl_source_interface
     *
     * @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
     */
-    int create_kernel_string()
+    std::string create_kernel_string()
     {
         // Create the parameters section of the kernel string. These parameter values are defines
         // SODE solver time size
@@ -78,7 +78,7 @@ class opencl_source_stochastic_noise : protected opencl_source_interface
         out << m_kernel_sources.data();
         out.close();
 
-        return 1;
+        return std::string(m_kernel_sources.data());
     }
 };
 }

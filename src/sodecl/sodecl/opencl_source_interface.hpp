@@ -119,7 +119,7 @@ class opencl_source_interface
     *
     * @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
     */
-    virtual int create_kernel_string() = 0;
+    virtual std::string create_kernel_string() = 0;
 };
 }
 

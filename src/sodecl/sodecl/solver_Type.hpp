@@ -5,19 +5,19 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-#ifndef sodecl_SOLVER_TYPE_HPP
-#define sodecl_SOLVER_TYPE_HPP
+#ifndef SODECL_SOLVER_TYPE_HPP
+#define SODECL_SOLVER_TYPE_HPP
 
 namespace sodecl
 {
-	enum class solver_Type
+	enum class solver_type
 	{
-		StochasticEuler = 0,
-		Euler = 1,
-		RungeKutta = 2,
-		ImplicitEuler = 3,
-		ImplicitMidpoint = 4
+		STOCHASTICEULER = 0,
+		EULER = 1,
+		RUNGEKUTTA = 2,
+		IMPLICITEULER = 3,
+		IMPLICITMIDPOINT = 4
 	};
 }
 
-#endif // sodecl_SOLVER_TYPE_HPP
+#endif // SODECL_SOLVER_TYPE_HPP

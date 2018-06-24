@@ -12,7 +12,7 @@ namespace sodecl
  */
 class opencl_mgr
 {
-  private:
+  public:
     /********************************************************************************************
 	* OPENCL HARDWARE SECTION VARIABLES
 	*/
@@ -27,8 +27,8 @@ class opencl_mgr
     OPENCL SOFTWARE SECTION VARIABLES
     */
 
-    std::vector<cl_context>             m_contexts;             /**< OpenCL command contexts vector */
-    std::vector<cl_command_queue>       m_command_queues;       /**< OpenCL command queues vector */
+    cl_context                          m_context;              /**< OpenCL context */
+    cl_command_queue                    m_command_queue;        /**< OpenCL command queue */
     std::vector<char*>                  m_kernel_sources;       /**< Char vector which stores the OpenCL kernel source string. @todo store multiple kernel source strings */
     std::string                         m_build_options_str;    /**< Char vector which stores the OpenCL build options string */
     std::vector<build_Option>           m_build_options;        /**< build_Option vector which stores the OpenCL build options selection */
@@ -37,6 +37,7 @@ class opencl_mgr
     std::vector<cl_program>             m_programs;             /**< OpenCL programs vector */
     std::vector<cl_kernel>              m_kernels;              /**< OpenCL kernels vector */
     int                                 m_local_group_size;     /**< OpenCL device local group size */
+	cl_double*	                        m_rcounter;		        /**< Counter that counts the number of calls to the random number generator */ 
 
     // Log mechanisms
     clog*                               m_log; /**< Pointer for log */
@@ -50,6 +51,9 @@ class opencl_mgr
     {
         // Initialise the clog object
         m_log = clog::getInstance();
+
+        get_opencl_platform_count();
+        create_opencl_platforms();
     };
 
     /**
@@ -193,13 +197,34 @@ class opencl_mgr
     int create_opencl_context()
     {
         cl_int err;
-        cl_context context = clCreateContext(NULL, 1, &(m_opencl_platforms[m_selected_opencl_platform]->m_devices[m_selected_opencl_device]->m_device_id), NULL, NULL, &err);
+        m_context = clCreateContext(NULL, 1, &(m_opencl_platforms[m_selected_opencl_platform]->m_devices[m_selected_opencl_device]->m_device_id), NULL, NULL, &err);
         if (err != CL_SUCCESS)
         {
             std::cerr << "Error: Failed to create context! " << err << std::endl;
             return 0;
         }
-        m_contexts.push_back(context);
+
+        return 1;
+    }
+
+    /**
+    * Create OpenCL command queue for the selected OpenCL platform and OpenCL device. 
+    *
+    * @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
+    */
+    int create_command_queue()
+    {
+        cl_context context = m_context;
+
+        cl_device_id device = m_opencl_platforms[m_selected_opencl_platform]->m_devices[m_selected_opencl_device]->m_device_id;
+
+        cl_int err;
+        m_command_queue = clCreateCommandQueue(context, device, NULL, &err);
+        if (err != CL_SUCCESS)
+        {
+            std::cout << "Error: Failed to create command queue!" << std::endl;
+            return 0;
+        }
 
         return 1;
     }
@@ -209,23 +234,162 @@ class opencl_mgr
     *
     * @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
     */
-    int create_program()
+    cl_program create_program(std::string source)
     {
-        const char *srcptr[] = { m_kernel_sources.at(0) };
-
-        //std::cout << "Size of string is: " << m_source_size << std::endl;
-
-        //cout << "Size of kernel " << m_source_size << endl;
+        const char *srcptr[] = {source.c_str()};
+        m_source_size = source.size();
 
         cl_int err;
-        cl_program program = clCreateProgramWithSource(m_contexts.at(0), 1, srcptr, (const size_t *)&m_source_size, &err);
+        cl_program program = clCreateProgramWithSource(m_context, 1, srcptr, (const size_t *)&m_source_size, &err);
         if (err != CL_SUCCESS)
         {
-            return 0;
+            return NULL;
         }
 
-        // Create OpenCL Program
-        m_programs.push_back(program);
+        return program;
+    }
+
+    /// <summary>
+    /// Create the OpenCL kernel.
+    /// </summary>
+    /// <param name="kernelname">Name of the OpenCL kernel.</param>
+    /// <param name="program">OpenCL program.</param>
+    /// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
+    cl_kernel create_kernel(char* kernelname, cl_program program)
+    {
+        cl_int err_code;
+
+        cl_kernel kernel = clCreateKernel(program, kernelname, &err_code);
+        if (!kernel || err_code != CL_SUCCESS)
+        {
+            cerr << "Error: Failed to create compute kernel!" << std::endl;
+            return NULL;
+        }
+
+        return kernel;
+    }
+
+    /**
+     * @brief Creates an OpenCL buffer.
+     * 
+     * @param	context		OpenCL cl_context.
+     * @param	list_size	Size of the buffer in number of double values.
+     * @return  cl_mem      Returns the cl_mem buffer if the operation was succcessful or 0 if they were unsuccessful.
+     */
+    cl_mem create_buffer(cl_context context, int list_size)
+    {
+        cl_int err_code;
+
+        cl_mem buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, list_size * sizeof(cl_double), NULL, &err_code);
+        if (err_code != CL_SUCCESS)
+        {
+            return NULL;
+        }
+
+        return buffer;
+    }
+
+    /**
+    * Adds a selected OpenCL build option in the vector which stores these OpenCL build options.
+    *
+    * @param	build_option	build_Option which will be stored in the vector
+    *
+    * @todo		This function should be expanded to perform all the operations for adding the OpenCL options in the char vector
+    */
+    void add_option_to_build_options(build_Option build_option)
+    {
+        m_build_options.push_back(build_option);
+    }
+
+    /// <summary>
+    /// Adds the characters of a string in the vector which stores the OpenCL build options.
+    /// </summary>
+    /// <param name="str">String with the OpenCL build option.</param>
+
+    /**
+    * Adds the characters of a string in the vector which stores the OpenCL build options.
+    *
+    * @param	str		String with the OpenCL build option
+    */
+    void add_string_to_build_options_str(string str)
+    {
+        for (size_t i = 0; i < str.length(); i++)
+        {
+            m_build_options_str.push_back(str[i]);
+        }
+    }
+
+    /**
+    * Builds OpenCL program for the selected OpenCL device.
+    *
+    * @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
+    */
+    int build_program(cl_program program)
+    {
+        cl_device_id device_id = m_opencl_platforms[m_selected_opencl_platform]->m_devices[m_selected_opencl_device]->m_device_id;
+
+        add_string_to_build_options_str("-I. ");
+
+        for (build_Option option : m_build_options)
+        {
+            switch (option)
+            {
+            case build_Option::FastRelaxedMath:
+                add_string_to_build_options_str("-cl-fast-relaxed-math ");
+                break;
+            case build_Option::stdCL20:
+                add_string_to_build_options_str("-cl-std=CL2.0 ");
+                break;
+            case build_Option::stdCL21:
+                add_string_to_build_options_str("-cl-std=CL2.1 ");
+                break;
+            }
+        }
+
+        const char *options = &m_build_options_str[0];
+        //cerr << "Build options string: " << options << endl;
+        m_log->write("Build options string: ");
+        m_log->write(options);
+        m_log->write("\n");
+
+        //const char * options = "-D KHR_DP_EXTENSION -x clc++ -cl-mad-enable";
+        //const char * options = "-D KHR_DP_EXTENSION -cl-opt-disable -cl-mad-enable";
+        //const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math -cl-unsafe-math-optimizations";
+        //const char * options = "-D KHR_DP_EXTENSION -cl-opt-disable";
+        //const char * options = "-D KHR_DP_EXTENSION -cl-std=CL2.0 -cl-uniform-work-group-size";
+        //const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math -cl-no-signed-zeros -cl-finite-math-only";
+        //const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math -cl-std=CL2.0";
+        //const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math";
+        //const char * options = "-D KHR_DP_EXTENSION -cl-std=CL2.0";
+        //const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math -cl-std=CL2.0";
+        //const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math";
+        //const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math -cl-std=CL2.0";
+        //const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math -cl-strict-aliasing -cl-single-precision-constant -cl-no-signed-zeros -cl-denorms-are-zero";
+        //const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math -cl-nv-maxrregcount=200 -cl-nv-verbose -cl-mad-enable -cl-fast-relaxed-math -cl-no-signed-zeros -cl-strict-aliasing";
+        //const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math -cl-nv-maxrregcount=200 -cl-nv-verbose -cl-mad-enable -cl-no-signed-zeros -cl-strict-aliasing";
+        //const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math  -cl-nv-maxrregcount=90";
+        //const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math -cl-nv-opt-level=2";
+        //const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math -cl-nv-allow-expensive-optimizations";
+        //const char * options = "-D KHR_DP_EXTENSION -cl-fast-relaxed-math";
+        //const char * options = "";
+        //const char * options = "-cl-fast-relaxed-math -cl-std=CL2.0";
+
+        cl_int err = clBuildProgram(program, 1, &device_id, options, NULL, NULL);
+        if (err != CL_SUCCESS)
+        {
+            size_t len;
+            char buffer[2048];
+
+            std::cout << "Error: " << err << std::endl;
+
+            std::cout << "Error: Failed to build program executable!" << std::endl;
+
+            clGetProgramBuildInfo(program, device_id, CL_PROGRAM_BUILD_LOG,
+                                  sizeof(buffer), buffer, &len);
+
+            std::cout << buffer << std::endl;
+            return 0;
+        }
 
         return 1;
     }

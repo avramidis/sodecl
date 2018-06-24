@@ -4,6 +4,7 @@
 #include "sodecl.hpp"
 
 #include "opencl_kernel_strings_test.hpp"
+#include "sodecl_solvers_tests.hpp"
 //#include "opencl_tests.hpp"
 
 

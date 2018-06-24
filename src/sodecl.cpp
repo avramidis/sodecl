@@ -23,40 +23,39 @@
 
 using namespace std;
 
-std::vector<cl_double> sodeclcall( std::vector<double> &a_t0,
-                std::vector<double> &a_y0,
-                std::vector<double> &a_params,
-                int a_platform, 
-                int a_device, 
-                string a_system, 
-                int a_solver_type, 
-                int a_orbits, 
-                int a_equats, 
-                int a_nparams, 
-                int a_nnoi, 
-                double a_dt,
-                double a_tspan, 
-                int a_ksteps, 
-                int a_local_group_size)
+std::vector<cl_double> sodeclcall(std::vector<double> &a_t0,
+                                  std::vector<double> &a_y0,
+                                  std::vector<double> &a_params,
+                                  int a_platform,
+                                  int a_device,
+                                  string a_system,
+                                  int a_solver_type,
+                                  int a_orbits,
+                                  int a_equats,
+                                  int a_nparams,
+                                  int a_nnoi,
+                                  double a_dt,
+                                  double a_tspan,
+                                  int a_ksteps,
+                                  int a_local_group_size)
 {
-    // odesolver - ODE solver
-    sodecl::solver_Type a_solver;
+    sodecl::solver_type a_solver;
     switch (a_solver_type)
     {
     case 0:
-        a_solver = sodecl::solver_Type::StochasticEuler;
+        a_solver = sodecl::solver_type::STOCHASTICEULER;
         break;
     case 1:
-        a_solver = sodecl::solver_Type::Euler;
+        a_solver = sodecl::solver_type::EULER;
         break;
     case 2:
-        a_solver = sodecl::solver_Type::RungeKutta;
+        a_solver = sodecl::solver_type::RUNGEKUTTA;
         break;
     case 3:
-        a_solver = sodecl::solver_Type::ImplicitEuler;
+        a_solver = sodecl::solver_type::IMPLICITEULER;
         break;
     case 4:
-        a_solver = sodecl::solver_Type::ImplicitMidpoint;
+        a_solver = sodecl::solver_type::IMPLICITMIDPOINT;
         break;
     default:
         std::cout << "Unknown SDE solver selection." << std::endl;
@@ -64,52 +63,36 @@ std::vector<cl_double> sodeclcall( std::vector<double> &a_t0,
         return myvector;
     }
 
-	sodecl::sodeclmgr *mysodeclmgr = new sodecl::sodeclmgr("kernels", 
-															&a_system[0], 
-															a_solver, 
-															a_dt, 
-															a_tspan, 
-															a_ksteps, 
-															a_equats, 
-															a_nparams, 
-															a_nnoi, 
-															a_orbits, 
-															sodecl::output_Type::File);
+    sodecl::opencl_mgr* m_opencl_mgr = new sodecl::opencl_mgr;
+    m_opencl_mgr->choose_opencl_device(0, sodecl::device_Type::ALL, 0);
 
-	int success;
+    sodecl::stochastic_euler* m_stochastic_euler = new sodecl::stochastic_euler(m_opencl_mgr,
+                                                                                "kernels",
+                                                                                &a_system[0],
+                                                                                a_dt,
+                                                                                a_tspan,
+                                                                                a_ksteps,
+                                                                                a_equats,
+                                                                                a_nparams,
+                                                                                a_nnoi,
+                                                                                a_orbits,
+                                                                                a_y0.data(),
+                                                                                a_params.data());
 
-	// Choose device
-	success = mysodeclmgr->choose_device(a_platform, sodecl::device_Type::ALL, a_device);
-	if (success == 0)
-	{
-		cerr << "Error selecting OpenCL device!" << endl;
-	}
+    m_stochastic_euler->setup_solver();
 
-	mysodeclmgr->set_t0(a_t0.data());
-	mysodeclmgr->set_y0(a_y0.data());
-	mysodeclmgr->set_params(a_params.data());
-
-	// Set the local group size.
-	mysodeclmgr->set_local_group_size(a_local_group_size);
-
-	// Setup and run the ODE solver
-	int ret = mysodeclmgr->setup_ode_solver();
-    if (ret == 0)
-    {
-        std::vector<cl_double> myvector(0);
-        return myvector;
-    }
-    
-	mysodeclmgr->run_ode_solver();
-
+    // m_stochastic_euler->run_solver();
 
     // The delete mysodeclmgr call breaks pybind11 for some reason
-	//delete mysodeclmgr;
+    //delete mysodeclmgr;
 
-    return mysodeclmgr->m_output;
+    //return mysodeclmgr->m_output;
+    std::vector<cl_double> paok;
+    return paok;
 }
 
-PYBIND11_MODULE(sodecl_interface, m) {
+PYBIND11_MODULE(sodecl_interface, m)
+{
     m.doc() = "sodecl plugin";
 
     m.def("sodeclcall", &sodeclcall, "A function that integrates a SDE/ODE system.");

@@ -65,7 +65,7 @@ class opencl_source_stochastic_euler : protected opencl_source_interface
     *
     * @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
     */
-    int create_kernel_string()
+    std::string create_kernel_string()
     {
         // Create the parameters section of the kernel string. These parameter values are defines
         // Number of noise parameters
@@ -80,7 +80,6 @@ class opencl_source_stochastic_euler : protected opencl_source_interface
 
         // ODE solver time size
         add_string_to_kernel_sources("#define _m_dt_ ");
-        //add_string_to_kernel_sources(std::to_string(static_cast<long double>(m_dt)));
         add_string_to_kernel_sources(double_to_string(m_dt));
         add_string_to_kernel_sources("\n");
 
@@ -131,7 +130,7 @@ class opencl_source_stochastic_euler : protected opencl_source_interface
         out << m_kernel_sources.data();
         out.close();
 
-        return 1;
+        return std::string(m_kernel_sources.data());
     }
 };
 }

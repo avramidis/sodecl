@@ -84,7 +84,7 @@ namespace sodecl
 		*/
 
 		char*			m_ode_system_string;			/**< ODE or SDE system OpenCL function */
-		solver_Type		m_solver;						/**< ODE solver type */ 
+		solver_type		m_solver;						/**< ODE solver type */ 
 		double			m_dt;							/**< Solver (initial) time step in seconds */ 
 		double			m_int_time;						/**< Time units to integrate the ODE system */ 
 		int				m_kernel_steps;					/**< Number of step the solver with perform in each kernel call */ 
@@ -127,7 +127,7 @@ namespace sodecl
 		* @param  list_size				Number of orbits to be integrated for the ODE system
 		* @param  output_type			Specifies the location where the output of the integration of the ODE system will be stored
 		*/
-		sodeclmgr(string kernel_path_str, char *ode_system_str, solver_Type solver, double dt, double int_time, int kernel_steps, int num_equat, int num_params, int num_noi, int list_size, output_Type output_type)
+		sodeclmgr(string kernel_path_str, char *ode_system_str, solver_type solver, double dt, double int_time, int kernel_steps, int num_equat, int num_params, int num_noi, int list_size, output_Type output_type)
 		{
 			// Initialise the clog object
 			m_log = clog::getInstance();
@@ -578,7 +578,7 @@ namespace sodecl
 			add_string_to_kernel_sources(std::to_string(static_cast<long long>(m_num_params)));
 			add_string_to_kernel_sources("\n");
 
-			if (m_solver == solver_Type::ImplicitEuler || m_solver == solver_Type::ImplicitMidpoint) {
+			if (m_solver == solver_type::IMPLICITEULER || m_solver == solver_type::IMPLICITMIDPOINT) {
 				double epsilon1 = 1e-7;
 				// Implicit StochasticEuler Newton-Raphson epsilon1 value
 				add_string_to_kernel_sources("#define _epsilon1_ ");
@@ -599,22 +599,22 @@ namespace sodecl
 
 			// Choose the solver.
 			switch (m_solver){
-			case solver_Type::StochasticEuler:
+			case solver_type::STOCHASTICEULER:
 				//cout << "Read the StochasticEuler solver" << endl;
 				kernelpath.append("/stochasticeuler.cl");	// StochasticEuler
 				break;
-			case solver_Type::Euler:
+			case solver_type::EULER:
 				//cout << "Read the Euler solver" << endl;
 				kernelpath.append("/euler.cl");	// Euler
 				break;
-			case solver_Type::RungeKutta:
+			case solver_type::RUNGEKUTTA:
 				//cout << "Read the Runge-Kutta solver" << endl;
 				kernelpath.append("/rk4.cl");	// Runge-Kutta
 				break;
-			case solver_Type::ImplicitEuler:
+			case solver_type::IMPLICITEULER:
 				kernelpath.append("/ie.cl");	// Runge-Kutta
 				break;
-			case solver_Type::ImplicitMidpoint:
+			case solver_type::IMPLICITMIDPOINT:
 				kernelpath.append("/im.cl");	// Runge-Kutta
 				break;
 			default:
@@ -641,21 +641,21 @@ namespace sodecl
 
 			// Choose the solver.
 			switch (m_solver) {
-			case solver_Type::StochasticEuler:
+			case solver_type::STOCHASTICEULER:
 				kernelsolverpath_char.append("/stochastic_solver_caller.cl");
 				break;
-			case solver_Type::Euler:
+			case solver_type::EULER:
 				//cout << "Read the Runge-Kutta solver" << endl;
 				kernelsolverpath_char.append("/solver_caller.cl");
 				break;
-			case solver_Type::RungeKutta:
+			case solver_type::RUNGEKUTTA:
 				//cout << "Read the Runge-Kutta solver" << endl;
 				kernelsolverpath_char.append("/solver_caller.cl");
 				break;
-			case solver_Type::ImplicitEuler:
+			case solver_type::IMPLICITEULER:
 				kernelsolverpath_char.append("/solver_caller.cl");
 				break;
-			case solver_Type::ImplicitMidpoint:
+			case solver_type::IMPLICITMIDPOINT:
 				kernelsolverpath_char.append("/solver_caller.cl");
 				break;
 			default:
