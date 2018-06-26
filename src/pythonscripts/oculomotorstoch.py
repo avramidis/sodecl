@@ -17,14 +17,6 @@ if __name__ == '__main__':
     start = time.time()
 
     orbits = 8
-    #orbits = 256
-    #orbits = 512
-    #orbits = 1024
-    #orbits = 2048
-    #orbits = 4096
-    #orbits = 8192
-    #orbits = 16384
-    # orbits = 32768
 
     openclplatform = 1
     opencldevice = 0

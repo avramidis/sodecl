@@ -38,8 +38,10 @@ class solver_interface
                                                  will write to the output file the results of the 1st then 2nd and then 3rd state variable */
 
     // arrays with the state of the system for each parameter combination
-    cl_double*	m_y0;			/**< Client memory buffer which stores the phase state of each integration output step */  
-    cl_double*	m_params;		/**< Client memory buffer which stores the parameter values of each integration orbit of the ODE system */ 
+    cl_double*	            m_t0;			  /**< Client memory buffer which stores the phase state of each integration output step */  
+    cl_double*	            m_y0;			  /**< Client memory buffer which stores the phase state of each integration output step */  
+    cl_double*	            m_params;		/**< Client memory buffer which stores the parameter values of each integration orbit of the ODE system */
+    std::vector<cl_double>  m_output;	  /**< Integration output */ 
     
     /********************************************************************************************
     OPENCL SOFTWARE SECTION VARIABLES
@@ -108,10 +110,21 @@ class solver_interface
         m_num_params = num_params;
         // m_output_type = output_type;
 
+        m_t0 = new cl_double[m_list_size];
+        for (int i = 0; i < m_list_size; i++)
+        { 
+            m_t0[i] = 0.0;
+        }
         m_y0 = y0;
         m_params = params;
 
-        
+        m_outputPattern = new int[m_num_equat];
+        for (int i = 0; i < m_num_equat; i++)
+        {
+          //m_outputPattern[i] = i+1;
+          m_outputPattern[i] = 1;
+        }
+        m_outputPattern[0] = 1;
 
         // m_outputPattern = new int[m_num_equat];
         // for (int i = 0; i < m_num_equat; i++)
@@ -155,24 +168,16 @@ class solver_interface
     /**
      * @brief Creates the OpenCL buffers needed for the solver.
      * 
-     * @param	context		OpenCL cl_context.
-     * @param	list_size	Size of the buffers in number of data points.
-     * @param	equat_num	Number of equations.
-     * @param   param_num	Number of parameters.
      * @return  int         Returns 1 if the operations were succcessful or 0 if they were unsuccessful.
      */
-    virtual int create_buffers(cl_context context, int list_size, int equat_num, int param_num) = 0;
+    virtual int create_buffers() = 0;
 
     /**
      * @brief Writes data in the OpenCL memory buffers.
      * 
-     * @param	commands	OpenCL command queue.
-     * @param	list_size	Number of data points to be written in the OpenCL memory buffers.
-     * @param	equat_num	Number of equations of the ODE or SDE system.
-     * @param	param_num	Number of parameters of the ODE or SDE system.
      * @return  int         Returns 1 if the operations were succcessful or 0 if they were unsuccessful.
      */
-    virtual int write_buffers(cl_command_queue commands, int list_size, int equat_num, int param_num) = 0;
+    virtual int write_buffers() = 0;
 
     /**
      * Setups the selected ODE or SDE solver OpenCL kernel source.

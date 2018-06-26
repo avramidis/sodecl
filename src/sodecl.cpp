@@ -64,7 +64,13 @@ std::vector<cl_double> sodeclcall(std::vector<double> &a_t0,
     }
 
     sodecl::opencl_mgr* m_opencl_mgr = new sodecl::opencl_mgr;
-    m_opencl_mgr->choose_opencl_device(0, sodecl::device_Type::ALL, 0);
+    m_opencl_mgr->choose_opencl_device(a_platform, sodecl::device_Type::ALL, a_device);
+    int err = m_opencl_mgr->create_opencl_context();    
+    err = m_opencl_mgr->create_command_queue();
+    if (err != 1)
+    {
+        std::cout << "Error: Failed to create command queue!" << std::endl;
+    }
 
     sodecl::stochastic_euler* m_stochastic_euler = new sodecl::stochastic_euler(m_opencl_mgr,
                                                                                 "kernels",
@@ -79,16 +85,13 @@ std::vector<cl_double> sodeclcall(std::vector<double> &a_t0,
                                                                                 a_y0.data(),
                                                                                 a_params.data());
 
+    m_stochastic_euler->create_kernel_strings();
+
     m_stochastic_euler->setup_solver();
 
-    // m_stochastic_euler->run_solver();
+    m_stochastic_euler->run_solver();
 
-    // The delete mysodeclmgr call breaks pybind11 for some reason
-    //delete mysodeclmgr;
-
-    //return mysodeclmgr->m_output;
-    std::vector<cl_double> paok;
-    return paok;
+    return m_stochastic_euler->m_output;
 }
 
 PYBIND11_MODULE(sodecl_interface, m)

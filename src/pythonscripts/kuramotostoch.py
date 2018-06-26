@@ -15,11 +15,11 @@ if __name__ == '__main__':
     start_time = time.time()
 
     orbits = 8
-    openclplatform = 0
+    openclplatform = 1
     opencldevice = 0
     openclkernel = 'kuramoto.cl'
     solver = 0
-    nequat = 20
+    nequat = 3
     nparams = nequat
     nnoi = nequat
     dt = 5e-2
@@ -45,7 +45,7 @@ if __name__ == '__main__':
         for p in range(nequat):
             noise[o][p] = random.uniform(0.01, 0.03)
 
-    nparams = numpy.concatenate((params, noise), axis=1)
+    params = numpy.concatenate((params, noise), axis=1)
 
     results = sodecl.sodecl(openclplatform, opencldevice, openclkernel,
                               initx, params, solver,
@@ -58,8 +58,8 @@ if __name__ == '__main__':
     if numpy.isnan(numpy.sum(numpy.sum(results))):
         raise RuntimeError("NaN present!")
 
-    # import matplotlib.pyplot as plt
-    # plt.plot(results[0, :])
-    # plt.xlabel('Time')
-    # plt.ylabel('Value')
-    # plt.show()
+    import matplotlib.pyplot as plt
+    plt.plot(results[0, :])
+    plt.xlabel('Time')
+    plt.ylabel('Value')
+    plt.show()

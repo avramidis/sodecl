@@ -364,6 +364,7 @@ class opencl_mgr
     {
         cl_device_id device_id = m_opencl_platforms[m_selected_opencl_platform]->m_devices[m_selected_opencl_device]->m_device_id;
 
+        m_build_options_str.clear();
         add_string_to_build_options_str("-I. ");
 
         for (build_Option option : m_build_options)
