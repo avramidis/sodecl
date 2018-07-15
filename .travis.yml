@@ -19,19 +19,9 @@ matrix:
         - sudo ldconfig
         - pip3 install numpy
         - git clone https://github.com/pybind/pybind11.git
-    # - os: osx
-    #   language: generic
-    #   python:
-    #     - "3.6.3"
-    #   before_install:
-    #     - export PATH=/usr/local/bin:/usr/local/sbin:$PATH
-    #     - brew upgrade python
-    #     - pip3 install numpy
-    #     - git clone https://github.com/pybind/pybind11.git
 
 compiler:
   - gcc
-  - clang
 
 # Build steps
 script:
