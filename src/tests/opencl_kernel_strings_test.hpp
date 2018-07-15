@@ -9,7 +9,7 @@ TEST_CASE("OpenCL kernel strings test.")
 {
     SECTION("Create noise OpenCL kernel.")
     {
-        sodecl::opencl_source_stochastic_noise m_opencl_source_stochastic_noise("kernels", 0.05);
+        //sodecl::opencl_source_stochastic_noise m_opencl_source_stochastic_noise("kernels", 0.05);
         
         // m_opencl_source_stochastic_noise.create_kernel_string();
                 
