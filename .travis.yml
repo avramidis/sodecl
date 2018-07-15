@@ -2,21 +2,21 @@
 matrix:
   include:
     - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-8
+      env:
+        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8~
       dist: trusty
       sudo: required
       language: python
       python:
-        - "3.6.3"
+        - "3.7"
       before_install:
-        - sudo apt-get update
-        - sudo apt-get upgrade
-        - sudo apt-get dist-upgrade
-        - sudo apt-get install build-essential software-properties-common
-        - sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-        - sudo apt-get update
-        - sudo apt-get install gcc-8 g++-8
-        - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-8
-        - sudo update-alternatives --config gcc
+        - eval "${MATRIX_EVAL}"
         - select gcc-8
         - sudo apt-get update -qq
         - sudo apt-get install lsb-core
