@@ -417,17 +417,15 @@ class opencl_mgr
         cl_int err = clBuildProgram(program, 1, &device_id, options, NULL, NULL);
         if (err != CL_SUCCESS)
         {
-            size_t len;
-            char buffer[2048];
-
             std::cout << "Error: " << err << std::endl;
-
             std::cout << "Error: Failed to build program executable!" << std::endl;
 
-            clGetProgramBuildInfo(program, device_id, CL_PROGRAM_BUILD_LOG,
-                                  sizeof(buffer), buffer, &len);
+            size_t log_size;
+            clGetProgramBuildInfo(program, device_id, CL_PROGRAM_BUILD_LOG, 0, NULL, &log_size);
+            char *log = new char[log_size];
+            clGetProgramBuildInfo(program, device_id, CL_PROGRAM_BUILD_LOG, log_size, log, NULL);
+            std::cout << log << std::endl;
 
-            std::cout << buffer << std::endl;
             return 0;
         }
 
