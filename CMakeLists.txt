@@ -18,11 +18,6 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
-# Select flags.
-# SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
-# SET(CMAKE_CXX_FLAGS_RELEASE "-O2")
-# SET(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g -Werror")
-
 project(sodecl VERSION 0.1.0 LANGUAGES CXX)
 
 # Add all warnings compile options
@@ -30,8 +25,8 @@ if (MSVC)
 	add_compile_options(/W4)
 else()
 	add_compile_options(
-		"$<$<CONFIG:RELASE>:-std=gnu11;-Wall;-O2>"
-		"$<$<CONFIG:DEBUG>:-std=gnu11;-Wall;-Wextra;-Wpedantic;-O0>"
+		"$<$<CONFIG:RELASE>:-Wall;-O2>"
+		"$<$<CONFIG:DEBUG>:-Wall;-Wextra;-Wpedantic;-O0;-g>"
 	)
 	#add_compile_options(-Wall -Wextra -Wpedantic -fprofile-arcs -ftest-coverage -fprofile-dir="${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl")
 endif()

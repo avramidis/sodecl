@@ -16,6 +16,7 @@ matrix:
       python:
         - "3.6.3"
       before_install:
+        - eval "${MATRIX_EVAL}"
         - sudo apt-get update -qq
         - sudo apt-get install lsb-core
         - sudo apt-get install ocl-icd-opencl-dev -y
