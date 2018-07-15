@@ -9,7 +9,7 @@ matrix:
           packages:
             - g++-8
       env:
-        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8~
+        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
       dist: trusty
       sudo: required
       language: python
@@ -17,7 +17,6 @@ matrix:
         - "3.6.3"
       before_install:
         - eval "${MATRIX_EVAL}"
-        - select gcc-8
         - sudo apt-get update -qq
         - sudo apt-get install lsb-core
         - sudo apt-get install ocl-icd-opencl-dev -y
