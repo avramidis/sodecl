@@ -2,14 +2,6 @@
 matrix:
   include:
     - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-7
-      env:
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
       dist: trusty
       sudo: required
       language: python
@@ -17,6 +9,16 @@ matrix:
         - "3.6.3"
       before_install:
         - eval "${MATRIX_EVAL}"
+        - sudo apt-get update -y &&
+        - sudo apt-get upgrade -y &&
+        - sudo apt-get dist-upgrade -y &&
+        - sudo apt-get install build-essential software-properties-common -y &&
+        - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y &&
+        - sudo apt-get update -y &&
+        - sudo apt-get install gcc-8 g++-8 -y &&
+        - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-8 &&
+        - sudo update-alternatives --config gcc
+        - select gcc-8
         - sudo apt-get update -qq
         - sudo apt-get install lsb-core
         - sudo apt-get install ocl-icd-opencl-dev -y
