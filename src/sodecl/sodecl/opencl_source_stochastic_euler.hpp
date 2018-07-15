@@ -102,7 +102,7 @@ class opencl_source_stochastic_euler : protected opencl_source_interface
 
         kernelpath.append("/stochasticeuler.cl");	// StochasticEuler
 
-        for (int i = 0; i < kernelpath.size(); i++)
+        for (size_t i = 0; i < kernelpath.size(); i++)
         {
             kernelpath_char.push_back(kernelpath[i]);
         }

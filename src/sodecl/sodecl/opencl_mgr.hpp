@@ -17,10 +17,10 @@ class opencl_mgr
 	* OPENCL HARDWARE SECTION VARIABLES
 	*/
 
-    cl_uint                             m_opencl_platform_count;            /**< Number of OpenCL platforms */
+    int                                 m_opencl_platform_count;            /**< Number of OpenCL platforms */
     std::vector<sodecl::platform *>     m_opencl_platforms;                 /**< Vector which stores the sodecl::platform objects. One object for each OpenCL platform */
-    cl_uint                             m_selected_opencl_platform;         /**< The index of the selected sodecl::platform object in the m_platforms vector */
-    cl_uint                             m_selected_opencl_device;           /**< The index of the selected sodecl::device object in m_devices vector of selected platform */
+    int                                 m_selected_opencl_platform;         /**< The index of the selected sodecl::platform object in the m_platforms vector */
+    int                                 m_selected_opencl_device;           /**< The index of the selected sodecl::device object in m_devices vector of selected platform */
     device_Type                         m_selected_opencl_device_type;      /**< Selected OpenCL device type */
 
     /********************************************************************************************
@@ -76,8 +76,10 @@ class opencl_mgr
      */
     int get_opencl_platform_count()
     {
+        cl_uint opencl_platform_count;
+
         // get platform count
-        cl_int err = clGetPlatformIDs(0, nullptr, &m_opencl_platform_count);
+        cl_int err = clGetPlatformIDs(0, nullptr, &opencl_platform_count);
 
         if (err == CL_INVALID_VALUE)
         {
@@ -91,7 +93,8 @@ class opencl_mgr
             return -1;
         }
 
-        return (int)m_opencl_platform_count;
+        m_opencl_platform_count = (int)opencl_platform_count;
+        return m_opencl_platform_count;
     }
 
     /**
@@ -120,7 +123,7 @@ class opencl_mgr
             return -1;
         }
 
-        for (cl_uint i = 0; i < m_opencl_platform_count; i++)
+        for (int i = 0; i < m_opencl_platform_count; i++)
         {
             m_opencl_platforms.push_back(new platform(cpPlatform[i]));
         }
@@ -137,7 +140,7 @@ class opencl_mgr
      * @param	device_num		Index of selected OpenCL device in the selected OpenCL platform
      * @return  int             Returns 1 if the operations were succcessful or 0 if they were unsuccessful.
      */
-    int choose_opencl_device(cl_uint platform_num, device_Type device_type, cl_uint device_num)
+    int choose_opencl_device(int platform_num, device_Type device_type, int device_num)
     {
         // Check if selected platform exist
         if (platform_num < 0 || platform_num > m_opencl_platform_count)
@@ -219,7 +222,7 @@ class opencl_mgr
         cl_device_id device = m_opencl_platforms[m_selected_opencl_platform]->m_devices[m_selected_opencl_device]->m_device_id;
 
         cl_int err;
-        m_command_queue = clCreateCommandQueue(context, device, NULL, &err);
+        m_command_queue = clCreateCommandQueue(context, device, 0, &err);
         if (err != CL_SUCCESS)
         {
             std::cout << "Error: Failed to create command queue!" << std::endl;

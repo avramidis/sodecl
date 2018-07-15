@@ -61,7 +61,7 @@ class opencl_source_stochastic_noise : protected opencl_source_interface
         string kernelpath = m_kernel_path_str;
         kernelpath.append("/random_numbers.cl");
 
-        for (int i = 0; i < kernelpath.size(); i++)
+        for (size_t i = 0; i < kernelpath.size(); i++)
         {
             kernelpath_char.push_back(kernelpath[i]);
         }

@@ -19,9 +19,9 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 # Select flags.
-SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
-SET(CMAKE_CXX_FLAGS_RELEASE "-O2")
-SET(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g")
+# SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
+# SET(CMAKE_CXX_FLAGS_RELEASE "-O2")
+# SET(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g -Werror")
 
 project(sodecl VERSION 0.1.0 LANGUAGES CXX)
 
@@ -29,7 +29,10 @@ project(sodecl VERSION 0.1.0 LANGUAGES CXX)
 if (MSVC)
 	add_compile_options(/W4)
 else()
-	add_compile_options(-Wall -Wextra -Wpedantic)
+	add_compile_options(
+		"$<$<CONFIG:RELASE>:-std=gnu11;-Wall;-O2>"
+		"$<$<CONFIG:DEBUG>:-std=gnu11;-Wall;-Wextra;-Wpedantic;-O0>"
+	)
 	#add_compile_options(-Wall -Wextra -Wpedantic -fprofile-arcs -ftest-coverage -fprofile-dir="${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl")
 endif()
 

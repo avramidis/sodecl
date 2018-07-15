@@ -66,7 +66,7 @@ class opencl_source_interface
 
             m_source_size = str.length();
 
-            for (int i = 0; i < m_source_size; i++)
+            for (size_t i = 0; i < m_source_size; i++)
             {
                 m_kernel_sources.push_back(str[i]);
             }

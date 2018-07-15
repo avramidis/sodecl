@@ -11,6 +11,7 @@
 #include "sodecl.hpp"
 #include <ctime>
 #include <limits>
+#include <random>
 
 namespace sodecl
 {

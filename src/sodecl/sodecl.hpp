@@ -20,7 +20,7 @@
 #include "sodecl/solver_Type.hpp"
 #include "sodecl/device.hpp"
 #include "sodecl/platform.hpp"
-#include "sodecl/sodeclmgr.hpp"
+//#include "sodecl/sodeclmgr.hpp"
 #include "sodecl/opencl_mgr.hpp"
 #include "sodecl/opencl_source_interface.hpp"
 #include "sodecl/solver_interface.hpp"
