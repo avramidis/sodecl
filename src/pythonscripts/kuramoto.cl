@@ -1,6 +1,6 @@
 #define NOSC _numeq_
 
-inline static void ode_system(double t, double y[_numeq_], double yout[_numeq_], double p[_numpar_])
+inline static void ode_system(double t, double* y, double* yout, double* p)
 {
 	// Kuramoto model
 	for (int i = 0; i<NOSC; i++)
@@ -16,7 +16,7 @@ inline static void ode_system(double t, double y[_numeq_], double yout[_numeq_],
 
 }
 
-inline static void ode_system_stoch(double t, double y[_numeq_], double stoch[_numeq_], double p[_numpar_], double noise[_numnoi_])
+inline static void ode_system_stoch(double t, double* y, double* stoch, double* p, double* noise)
 {
 	//#pragma unroll 1
 	for (int i = 0; i < NOSC; i++)

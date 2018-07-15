@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
     start_time = time.time()
 
-    orbits = 8
+    orbits = 25600
     openclplatform = 1
     opencldevice = 0
     openclkernel = 'kuramoto.cl'
@@ -25,7 +25,7 @@ if __name__ == '__main__':
     dt = 5e-2
     tspan = 200
     ksteps = 40
-    localgroupsize = 8
+    localgroupsize = 256
 
     # Initialise initial state of the system
     initx = numpy.ndarray((orbits, nequat))
@@ -46,7 +46,6 @@ if __name__ == '__main__':
             noise[o][p] = random.uniform(0.01, 0.03)
 
     params = numpy.concatenate((params, noise), axis=1)
-
     results = sodecl.sodecl(openclplatform, opencldevice, openclkernel,
                               initx, params, solver,
                               orbits, nequat, nnoi,

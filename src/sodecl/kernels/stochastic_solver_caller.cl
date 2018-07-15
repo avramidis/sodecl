@@ -19,12 +19,10 @@ __kernel void solver_caller(__global double *t0,
 	double params[_numpar_];
 	double noise[_numnoi_];
 
-	//#pragma unroll 1
 	for (int ieq = 0; ieq < _numeq_; ieq++)
 	{
 		y[ieq] = y0[i * _numeq_ + ieq];
 	}
-	//#pragma unroll 1
 	for (int ipar = 0; ipar < _numpar_; ipar++)
 	{
 		params[ipar] = params_g[i * _numpar_ + ipar];
@@ -41,14 +39,12 @@ __kernel void solver_caller(__global double *t0,
 		ode_solver(t0[i], y, detterm, params, noise);
 
 		t0[i] = t0[i] + _m_dt_;
-		//#pragma unroll 1
 		for (int ieq = 0; ieq < _numeq_; ieq++)
 		{
 			y[ieq] = detterm[ieq];
 		}
 	}
 
-	//#pragma unroll 1
 	for (int ieq = 0; ieq < _numeq_; ieq++)
 	{
 		y0[i * _numeq_ + ieq] = y[ieq];
