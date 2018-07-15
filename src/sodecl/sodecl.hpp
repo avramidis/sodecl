@@ -17,7 +17,7 @@
 #include "sodecl/build_Option.hpp"
 #include "sodecl/output_Type.hpp"
 #include "sodecl/device_Type.hpp"
-#include "sodecl/solver_type.hpp"
+#include "sodecl/solver_Type.hpp"
 #include "sodecl/device.hpp"
 #include "sodecl/platform.hpp"
 #include "sodecl/sodeclmgr.hpp"
