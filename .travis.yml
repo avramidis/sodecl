@@ -35,9 +35,9 @@ script:
   - mkdir build
   - cd build
   - cmake .. -DCMAKE_BUILD_TYPE=Release && make && ctest --verbose
-  - cd Debug/tests
-  - python3 sodecl_python_tests.py
-  - cd ../../..
+  # - cd Debug/tests
+  # - python3 sodecl_python_tests.py
+  # - cd ../../..
   #- cd /home/travis/build/avramidis/sodecl/src/
   #- ./get_code_cov.sh
   
