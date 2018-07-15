@@ -10,8 +10,8 @@
 #include <Random123/u01.h>
 
 __kernel void random_numbers(__global double *noise, __global double *counter)
-{
-	int gi = get_global_id(0);    
+{   
+    int gi = get_global_id(0);    
     int i = gi*2;
     double dtsqrt = sqrt(_m_dt_);	
 

@@ -122,7 +122,7 @@ class opencl_source_stochastic_euler : protected opencl_source_interface
         read_kernel_file(&kernelsolverpath_char[0]);
         add_string_to_kernel_sources("\n");
 
-        //m_kernel_sources.shrink_to_fit();
+        m_kernel_sources.shrink_to_fit();
         m_source_size = m_kernel_sources.size();
         
         // This is for debug purpose
