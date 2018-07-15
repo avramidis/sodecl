@@ -34,7 +34,7 @@ script:
   - g++ --version
   - mkdir build
   - cd build
-  - cmake .. -DCMAKE_BUILD_TYPE=Release && make && ctest --verbose
+  - cmake .. -DCMAKE_BUILD_TYPE=Debug && make && ctest --verbose
   # - cd Debug/tests
   # - python3 sodecl_python_tests.py
   # - cd ../../..
