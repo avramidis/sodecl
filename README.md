@@ -68,6 +68,8 @@ To use the Python wrapper a number of module must be installed. To install these
 
 ```
 sudo apt-get install python3-numpy
+sudo pip3 install numpy
+sudo pip3 install matplotlib
 ```
 
 ### Installing
