@@ -18,21 +18,20 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
-# Select flags.
-SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
-SET(CMAKE_CXX_FLAGS_RELEASE "-O2")
-SET(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g")
-
 project(sodecl VERSION 0.1.0 LANGUAGES CXX)
 
 # Add all warnings compile options
 if (MSVC)
 	add_compile_options(/W4)
 else()
-	add_compile_options(-Wall -Wextra -Wpedantic -fprofile-arcs -ftest-coverage -fprofile-dir="${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl")
+	add_compile_options(
+		"$<$<CONFIG:RELASE>:-Wall;-O2>"
+		"$<$<CONFIG:DEBUG>:-Wall;-Wextra;-Wpedantic;-O0;-g>"
+	)
+	#add_compile_options(-Wall -Wextra -Wpedantic -fprofile-arcs -ftest-coverage -fprofile-dir="${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl")
 endif()
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 11)
 
 add_subdirectory(pybind11)
 pybind11_add_module(sodecl_bin "${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl.cpp")

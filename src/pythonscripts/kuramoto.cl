@@ -5,13 +5,13 @@ inline static void ode_system(double t, double y[_numeq_], double yout[_numeq_],
 	// Kuramoto model
 	for (int i = 0; i<NOSC; i++)
 	{
-		yout[i] = p[i];
+		yout[i] = p[i+1];
 		//#pragma unroll 1
 		for (int j = 0; j<NOSC; j++)
 		{
 			yout[i] = yout[i] + (sin(y[j] - y[i]));
 		}
-		yout[i] = yout[i] * (double)(1.00 / (double)(NOSC));
+		yout[i] = yout[i] * (double)(p[0] / (double)(NOSC));
 	}
 
 }

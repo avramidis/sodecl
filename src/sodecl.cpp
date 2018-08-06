@@ -74,7 +74,7 @@ std::vector<cl_double> sodeclcall( std::vector<double> &a_t0,
 															a_nparams, 
 															a_nnoi, 
 															a_orbits, 
-															sodecl::output_Type::File);
+															sodecl::output_Type::Array);
 
 	int success;
 

@@ -141,7 +141,9 @@ namespace sodecl
 			m_num_equat = num_equat;								
 			m_num_params = num_params;								
 			m_num_noi = num_noi;									
-			m_output_type = output_type;							
+			m_output_type = output_type;	
+
+			m_outputfile_str = "sodecloutput.bin";					
 
 			if (m_num_noi > 0)
 			{
@@ -1209,7 +1211,16 @@ namespace sodecl
 					{
 						for (int ji = jo; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
 						{
-							m_output.push_back(orbits_out[ji]);
+							switch(m_output_type) {
+								case  sodecl::output_Type::Array : 
+									m_output.push_back(orbits_out[ji]);
+									break;       
+								case  sodecl::output_Type::File : 
+									output_stream.write((char *)(&orbits_out[ji]), sizeof(cl_double));
+									break;
+								case  sodecl::output_Type::None : 
+									break;
+							}		
 						}
 					}
 				}
@@ -1225,7 +1236,17 @@ namespace sodecl
 				{
 					for (int ji = jo; ji < m_list_size*m_num_equat; ji = ji + m_num_equat)
 					{
-						m_output.push_back(orbits_out[ji]);
+						//m_output.push_back(orbits_out[ji]);
+						switch(m_output_type) {
+							case  sodecl::output_Type::Array : 
+								m_output.push_back(orbits_out[ji]);
+								break;       
+							case  sodecl::output_Type::File : 
+								output_stream.write((char *)(&orbits_out[ji]), sizeof(cl_double));
+								break;
+							case  sodecl::output_Type::None : 
+								break;
+						}
 					}
 				}
 			}
