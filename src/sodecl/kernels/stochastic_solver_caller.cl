@@ -7,28 +7,17 @@
 
 __kernel void solver_caller(__global double *t0,
 	__global double *y0,
+	__global double *detterm,
 	__global double *params_g,
-	__global double *counter_g)
+	__global double *stoch,
+	__global double *counter_g,
+	__global double *noise)
 {
 	int i = get_global_id(0);
 
 	double dtsqrt = sqrt(_m_dt_);
 
-	double y[_numeq_];
-	double detterm[_numeq_];
-	double params[_numpar_];
-	double noise[_numnoi_];
-
-	#pragma unroll 1
-	for (int ieq = 0; ieq < _numeq_; ieq++)
-	{
-		y[ieq] = y0[i * _numeq_ + ieq];
-	}
-	#pragma unroll 1
-	for (int ipar = 0; ipar < _numpar_; ipar++)
-	{
-		params[ipar] = params_g[i * _numpar_ + ipar];
-	}
+	//double noise[_numnoi_];
 
 	threefry2x64_key_t rk = { { i, 0xf00dcafe } };
 	threefry2x64_ctr_t rc = { { 0, 0xdecafbad } };	
@@ -57,30 +46,23 @@ __kernel void solver_caller(__global double *t0,
 			{
 				u0 = u01_open_open_64_53(rr.v[0]);
 				u1 = u01_open_open_64_53(rr.v[1]);
-				noise[ncounter] = sqrt(-2 * log(u0)) * cos(2 * M_PI * u1)*dtsqrt;
+				noise[i * _numnoi_ + ncounter] = sqrt(-2 * log(u0)) * cos(2 * M_PI * u1)*dtsqrt;
 				ncounter = ncounter + 1;
 			}
 			if (ncounter < _numnoi_)
 			{
-				noise[ncounter] = sqrt(-2 * log(u0)) * sin(2 * M_PI * u1)*dtsqrt;
+				noise[i * _numnoi_ + ncounter] = sqrt(-2 * log(u0)) * sin(2 * M_PI * u1)*dtsqrt;
 				ncounter = ncounter + 1;
 			}
 		}
 
 		// Call the solver
-		ode_solver(t0[i], y, detterm, params, noise);
+		ode_solver(t0[i], y0, detterm, stoch, params_g, noise);
 
 		t0[i] = t0[i] + _m_dt_;
-		#pragma unroll 1
 		for (int ieq = 0; ieq < _numeq_; ieq++)
 		{
-			y[ieq] = detterm[ieq];
+			y0[i * _numeq_ + ieq] = detterm[i * _numeq_ + ieq];
 		}
-	}
-
-	#pragma unroll 1
-	for (int ieq = 0; ieq < _numeq_; ieq++)
-	{
-		y0[i * _numeq_ + ieq] = y[ieq];
 	}
 }

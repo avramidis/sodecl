@@ -73,9 +73,12 @@ namespace sodecl
 		// ODE solvers OpenCL buffers
 		cl_mem	m_mem_t0;				/**< OpenCL memory buffer which stores the time value of each integration output step */ 
 		cl_mem	m_mem_y0;				/**< OpenCL memory buffer which stores the phase state of each integration output step */ 
+		cl_mem	m_mem_detterm;			/**< OpenCL memory buffer which stores the temporary phase state of each integration output step */ 
+		cl_mem	m_mem_stoch;			/**< OpenCL memory buffer which stores the stoch phase state of each integration output step */ 
 		cl_mem	m_mem_params;			/**< OpenCL memory buffer which stores the parameter values of each integration orbit of the ODE system */ 
 		cl_mem	m_mem_dt;				/**< OpenCL memory buffer which stores the time step for each integration orbit of the ODE system */ 
 		cl_mem	m_mem_rcounter;			/**< OpenCL memory buffer which stores the counters for each workitem for the random number generation */ 
+		cl_mem	m_mem_noise;			/**< OpenCL memory buffer which stores the noise for each workitem for the random number generation */ 
 		char*	m_outputfile_str;		/**< Path to the results output file */
 
 		/********************************************************************************************
@@ -856,6 +859,12 @@ namespace sodecl
 				return 0;
 			}
 
+			m_mem_detterm = clCreateBuffer(context, CL_MEM_READ_WRITE, list_size * sizeof(cl_double)*equat_num, NULL, &errcode);
+			if (errcode != CL_SUCCESS)
+			{
+				return 0;
+			}
+
 			m_mem_params = clCreateBuffer(context, CL_MEM_READ_ONLY, list_size * sizeof(cl_double)*param_num, NULL, &errcode);
 			if (errcode != CL_SUCCESS)
 			{
@@ -864,7 +873,19 @@ namespace sodecl
 
 			if (m_num_noi > 0)
 			{
+				m_mem_stoch  = clCreateBuffer(context, CL_MEM_READ_WRITE, list_size * sizeof(cl_double)*equat_num, NULL, &errcode);
+				if (errcode != CL_SUCCESS)
+				{
+					return 0;
+				}
+
 				m_mem_rcounter = clCreateBuffer(context, CL_MEM_READ_ONLY, list_size * sizeof(cl_double), NULL, &errcode);
+				if (errcode != CL_SUCCESS)
+				{
+					return 0;
+				}
+
+				m_mem_noise  = clCreateBuffer(context, CL_MEM_READ_ONLY, list_size * sizeof(cl_double)*m_num_noi, NULL, &errcode);
 				if (errcode != CL_SUCCESS)
 				{
 					return 0;
@@ -984,11 +1005,14 @@ namespace sodecl
 			cl_int err = 0;
 			err = clSetKernelArg(kernel, 0, sizeof(cl_mem), &m_mem_t0);
 			err |= clSetKernelArg(kernel, 1, sizeof(cl_mem), &m_mem_y0);
-			err |= clSetKernelArg(kernel, 2, sizeof(cl_mem), &m_mem_params);
+			err |= clSetKernelArg(kernel, 2, sizeof(cl_mem), &m_mem_detterm);
+			err |= clSetKernelArg(kernel, 3, sizeof(cl_mem), &m_mem_params);
 
 			if (m_num_noi > 0)
 			{
-				err |= clSetKernelArg(kernel, 3, sizeof(cl_mem), &m_mem_rcounter);
+				err |= clSetKernelArg(kernel, 4, sizeof(cl_mem), &m_mem_stoch);
+				err |= clSetKernelArg(kernel, 5, sizeof(cl_mem), &m_mem_rcounter);
+				err |= clSetKernelArg(kernel, 6, sizeof(cl_mem), &m_mem_noise);
 			}
 
 			if (err != CL_SUCCESS)

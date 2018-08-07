@@ -7,16 +7,16 @@
 
 
 // StochasticEuler solver
-inline static void ode_solver(double t, double y[_numeq_], double yout[_numeq_], double p[_numpar_], double noise[_numnoi_])
+inline static void ode_solver(double t, __global double y[_numeq_], __global double yout[_numeq_], __global double stoch[_numeq_], __global double p[_numpar_], __global double noise[_numnoi_])
 {
+	int ig = get_global_id(0);
+	
 	ode_system(t, y, yout, p);
 
-	double stoch[_numeq_];
 	ode_system_stoch(t, y, stoch, p, noise);
 
-	#pragma unroll 1
 	for (int i = 0; i < _numeq_; i++)
 	{
-		yout[i] = y[i] + yout[i] * _m_dt_ + stoch[i];
+		yout[ig * _numeq_ + i] = y[ig * _numeq_ + i] + yout[ig * _numeq_ + i] * _m_dt_ + stoch[ig * _numeq_ + i];
 	}
 }
