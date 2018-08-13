@@ -29,7 +29,7 @@ def kuramotostoch(orbits, openclplatform, opencldevice, nequat, dt, ksteps, loca
     params = numpy.ndarray((orbits, nparams))
     for o in range(orbits):
         params[o][0] = 0.02
-        for p in range(1,nequat):
+        for p in range(1,nequat+1):
             params[o][p] = random.uniform(0.01, 0.03)
 
     # Initialise noise values of the system
@@ -38,7 +38,7 @@ def kuramotostoch(orbits, openclplatform, opencldevice, nequat, dt, ksteps, loca
         for p in range(nequat):
             noise[o][p] = random.uniform(0.01, 0.03)
 
-    nparams = numpy.concatenate((params, noise), axis=1)
+    params = numpy.concatenate((params, noise), axis=1)
 
     results = sodecl.sodecl(openclplatform, opencldevice, openclkernel,
                               initx, params, solver,
@@ -57,13 +57,13 @@ if __name__ == '__main__':
 
     start_time = time.time()
 
-    orbits = 2*512
+    orbits = 64
     openclplatform = 0
     opencldevice = 0
     nequat = 100
     dt = 5e-2
     ksteps = 40
-    localgroupsize = 0
+    localgroupsize = 8
 
     results = kuramotostoch(orbits, openclplatform, opencldevice, nequat, dt, ksteps, localgroupsize)
 

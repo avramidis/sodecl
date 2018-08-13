@@ -17,8 +17,6 @@ __kernel void solver_caller(__global double *t0,
 
 	double dtsqrt = sqrt(_m_dt_);
 
-	//double noise[_numnoi_];
-
 	threefry2x64_key_t rk = { { i, 0xf00dcafe } };
 	threefry2x64_ctr_t rc = { { 0, 0xdecafbad } };	
 	
@@ -46,12 +44,12 @@ __kernel void solver_caller(__global double *t0,
 			{
 				u0 = u01_open_open_64_53(rr.v[0]);
 				u1 = u01_open_open_64_53(rr.v[1]);
-				noise[i * _numnoi_ + ncounter] = sqrt(-2 * log(u0)) * cos(2 * M_PI * u1)*dtsqrt;
+				noise[i * _numnoi_ + ncounter] = (sqrt(-2 * log(u0)) * cos(2 * M_PI * u1))*dtsqrt;
 				ncounter = ncounter + 1;
 			}
 			if (ncounter < _numnoi_)
 			{
-				noise[i * _numnoi_ + ncounter] = sqrt(-2 * log(u0)) * sin(2 * M_PI * u1)*dtsqrt;
+				noise[i * _numnoi_ + ncounter] = (sqrt(-2 * log(u0)) * sin(2 * M_PI * u1))*dtsqrt;
 				ncounter = ncounter + 1;
 			}
 		}
