@@ -37,7 +37,7 @@ compiler:
 script:
   - mkdir build
   - cd build
-  - cmake .. -DCMAKE_BUILD_TYPE=Debug && make --verbose
+  - cmake .. -DCMAKE_BUILD_TYPE=Debug && make
   - cd Debug/tests
   - python3 sodecl_python_tests.py
   - cd ../../..
