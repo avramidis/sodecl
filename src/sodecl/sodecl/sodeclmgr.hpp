@@ -85,7 +85,7 @@ namespace sodecl
 		ODE SOLVERS SECTION VARIABLES
 		*/
 
-		char*			m_ode_system_string;			/**< ODE or SDE system OpenCL function */
+		char*			m_sode_system_string;			/**< ODE or SDE system OpenCL function */
 		solver_Type		m_solver;						/**< ODE solver type */ 
 		double			m_dt;							/**< Solver (initial) time step in seconds */ 
 		double			m_int_time;						/**< Time units to integrate the ODE system */ 
@@ -118,7 +118,7 @@ namespace sodecl
 		*  Default constructor which initialises the sodecl object. 
 		*
 		* @param  kernel_path_str		Path to the OpenCL ODE solvers kernel source files
-		* @param  ode_system_str		Path to the OpenCL ODE system source file
+		* @param  sode_system_str		Path to the OpenCL ODE system source file
 		* @param  solver				Type of the solver that will be used to integrate the ODE system
 		* @param  dt					ODE solver time step size
 		* @param  int_time				Length of time in seconds the the ODE system with be integrated
@@ -128,14 +128,14 @@ namespace sodecl
 		* @param  list_size				Number of orbits to be integrated for the ODE system
 		* @param  output_type			Specifies the location where the output of the integration of the ODE system will be stored
 		*/
-		sodeclmgr(string kernel_path_str, char *ode_system_str, solver_Type solver, double dt, double int_time, int kernel_steps, int num_equat, int num_params, int num_noi, int list_size, output_Type output_type)
+		sodeclmgr(string kernel_path_str, char *sode_system_str, solver_Type solver, double dt, double int_time, int kernel_steps, int num_equat, int num_params, int num_noi, int list_size, output_Type output_type)
 		{
 			// Initialise the clog object
 			m_log = clog::getInstance();
 
 			// Set ODE Solver parameter values
 			m_kernel_path_str = kernel_path_str;
-			m_ode_system_string = ode_system_str;
+			m_sode_system_string = sode_system_str;
 			m_solver = solver;										
 			m_dt = dt;												
 			m_int_time = int_time;									
@@ -197,11 +197,11 @@ namespace sodecl
 		*/
 		~sodeclmgr()
 		{
-			// delete m_ode_system_string;
+			// delete m_sode_system_string;
 			// delete m_output;
 			// delete m_source_str;
 
-			// delete[] m_ode_system_string;  // This is a string literals. That means it has static storage duration (not dynamically allocated).
+			// delete[] m_sode_system_string;  // This is a string literals. That means it has static storage duration (not dynamically allocated).
 			
 			/////////////////////////////////////////////////
 
@@ -561,20 +561,20 @@ namespace sodecl
 
 			//cout << "Kernel steps done" << endl;
 
-			// ODE solver time size
+			// SODE solver time size
 			add_string_to_kernel_sources("#define _m_dt_ ");
 			//add_string_to_kernel_sources(std::to_string(static_cast<long double>(m_dt)));
 			add_string_to_kernel_sources(double2string(m_dt));
 			add_string_to_kernel_sources("\n");
 
-			//cout << "ODE solver time size" << endl;
+			//cout << "SODE solver time size" << endl;
 
-			// ODE system number of equations
+			// SODE system number of equations
 			add_string_to_kernel_sources("#define _numeq_ ");
 			add_string_to_kernel_sources(std::to_string(static_cast<long long>(m_num_equat)));
 			add_string_to_kernel_sources("\n");
 
-			// ODE system number of parameters
+			// SODE system number of parameters
 			add_string_to_kernel_sources("#define _numpar_ ");
 			add_string_to_kernel_sources(std::to_string(static_cast<long long>(m_num_params)));
 			add_string_to_kernel_sources("\n");
@@ -587,36 +587,29 @@ namespace sodecl
 				add_string_to_kernel_sources("\n");
 			}
 
-			//cout << "ODE system number of parameters" << endl;
-
-			// Read the ODE system functions
-			read_kernel_file(m_ode_system_string);
+			// Read the SODE system functions
+			read_kernel_file(m_sode_system_string);
 			add_string_to_kernel_sources("\n");
 
 			std::vector<char> kernelpath_char;
 			string kernelpath = m_kernel_path_str;
 
-			//std::cout << "The kernal path is: " << kernelpath << std::endl;
-
 			// Choose the solver.
 			switch (m_solver){
 			case solver_Type::StochasticEuler:
-				//cout << "Read the StochasticEuler solver" << endl;
-				kernelpath.append("/stochasticeuler.cl");	// StochasticEuler
+				kernelpath.append("/stochasticeuler.cl");	// Stochastic Euler
 				break;
 			case solver_Type::Euler:
-				//cout << "Read the Euler solver" << endl;
 				kernelpath.append("/euler.cl");	// Euler
 				break;
 			case solver_Type::RungeKutta:
-				//cout << "Read the Runge-Kutta solver" << endl;
 				kernelpath.append("/rk4.cl");	// Runge-Kutta
 				break;
 			case solver_Type::ImplicitEuler:
-				kernelpath.append("/ie.cl");	// Runge-Kutta
+				kernelpath.append("/ie.cl");	// Implicit Euler
 				break;
 			case solver_Type::ImplicitMidpoint:
-				kernelpath.append("/im.cl");	// Runge-Kutta
+				kernelpath.append("/im.cl");	// Implicit midpoint
 				break;
 			default:
 				std::cout << "No valid solver chosen!" << std::endl;
@@ -646,11 +639,9 @@ namespace sodecl
 				kernelsolverpath_char.append("/stochastic_solver_caller.cl");
 				break;
 			case solver_Type::Euler:
-				//cout << "Read the Runge-Kutta solver" << endl;
 				kernelsolverpath_char.append("/solver_caller.cl");
 				break;
 			case solver_Type::RungeKutta:
-				//cout << "Read the Runge-Kutta solver" << endl;
 				kernelsolverpath_char.append("/solver_caller.cl");
 				break;
 			case solver_Type::ImplicitEuler:
@@ -719,11 +710,6 @@ namespace sodecl
 		{
 			m_build_options.push_back(build_option);
 		}
-
-		/// <summary>
-		/// Adds the characters of a string in the vector which stores the OpenCL build options.
-		/// </summary>
-		/// <param name="str">String with the OpenCL build option.</param>
 
 		/**
 		* Adds the characters of a string in the vector which stores the OpenCL build options.
@@ -1151,7 +1137,7 @@ namespace sodecl
 		*
 		* @param	params		Returns 1 if the read of the data is successful or 0 if unsuccessful
 		*/
-		int run_ode_solver()
+		int run_sode_solver()
 		{
 			// Output binary files
 			std::ofstream output_stream;
@@ -1165,18 +1151,6 @@ namespace sodecl
 
 			size_t global = size_t(m_list_size);
 			size_t local;
-
-			//switch (m_selected_device_type) {
-			//case device_Type::CPU: 
-			//	local = size_t(8);
-			//	break;       
-			//case device_Type::GPU:
-			//	local = size_t(256);
-			//	break;
-			//default: 
-			//	local = 64;
-			//	break;
-			//}
 
 			local = m_local_group_size;
 			if (m_local_group_size>m_list_size)
@@ -1301,20 +1275,14 @@ namespace sodecl
 		*
 		* @return 1 if the operations were succcessfull or 0 if they were unsuccessful
 		*/
-		int setup_ode_solver()
+		int setup_sode_solver()
 		{
-			//sodecl::timer start_timer;
-
-			//std::cout << "setup_ode_solver start." << std::endl;
-
 			// To create a cl string with the program to run
 			if (create_kernel_string() == 0)
 			{
 				std::cout << "Kernel code creation failed." << std::endl;
 				return 0;
 			}
-
-			//std::cout << "Kernel code creation successed." << std::endl;
 			//m_log->write("Kernel code creation successed.\n");
 
 			if (create_context() == 0)
@@ -1322,7 +1290,6 @@ namespace sodecl
 				std::cout << "Context creation failed." << std::endl;
 				return 0;
 			}
-			//std::cout << "Context created." << std::endl;
 			//m_log->write("Context created.\n");
 
 			if (create_program() == 0)
@@ -1330,42 +1297,36 @@ namespace sodecl
 				std::cout << "Failed to create OpenCL program from source." << std::endl;
 				return 0;
 			}
-			//std::cout << "Program created." << std::endl;
 
 			if (build_program() == 0)
 			{
 				std::cout << "Failed to build kernel." << std::endl;
 				return 0;
 			}
-			//std::cout << "Program build." << std::endl;
 
 			if (create_kernel("solver_caller", m_programs[0]) == 0)
 			{
 				std::cout << "Failed to create kernel." << std::endl;
 				return 0;
 			}
-			//std::cout << "Kernel created." << std::endl;
 
 			if (create_command_queue() == 0)
 			{
 				std::cout << "Failed to create command queue." << std::endl;
 				return 0;
 			}
-			//std::cout << "Command queue created." << std::endl;
 
 			if (create_buffers(m_contexts[0], m_list_size, m_num_equat, m_num_params) == 0)
 			{
 				std::cout << "Failed to create the OpenCL buffers." << std::endl;
 				return 0;
 			}
-			//std::cout << "Buffers created." << std::endl;
 
 			if (write_buffers(m_command_queues[0], m_list_size, m_num_equat, m_num_params) == 0)
 			{
 				std::cout << "Failed to write the data to the OpenCL buffers." << std::endl;
 				return 0;
 			}
-			//std::cout << "Data written to buffers." << std::endl;
 
 			// assign the inputs to kernel
 			if (set_kernel_args(m_kernels[0]) == 0)
@@ -1375,9 +1336,6 @@ namespace sodecl
 			}
 
 			//m_log->toFile();
-
-			//double walltime = start_timer.stop_timer();
-			//cout << "Setup SODE solver runtime: " << walltime << endl;
 
 			return 1;
 		}

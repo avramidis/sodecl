@@ -92,19 +92,15 @@ std::vector<cl_double> sodeclcall( std::vector<double> &a_t0,
 	// Set the local group size.
 	mysodeclmgr->set_local_group_size(a_local_group_size);
 
-	// Setup and run the ODE solver
-	int ret = mysodeclmgr->setup_ode_solver();
+	// Setup and run the SODE solver
+	int ret = mysodeclmgr->setup_sode_solver();
     if (ret == 0)
     {
         std::vector<cl_double> myvector(0);
         return myvector;
     }
     
-	mysodeclmgr->run_ode_solver();
-
-
-    // The delete mysodeclmgr call breaks pybind11 for some reason
-	//delete mysodeclmgr;
+	mysodeclmgr->run_sode_solver();
 
     return mysodeclmgr->m_output;
 }
