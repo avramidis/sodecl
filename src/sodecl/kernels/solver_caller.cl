@@ -33,7 +33,7 @@ __kernel void solver_caller(__global double *t0,
 	int it;
 	for (it = 0; it < _numsteps_; ++it)
 	{
-		ode_solver(_m_dt_, t, y, detterm, params);
+		sode_solver(_m_dt_, t, y, detterm, params);
 
 		t = t + _m_dt_;
 		for (int ieq = 0; ieq < _numeq_; ++ieq)

@@ -14,7 +14,7 @@
 /// <param name="y">The y is the current phase values.</param>
 /// <param name="yout">The yout is the next phase values.</param>
 /// <param name="p">The p is the parameter values.</param>
-inline static void ode_solver(double dt, double t, double y[_numeq_], double yout[_numeq_], double p[_numpar_])
+inline static void sode_solver(double dt, double t, double y[_numeq_], double yout[_numeq_], double p[_numpar_])
 {
 	ode_system(t, y, yout, p);
 
@@ -32,7 +32,7 @@ inline static void ode_solver(double dt, double t, double y[_numeq_], double you
 		x2[i] = y[i] + (dt * 0.50)*k1[i];
 	}
 	
-	ode_system(t + 0.50*dt, x2, k1, p);
+	sode_system(t + 0.50*dt, x2, k1, p);
 	for (int i = 0; i < _numeq_; ++i)
 	{
 		yout[i] = yout[i] + 2.00 * k1[i];
@@ -43,7 +43,7 @@ inline static void ode_solver(double dt, double t, double y[_numeq_], double you
 	{
 		x2[i] = y[i] + (dt * 0.50)*k1[i];
 	}
-	ode_system(t + 0.50*dt, x2, k1, p);
+	sode_system(t + 0.50*dt, x2, k1, p);
 
 	for (int i = 0; i < _numeq_; ++i)
 	{
@@ -55,7 +55,7 @@ inline static void ode_solver(double dt, double t, double y[_numeq_], double you
 	{
 		x2[i] = y[i] + dt*k1[i];
 	}
-	ode_system(t+dt, x2, k1, p);
+	sode_system(t+dt, x2, k1, p);
 
 	for (int i = 0; i < _numeq_; ++i)
 	{

@@ -597,7 +597,7 @@ namespace sodecl
 			// Choose the solver.
 			switch (m_solver){
 			case solver_Type::StochasticEuler:
-				kernelpath.append("/stochasticeuler.cl");	// Stochastic Euler
+				kernelpath.append("/stochastic_euler.cl");	// Stochastic Euler
 				break;
 			case solver_Type::Euler:
 				kernelpath.append("/euler.cl");	// Euler

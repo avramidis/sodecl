@@ -55,7 +55,7 @@ __kernel void solver_caller(__global double *t0,
 		}
 
 		// Call the solver
-		ode_solver(t0[i], y0, detterm, stoch, params_g, noise);
+		sode_solver(t0[i], y0, detterm, stoch, params_g, noise);
 
 		t0[i] = t0[i] + _m_dt_;
 		for (int ieq = 0; ieq < _numeq_; ieq++)

@@ -80,7 +80,7 @@ inline static void calc_jacobian(double y[_numeq_], double jac[_numeq_][_numeq_]
 	jac[5][5] = 0;
 }
 
-inline static void ode_system(double t, double* y, double* yout, double* p)
+inline static void sode_system(double t, double* y, double* yout, double* p)
 {
 	// g
 	yout[0] = y[1];
@@ -96,7 +96,7 @@ inline static void ode_system(double t, double* y, double* yout, double* p)
 	yout[5] = -(y[3] - y[4]);
 }
 
-inline static void ode_system_stoch(double t, double y[_numeq_], double stoch[_numeq_], double p[_numpar_], double noise[_numnoi_])
+inline static void sode_system_stoch(double t, double y[_numeq_], double stoch[_numeq_], double p[_numpar_], double noise[_numnoi_])
 {
 	// g
 	stoch[0] = 0;
