@@ -5,4 +5,4 @@
 # to native line endings on checkout.
 
 # Declare files that will always have CRLF line endings on checkout.
-*.cl text eol=lf
+#*.cl text eol=lf
