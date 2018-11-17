@@ -27,7 +27,7 @@
 ##SBATCH --no-requeue
 
 #! For 6GB per CPU, set "-p skylake"; for 12GB per CPU, set "-p skylake-himem": 
-#SBATCH -p skylake
+#SBATCH -p skylake-himem
 
 #! sbatch directives end here (put any additional directives above this line)
 
@@ -53,6 +53,7 @@ module purge                               # Removes all modules still loaded
 module load rhel7/default-peta4            # REQUIRED - loads the basic environment
 module load intel/ocl/3.1.1.11385
 module load gcc
+module load python/3.5.1
 
 #! Insert additional module load commands after this line if needed:
 python3 kuramotobenchmarks.py
