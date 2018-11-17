@@ -13,7 +13,7 @@ import sodecl
 if __name__ == '__main__':
     orbit_set = [512, 5120, 25600, 40960, 81920]
     nequat_set = [5, 10, 15]
-    repetitions = 2
+    repetitions = 8
 
     # orbit_set = [8]
     # nequat_set = [15]
@@ -99,4 +99,4 @@ if __name__ == '__main__':
     ## Write the results to files
     numpy.savetxt('nequat_5.txt', runtimes[0][:][:], fmt='%.4f')
     numpy.savetxt('nequat_10.txt', runtimes[1][:][:], fmt='%.4f')
-    numpy.savetxt('nequat_25.txt', runtimes[2][:][:], fmt='%.4f')
+    numpy.savetxt('nequat_15.txt', runtimes[2][:][:], fmt='%.4f')
