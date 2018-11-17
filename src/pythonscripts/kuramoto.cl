@@ -1,6 +1,6 @@
 #define NOSC _numeq_
 
-inline static void ode_system(double t, __global double y[_numeq_], __global double yout[_numeq_], __global double p[_numpar_])
+inline static void sode_system(double t, __global double y[_numeq_], __global double yout[_numeq_], __global double p[_numpar_])
 {
 	int ig = get_global_id(0);
 	int paramstep = ig * _numpar_;
@@ -19,7 +19,7 @@ inline static void ode_system(double t, __global double y[_numeq_], __global dou
 	}
 }
 
-inline static void ode_system_stoch(double t, __global double y[_numeq_], __global double stoch[_numeq_], __global double p[_numpar_], __global double noise[_numnoi_])
+inline static void sode_system_stoch(double t, __global double y[_numeq_], __global double stoch[_numeq_], __global double p[_numpar_], __global double noise[_numnoi_])
 {
 	int ig = get_global_id(0);
 
