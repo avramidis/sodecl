@@ -1,0 +1,47 @@
+#!/bin/bash
+#!
+#! Example SLURM job script for Peta4-KNL (KNL 7210)
+#! Last updated: Mon 13 Nov 12:17:14 GMT 2017
+#!
+
+#!#############################################################
+#!#### Modify the options in this section as appropriate ######
+#!#############################################################
+
+#! sbatch directives begin here ###############################
+#! Name of the job:
+#SBATCH -J sodeclbench
+#! Which project should be charged (NB Peta4-KNL projects end in '-KNL'):
+#SBATCH -A SUPPORT-KNL
+#! How many whole nodes should be allocated?
+#SBATCH --nodes=1
+#! Which memory mode do you require (recommended choices are cache or flat):
+#SBATCH --constraint=cache
+#! How many (MPI) tasks will there be in total? (<=nodes*256)
+#SBATCH --ntasks=256
+#! How much wallclock time will be required?
+#SBATCH --time=02:00:00
+#! What types of email messages do you wish to receive?
+#SBATCH --mail-type=FAIL
+#! Uncomment this to prevent the job from being requeued (e.g. if
+#! interrupted by node failure or system downtime):
+##SBATCH --no-requeue
+
+#! Do not change:
+#SBATCH -p knl
+
+#! sbatch directives end here (put any additional directives above this line)
+
+#! Notes:
+#! Charging is determined by node number*walltime. Allocation is in entire nodes.
+
+#! Optionally modify the environment seen by the application
+#! (note that SLURM reproduces the environment at submission irrespective of ~/.bashrc):
+. /etc/profile.d/modules.sh                # Leave this line (enables the module command)
+module purge                               # Removes all modules still loaded
+module load rhel7/default-peta4            # REQUIRED - loads the basic environment
+module load intel/ocl/3.1.1.11385
+module load gcc
+module load python/3.5.1
+
+python3 kuramotobenchmarks.py
