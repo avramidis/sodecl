@@ -19,14 +19,14 @@ if __name__ == '__main__':
     # nequat_set = [15]
     # repetitions = 2
 
-    openclplatform = 1
+    openclplatform = 0
     opencldevice = 0
     openclkernel = 'kuramoto.cl'
     solver = 0    
     dt = 0.05
     tspan = 50
     ksteps = 40
-    localgroupsize = 256
+    localgroupsize = 0
 
     runtimes = numpy.zeros((len(nequat_set), len(orbit_set), repetitions+1))
 
