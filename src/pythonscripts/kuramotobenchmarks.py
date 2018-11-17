@@ -11,9 +11,10 @@ import numpy
 import sodecl
 
 if __name__ == '__main__':
-    orbit_set = [512, 5120, 25600, 40960, 81920, 163840, 327680]
-    nequat_set = [3, 10, 20]
-    repetitions = 8
+    #orbit_set = [512, 5120, 25600, 40960, 81920, 163840, 327680]
+    orbit_set = [512, 1024]
+    nequat_set = [5, 10, 15]
+    repetitions = 2
 
     openclplatform = 0
     opencldevice = 0
