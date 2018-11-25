@@ -45,5 +45,6 @@ module load rhel7/default-gpu              # REQUIRED - loads the basic environm
 module load gcc
 module load python/3.5.1
 module load cuda
+module load intel/ocl/3.1.1.11385
 
 python3 kuramotobenchmarks.py

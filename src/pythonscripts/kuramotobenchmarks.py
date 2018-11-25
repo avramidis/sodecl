@@ -11,13 +11,13 @@ import numpy
 import sodecl
 
 if __name__ == '__main__':
-    orbit_set = [512, 5120, 25600, 40960, 81920]
+    orbit_set = [512, 5120, 25600, 40960, 81920, 163840]
     nequat_set = [5, 10, 15]
     repetitions = 8
 
-    # orbit_set = [8]
-    # nequat_set = [15]
-    # repetitions = 2
+    orbit_set = [163840]
+    nequat_set = [15]
+    repetitions = 1
 
     openclplatform = 0
     opencldevice = 0
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     dt = 0.05
     tspan = 50
     ksteps = 40
-    localgroupsize = 0
+    localgroupsize = 256
 
     runtimes = numpy.zeros((len(nequat_set), len(orbit_set), repetitions+1))
 
@@ -40,7 +40,7 @@ if __name__ == '__main__':
                 print("norbits: ", orbit_set[orbits_count])
                 print("rep: ", reps)
                 
-                time.sleep(1)
+                time.sleep(3)
                 start_time = time.time()
                 
                 nparams = nequat+1
@@ -97,6 +97,6 @@ if __name__ == '__main__':
 
     #####################################################
     ## Write the results to files
-    numpy.savetxt('nequat_5.txt', runtimes[0][:][:], fmt='%.4f')
-    numpy.savetxt('nequat_10.txt', runtimes[1][:][:], fmt='%.4f')
-    numpy.savetxt('nequat_15.txt', runtimes[2][:][:], fmt='%.4f')
+    numpy.savetxt('nequat_15.txt', runtimes[0][:][:], fmt='%.4f')
+    # numpy.savetxt('nequat_10.txt', runtimes[1][:][:], fmt='%.4f')
+    # numpy.savetxt('nequat_15.txt', runtimes[2][:][:], fmt='%.4f')
