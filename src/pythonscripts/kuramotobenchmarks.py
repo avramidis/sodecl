@@ -15,7 +15,7 @@ if __name__ == '__main__':
     nequat_set = [5, 10, 15]
     repetitions = 8
 
-    orbit_set = [163840]
+    orbit_set = [512]
     nequat_set = [15]
     repetitions = 1
 

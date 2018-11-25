@@ -991,14 +991,14 @@ namespace sodecl
 			cl_int err = 0;
 			err = clSetKernelArg(kernel, 0, sizeof(cl_mem), &m_mem_t0);
 			err |= clSetKernelArg(kernel, 1, sizeof(cl_mem), &m_mem_y0);
-			err |= clSetKernelArg(kernel, 2, sizeof(cl_mem), &m_mem_detterm);
-			err |= clSetKernelArg(kernel, 3, sizeof(cl_mem), &m_mem_params);
+			//err |= clSetKernelArg(kernel, 2, sizeof(cl_mem), &m_mem_detterm);
+			err |= clSetKernelArg(kernel, 2, sizeof(cl_mem), &m_mem_params);
 
 			if (m_num_noi > 0)
 			{
-				err |= clSetKernelArg(kernel, 4, sizeof(cl_mem), &m_mem_stoch);
-				err |= clSetKernelArg(kernel, 5, sizeof(cl_mem), &m_mem_rcounter);
-				err |= clSetKernelArg(kernel, 6, sizeof(cl_mem), &m_mem_noise);
+				//err |= clSetKernelArg(kernel, 4, sizeof(cl_mem), &m_mem_stoch);
+				err |= clSetKernelArg(kernel, 3, sizeof(cl_mem), &m_mem_rcounter);
+				//err |= clSetKernelArg(kernel, 6, sizeof(cl_mem), &m_mem_noise);
 			}
 
 			if (err != CL_SUCCESS)
