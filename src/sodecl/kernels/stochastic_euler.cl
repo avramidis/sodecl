@@ -18,5 +18,6 @@ inline static void sode_solver(double t, __global double y[_numeq_], __global do
 	for (int i = 0; i < _numeq_; i++)
 	{
 		yout[ig * _numeq_ + i] = y[ig * _numeq_ + i] + yout[ig * _numeq_ + i] * _m_dt_ + stoch[ig * _numeq_ + i];
+		yout[ig * _numeq_ + i] = fmod(yout[ig * _numeq_ + i], 2*M_PI);
 	}
 }
