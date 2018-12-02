@@ -17,5 +17,6 @@ void sode_solver(double t, double y[_numeq_], double yout[_numeq_], double p[_nu
 	for (int i = 0; i < _numeq_; i++)
 	{
 		yout[i] = y[i] + yout[i] * _m_dt_ + stoch[i];
+		yout[i] = fmod(yout[i], 2*M_PI);
 	}
 }
