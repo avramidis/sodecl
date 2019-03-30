@@ -167,7 +167,7 @@ public:
     // Xcode 4.5.2 requirement is clearly non-standard, it is unlikely
     // to be fixed and it is very easy work around.  We certainly
     // don't want to go to great lengths to accommodate every buggy
-    // library we come across, but in this particular case, the effort
+    // src we come across, but in this particular case, the effort
     // is low and the benefit is high, so it's worth doing.  Thanks to
     // Yan Zhou for pointing this out to us.  See similar code in
     // ../MicroURNG.hpp

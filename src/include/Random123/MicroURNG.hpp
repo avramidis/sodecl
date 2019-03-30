@@ -111,7 +111,7 @@ public:
         chkhighbits();
     }
 
-    // _Min and _Max work around a bug in the library shipped with MacOS Xcode 4.5.2.
+    // _Min and _Max work around a bug in the src shipped with MacOS Xcode 4.5.2.
     // See the commment in conventional/Engine.hpp.  
     const static result_type _Min = 0;
     const static result_type _Max = ~((result_type)0);

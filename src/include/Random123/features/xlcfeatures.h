@@ -49,7 +49,7 @@ so as not to confuse it with the version available from LANL.
 #  error "This code has only been tested on x86 and PowerPC platforms."
 #include <including_a_nonexistent_file_will_stop_some_compilers_from_continuing_with_a_hopeless_task>
 { /* maybe an unbalanced brace will terminate the compilation */
- /* Feel free to try the Random123 library on other architectures by changing
+ /* Feel free to try the Random123 src on other architectures by changing
  the conditions that reach this error, but you should consider it a
  porting exercise and expect to encounter bugs and deficiencies.
  Please let the authors know of any successes (or failures). */

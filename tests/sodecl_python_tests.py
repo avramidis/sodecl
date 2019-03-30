@@ -2,8 +2,8 @@ import unittest
 import sys
 import numpy
 import random
-sys.path.append('..')
-import pythonscripts.sodecl
+sys.path.append('../interfaces/python')
+import sodecl
 
 class TestPythonWrapper(unittest.TestCase):
     
@@ -43,7 +43,7 @@ class TestPythonWrapper(unittest.TestCase):
 
         nparams = numpy.concatenate((params, noise), axis=1)
 
-        results = pythonscripts.sodecl.sodecl(openclplatform, opencldevice, openclkernel,
+        results = sodecl.sodeclcall(openclplatform, opencldevice, openclkernel,
                                                 initx, params, solver,
                                                 orbits, nequat, nnoi,
                                                 dt, tspan, ksteps, localgroupsize)
