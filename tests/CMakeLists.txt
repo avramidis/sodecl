@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 project(sodecl_test)
-add_test(sodecl_test_1 python sodecl_python_tests.py)
+add_test(sodecl_test_1 python3 sodecl_python_tests.py)
 
 add_custom_target(meta_test ALL
         COMMAND ""

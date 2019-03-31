@@ -6,20 +6,20 @@
 
 using namespace std;
 
-std::vector<double> sodeclcall( std::vector<double> &a_t0,
-                std::vector<double> &a_y0,
-                std::vector<double> &a_params,
-                int a_platform, 
-                int a_device, 
-                string a_system, 
-                int a_solver_type, 
-                int a_orbits, 
-                int a_equats, 
-                int a_nparams, 
-                int a_nnoi, 
+std::vector<double> sodeclcall( std::vector<double> a_t0,
+                std::vector<double> a_y0,
+                std::vector<double> a_params,
+                int a_platform,
+                int a_device,
+                string a_system,
+                int a_solver_type,
+                int a_orbits,
+                int a_equats,
+                int a_nparams,
+                int a_nnoi,
                 double a_dt,
-                double a_tspan, 
-                int a_ksteps, 
+                double a_tspan,
+                int a_ksteps,
                 int a_local_group_size)
 {
     sodecl::solver_Type a_solver;
@@ -46,16 +46,16 @@ std::vector<double> sodeclcall( std::vector<double> &a_t0,
         return myvector;
     }
 
-	sodecl::sodeclmgr *mysodeclmgr = new sodecl::sodeclmgr("kernels", 
-															&a_system[0], 
-															a_solver, 
-															a_dt, 
-															a_tspan, 
-															a_ksteps, 
-															a_equats, 
-															a_nparams, 
-															a_nnoi, 
-															a_orbits, 
+	sodecl::sodeclmgr *mysodeclmgr = new sodecl::sodeclmgr("kernels",
+															&a_system[0],
+															a_solver,
+															a_dt,
+															a_tspan,
+															a_ksteps,
+															a_equats,
+															a_nparams,
+															a_nnoi,
+															a_orbits,
 															sodecl::output_Type::Array);
 
 	int success;
@@ -81,7 +81,7 @@ std::vector<double> sodeclcall( std::vector<double> &a_t0,
         std::vector<double> myvector(0);
         return myvector;
     }
-    
+
 	mysodeclmgr->run_sode_solver();
 
     return mysodeclmgr->m_output;
