@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     orbit_set = [512]
     nequat_set = [15]
-    repetitions = 1
+    repetitions = 8
 
     openclplatform = 0
     opencldevice = 0
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     dt = 0.05
     tspan = 50
     ksteps = 40
-    localgroupsize = 256
+    localgroupsize = 0
 
     runtimes = numpy.zeros((len(nequat_set), len(orbit_set), repetitions+1))
 
