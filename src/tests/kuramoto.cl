@@ -1,26 +1,25 @@
 #define NOSC _numeq_
 
-inline static void ode_system(double t, double y[_numeq_], double yout[_numeq_], double p[_numpar_])
-{
+void sode_system(double t, double y[_numeq_], double yout[_numeq_], double p[_numpar_])
+{	
 	// Kuramoto model
 	for (int i = 0; i<NOSC; i++)
 	{
-		yout[i] = p[i];
-		//#pragma unroll 1
+		yout[i] = 0;
 		for (int j = 0; j<NOSC; j++)
 		{
 			yout[i] = yout[i] + (sin(y[j] - y[i]));
 		}
-		yout[i] = yout[i] * (double)(1.00 / (double)(NOSC));
+		yout[i] = yout[i] * (double)(p[0] / (double)(NOSC));
+		yout[i] = yout[i] + p[i+1];
 	}
-
 }
 
-inline static void ode_system_stoch(double t, double y[_numeq_], double stoch[_numeq_], double p[_numpar_], double noise[_numnoi_])
+void sode_system_stoch(double t, double y[_numeq_], double stoch[_numeq_], double p[_numpar_], double noise[_numnoi_])
 {
-	//#pragma unroll 1
 	for (int i = 0; i < NOSC; i++)
 	{
-		stoch[i] = p[_numpar_- _numnoi_ + i] * noise[i];
+		stoch[i] = p[_numpar_ - _numnoi_ + i] * noise[i];
+		//stoch[ig * _numeq_ + i] = 0;
 	}
 }
