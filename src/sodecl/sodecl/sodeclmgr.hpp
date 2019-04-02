@@ -39,8 +39,8 @@ namespace sodecl
 		*/
 	public:
 
-		std::vector<cl_double> m_output;	/**< Integration output */
-		int			m_output_size;			/**< Output size */
+		std::vector<cl_double>  m_output;         /**< Integration output */
+		int			            m_output_size;    /**< Output size */
 
 	private:
 
