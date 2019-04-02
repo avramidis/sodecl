@@ -1,0 +1,4 @@
+*.o
+\.idea/
+cmake-*/
+pybind11/
