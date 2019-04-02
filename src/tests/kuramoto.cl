@@ -1,8 +1,7 @@
 #define NOSC _numeq_
 
 void sode_system(double t, double y[_numeq_], double yout[_numeq_], double p[_numpar_])
-{	
-	// Kuramoto model
+{
 	for (int i = 0; i<NOSC; i++)
 	{
 		yout[i] = 0;
@@ -20,6 +19,5 @@ void sode_system_stoch(double t, double y[_numeq_], double stoch[_numeq_], doubl
 	for (int i = 0; i < NOSC; i++)
 	{
 		stoch[i] = p[_numpar_ - _numnoi_ + i] * noise[i];
-		//stoch[ig * _numeq_ + i] = 0;
 	}
 }
