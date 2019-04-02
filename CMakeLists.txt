@@ -137,4 +137,6 @@ add_custom_command(TARGET sodecl_tests POST_BUILD
 					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests"
 					
 					COMMENT "Copying support files to build directory"
-) 
+)
+
+add_subdirectory(benchmarks)
