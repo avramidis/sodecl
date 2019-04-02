@@ -660,7 +660,7 @@ namespace sodecl
 			// Print the string
 			//cout << m_kernel_sources.data() << endl;
 
-			//m_kernel_sources.shrink_to_fit();
+			m_kernel_sources.shrink_to_fit();
 			m_source_size = m_kernel_sources.size();
 
 			//cout << m_kernel_sources.data() << endl;
