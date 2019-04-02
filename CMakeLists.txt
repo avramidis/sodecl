@@ -121,6 +121,9 @@ add_custom_command(TARGET sodecl_tests POST_BUILD
                     COMMAND ${CMAKE_COMMAND} -E copy
 					"${CMAKE_CURRENT_SOURCE_DIR}/src/tests/kuramoto.cl" 
 					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
+					COMMAND ${CMAKE_COMMAND} -E copy
+					"${CMAKE_CURRENT_SOURCE_DIR}/src/tests/oculomotor.cl"
+					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
 
                     # Copy test executable to the tests folder
                     COMMAND ${CMAKE_COMMAND} -E copy 

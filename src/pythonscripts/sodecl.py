@@ -46,15 +46,15 @@ def sodecl(openclplatform, opencldevice, openclkernel,
     params=params.flatten()
 
     if nnoiseprocesses == 0:
-        solvers = {'se': 0,
-                   'e': 1,
-                   'r': 2,
-                   'ie': 3,
-                   'im': 4}
+        # solvers = {'se': 0,
+        #            'e': 1,
+        #            'r': 2,
+        #            'ie': 3,
+        #            'im': 4}
 
-        try:
-            solver2user = solvers[sodesolver]
-        except KeyError:
+        if sodesolver>0 and sodesolver<5:
+            solver2user = sodesolver
+        else:
             print("Invalid SODE solver selected! Using Euler!")
             solver2user = 1
     else:

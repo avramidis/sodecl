@@ -7,9 +7,9 @@
 
 
 // Euler solver
-inline static void ode_solver(double dt, double t, double y[_numeq_], double yout[_numeq_], double p[_numpar_])
+void sode_solver(double dt, double t, double y[_numeq_], double yout[_numeq_], double p[_numpar_])
 {
-	ode_system(t, y, yout, p);
+	sode_system(t, y, yout, p);
 
 	for (int ieq = 0; ieq < _numeq_; ieq++)
 	{
