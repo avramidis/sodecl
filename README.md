@@ -156,7 +156,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## How to cite SODECL
 To cite SODECL please cite the URL and the DOI of the release version you used. The DOI of the latest release is at the badge at the top of this README.md file.
 
-## Acknowledgments
+## Acknowledgements
 
 * The Random123 library found at https://www.deshawresearch.com/resources_random123.html is used
 * The Catch2 unit testing library found at https://github.com/catchorg/Catch2 is used
