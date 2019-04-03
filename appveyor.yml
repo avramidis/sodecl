@@ -4,8 +4,8 @@ image: ubuntu
 install:
 - sudo apt update -qq
 - sudo apt install python3 python3-dev -y
-- sudo apt install cmake
-- sudo apt-get install lsb-core
+- sudo apt install cmake -y
+- sudo apt-get install lsb-core -y
 - sudo apt-get install ocl-icd-opencl-dev -y
 - wget http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/15365/l_opencl_p_18.1.0.014.tgz
 - tar -xvzf l_opencl_p_18.1.0.014.tgz
