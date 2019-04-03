@@ -8,9 +8,6 @@
 #ifndef SODECL_MAINCL_HPP
 #define SODECL_MAINCL_HPP
 
-#define CL_USE_DEPRECATED_OPENCL_2_0_APIS
-#define _SCL_SECURE_NO_WARNINGS
-
 #include <CL/cl.hpp>
 #include <clog.hpp>
 #include <timer.hpp>
