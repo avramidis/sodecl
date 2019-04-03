@@ -5,7 +5,7 @@
 # See accompanying file LICENSE.txt
 #---------------------------------------------------------------------------//
 
-cmake_minimum_required (VERSION 3.2.2)
+cmake_minimum_required (VERSION 3.13.4)
 project(sodecl)
 
 set(CMAKE_CXX_STANDARD 11)
