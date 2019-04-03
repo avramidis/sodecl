@@ -13,7 +13,7 @@
 //#endif
 
 #include "iostream"
-#include "../../src/sodecl.hpp"
+#include "sodecl.hpp"
 #include <stdio.h>
 #include <math.h>
 #include <pybind11/pybind11.h>
