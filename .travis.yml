@@ -18,6 +18,7 @@ matrix:
         - cd ..
         - sudo ldconfig
         - pip3 install numpy
+        - cd interfaces/python
         - git clone https://github.com/pybind/pybind11.git
     # - os: osx
     #   language: generic
@@ -37,9 +38,9 @@ compiler:
 script:
   - mkdir build
   - cd build
-  - cmake .. -DCMAKE_BUILD_TYPE=Debug && make
-  - cd Debug/tests
-  - python3 sodecl_python_tests.py
+  - cmake -DCMAKE_BUILD_TYPE=Debug .. && make
+  - cd tests
+  - ctest
   - cd ../../..
   #- cd /home/travis/build/avramidis/sodecl/src/
   - ./get_code_cov.sh
