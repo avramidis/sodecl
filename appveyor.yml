@@ -5,6 +5,10 @@ install:
 - sudo apt update -qq
 - sudo apt install python3 python3-dev -y
 - sudo apt install cmake -y
+- mkdir temp
+- cd temp
+- wget https://github.com/Kitware/CMake/releases/download/v3.14.1/cmake-3.14.1-Linux-x86_64.sh
+- sudo sh cmake-3.14.1-Linux-x86_64.sh --skip-license --prefix=/usr/local
 - sudo apt-get install lsb-core -y
 - sudo apt-get install ocl-icd-opencl-dev -y
 - wget http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/15365/l_opencl_p_18.1.0.014.tgz
