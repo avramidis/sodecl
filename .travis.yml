@@ -45,7 +45,7 @@ compiler:
 script:
   - mkdir build
   - cd build
-  - cmake -DCMAKE_BUILD_TYPE=Debug .. && make
+  - /opt/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug .. && make
   - cd tests
   - ctest
   - cd ../../..
