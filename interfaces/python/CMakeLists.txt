@@ -6,14 +6,14 @@ FIND_PACKAGE(OpenCL REQUIRED)
 FIND_PACKAGE(Python3 REQUIRED)
 
 add_subdirectory(pybind11)
-pybind11_add_module(sodecl_python "sodecl.cpp")
-set_target_properties(sodecl_python PROPERTIES OUTPUT_NAME "sodecl_interface")
+pybind11_add_module(sodecl_python sodecl.cpp)
+set_target_properties(sodecl_python PROPERTIES OUTPUT_NAME sodecl_interface)
 
 # Add include directories for OpenCL and sodecl
-include_directories(${CMAKE_SOURCE_DIR}/external/include)
-include_directories(${CMAKE_SOURCE_DIR}/src/sodecl)
-include_directories(${CMAKE_SOURCE_DIR}/src)
-include_directories(${PYTHON_INCLUDE_PATH})
+target_include_directories(sodecl_python PUBLIC ${CMAKE_SOURCE_DIR}/external/include)
+target_include_directories(sodecl_python PUBLIC ${CMAKE_SOURCE_DIR}/src/sodecl)
+target_include_directories(sodecl_python PUBLIC ${CMAKE_SOURCE_DIR}/src)
+target_include_directories(sodecl_python PUBLIC ${PYTHON_INCLUDE_PATH})
 
 message(STATUS "PYTHON_INCLUDE_DIRS  : " ${PYTHON_INCLUDE_PATH})
 message(STATUS "PYTHON_LIBRARIES  : " ${PYTHON_LIBRARIES})
