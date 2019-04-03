@@ -11,7 +11,6 @@ set_target_properties(sodecl_python PROPERTIES OUTPUT_NAME "sodecl_interface")
 
 # Add include directories for OpenCL and sodecl
 include_directories(${CMAKE_SOURCE_DIR}/external/include)
-include_directories(${CMAKE_SOURCE_DIR}/external/include/CL)
 include_directories(${CMAKE_SOURCE_DIR}/src/sodecl)
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${PYTHON_INCLUDE_PATH})
@@ -20,7 +19,7 @@ message(STATUS "PYTHON_INCLUDE_DIRS  : " ${PYTHON_INCLUDE_PATH})
 message(STATUS "PYTHON_LIBRARIES  : " ${PYTHON_LIBRARIES})
 
 link_directories(${OpenCL_LIBRARY})
-target_link_libraries(sodecl_python PRIVATE ${OpenCL_LIBRARIES})
+target_link_libraries(sodecl_python PUBLIC ${OpenCL_LIBRARIES})
 #TARGET_LINK_LIBRARIES(sodecl_python PUBLIC "-lgcov")
 
 add_custom_command(TARGET sodecl_python POST_BUILD
