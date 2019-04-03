@@ -12,6 +12,7 @@ install:
 - cd l_opencl_p_18.1.0.014
 - sudo ./install.sh -s $APPVEYOR_BUILD_FOLDER/travisci/intelOpenCLSilent.cfg
 - sudo ldconfig
+- sudo apt install python3-pip -y
 - pip3 install numpy
 - cd ../interfaces/python
 - git clone https://github.com/pybind/pybind11.git
