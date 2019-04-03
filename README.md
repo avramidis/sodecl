@@ -34,7 +34,7 @@ git clone https://github.com/avramidis/sodecl.git
 You will need pybind11, to clone the repository in the sodecl folder use the following commands in a terminal
 
 ```
-cd sodecl
+cd sodecl/interfaces/python
 git clone https://github.com/pybind/pybind11.git
 ```
 
@@ -47,8 +47,8 @@ sudo apt install lsb-core
 You will need the OpenCL Runtime for Intel Core and Intel Xeon Processors to run SODECL on an Intel CPU. The runtime can be downloaded from https://software.intel.com/en-us/articles/opencl-drivers#latest_CPU_runtime. In the folder with the downloaded tgz file use the following commands in a terminal
 
 ```
-tar -zxvf opencl_runtime_16.1.2_x64_sles_6.4.0.37.tgz
-cd opencl_runtime_16.1.2_x64_sles_6.4.0.37
+tar -zxvf l_opencl_p_18.1.0.014.tgz
+cd l_opencl_p_18.1.0.014
 sudo ./install_GUI.sh
 ```
 
@@ -137,7 +137,6 @@ Compute results runtime: 0.0690873sec.
 ## Simple wrappers for
 
 1. Python
-2. MATLAB
 
 ## Future work
 
