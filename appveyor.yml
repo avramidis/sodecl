@@ -18,7 +18,7 @@ install:
 - sudo ldconfig
 - sudo apt install python3-pip -y
 - pip3 install numpy
-- cd ../interfaces/python
+- cd $APPVEYOR_BUILD_FOLDER/interfaces/python
 - git clone https://github.com/pybind/pybind11.git
 
 build: off
