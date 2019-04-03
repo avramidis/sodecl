@@ -8,9 +8,9 @@
 #ifndef sodecl_CLOG_HPP
 #define sodecl_CLOG_HPP
 
-#include <string>
-#include <sstream>
-#include <fstream>
+#include "../../../../../../usr/include/c++/8/string"
+#include "../../../../../../usr/include/c++/8/sstream"
+#include "../../../../../../usr/include/c++/8/fstream"
 
 using namespace std;
 

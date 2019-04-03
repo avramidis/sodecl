@@ -3,9 +3,7 @@ import sys
 import numpy
 import random
 import time
-
-sys.path.append('..')
-import pythonscripts.sodecl
+import sodecl
 
 
 class TestPythonWrapper(unittest.TestCase):

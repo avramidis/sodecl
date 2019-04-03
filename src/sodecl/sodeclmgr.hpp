@@ -8,22 +8,22 @@
 #ifndef sodecl_system_HPP
 #define sodecl_system_HPP
 
-#include <vector>
-#include <list>
-#include <iostream>
+#include "../../../../../../usr/include/c++/8/vector"
+#include "../../../../../../usr/include/c++/8/list"
+#include "../../../../../../usr/include/c++/8/iostream"
 
-#include <string>
-#include <fstream>
-#include <streambuf>
+#include "../../../../../../usr/include/c++/8/string"
+#include "../../../../../../usr/include/c++/8/fstream"
+#include "../../../../../../usr/include/c++/8/streambuf"
 
-#include <time.h>
+#include "../../../../../../usr/include/time.h"
 
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <algorithm>
-#include <iterator>
-#include <random>
+#include "../../../../../../usr/include/c++/8/iostream"
+#include "../../../../../../usr/include/c++/8/string"
+#include "../../../../../../usr/include/c++/8/sstream"
+#include "../../../../../../usr/include/c++/8/algorithm"
+#include "../../../../../../usr/include/c++/8/iterator"
+#include "../../../../../../usr/include/c++/8/random"
 
 using namespace std;
 

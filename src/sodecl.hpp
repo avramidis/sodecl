@@ -12,15 +12,15 @@
 #define _SCL_SECURE_NO_WARNINGS
 
 #include <CL/cl.hpp>
-#include <sodecl/clog.hpp>
-#include <sodecl/timer.hpp>
-#include <sodecl/build_Option.hpp>
-#include <sodecl/output_Type.hpp>
-#include <sodecl/device_Type.hpp>
-#include <sodecl/solver_Type.hpp>
-#include <sodecl/device.hpp>
-#include <sodecl/platform.hpp>
-#include <sodecl/sodeclmgr.hpp>
-#include <sodecl/opencl_mgr.hpp>
+#include <clog.hpp>
+#include <timer.hpp>
+#include <build_Option.hpp>
+#include <output_Type.hpp>
+#include <device_Type.hpp>
+#include <solver_Type.hpp>
+#include <device.hpp>
+#include <platform.hpp>
+#include <sodeclmgr.hpp>
+#include <opencl_mgr.hpp>
 
 #endif // SODECL_MAINCL_HPP

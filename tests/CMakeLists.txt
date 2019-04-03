@@ -1,5 +1,7 @@
 project(tests)
 
+enable_testing()
+
 set(TESTS_SOURCE_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/sodecl_tests.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/sodecl_python_tests.py
@@ -26,5 +28,5 @@ add_custom_target(tests_copy ALL
 
 FIND_PACKAGE(Python3 REQUIRED)
 
-add_test(NAME tests
+add_test(NAME tests_python
         COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/sodecl_python_tests.py)

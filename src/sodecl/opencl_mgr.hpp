@@ -1,7 +1,7 @@
 #ifndef SODECL_OPENLC_MGR_HPP
 #define SODECL_OPENLC_MGR_HPP
 
-#include "sodecl.hpp"
+#include "../sodecl.hpp"
 
 namespace sodecl
 {
