@@ -8,7 +8,7 @@
 #ifndef sodecl_PLATFORM_HPP
 #define sodecl_PLATFORM_HPP
 
-#include "../../../../../../usr/include/c++/8/vector"
+#include <vector>
 
 namespace sodecl
 {

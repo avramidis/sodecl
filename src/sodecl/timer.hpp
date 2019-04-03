@@ -8,9 +8,9 @@
 #ifndef sodecl_TIMER_HPP
 #define sodecl_TIMER_HPP
 
-#include "../../../../../../usr/include/c++/8/iostream"
-#include "../../../../../../usr/include/c++/8/chrono"
-#include "../../../../../../usr/include/c++/8/ctime"
+#include <iostream>
+#include <chrono>
+#include <ctime>
 
 namespace sodecl
 {
