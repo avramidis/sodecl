@@ -10,7 +10,7 @@ install:
 - wget http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/15365/l_opencl_p_18.1.0.014.tgz
 - tar -xvzf l_opencl_p_18.1.0.014.tgz
 - cd l_opencl_p_18.1.0.014
-- sudo ./install.sh -s $TRAVIS_BUILD_DIR/travisci/intelOpenCLSilent.cfg
+- sudo ./install.sh -s $APPVEYOR_BUILD_FOLDER/travisci/intelOpenCLSilent.cfg
 - sudo ldconfig
 - pip3 install numpy
 - cd ../interfaces/python
