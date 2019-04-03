@@ -52,9 +52,9 @@ script:
   - /opt/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug .. && make
   - cd tests
   - ctest
-  - cd ../../..
-  #- cd /home/travis/build/avramidis/sodecl/src/
-  - ./get_code_cov.sh
+#  - cd ../../..
+#  #- cd /home/travis/build/avramidis/sodecl/src/
+#  - ./get_code_cov.sh
   
 after_success: 
  #- bash <(curl -s https://codecov.io/bash)
