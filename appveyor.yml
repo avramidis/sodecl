@@ -3,7 +3,7 @@ image: ubuntu
 
 install:
 - sudo apt update -qq
-- sudo apt install python3.7
+- sudo apt install python3 python3-dev -y
 - sudo apt install cmake
 - sudo apt-get install lsb-core
 - sudo apt-get install ocl-icd-opencl-dev -y
