@@ -36,7 +36,7 @@ set(CMAKE_CXX_STANDARD 11)
 add_subdirectory(pybind11)
 pybind11_add_module(sodecl_bin "${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl.cpp")
 
-add_executable(sodecl_tests "${CMAKE_CURRENT_SOURCE_DIR}/src/tests/sodecl_tests.cpp")
+add_executable(sodecl_tests "tests/sodecl_tests.cpp")
 
 enable_testing()
 
@@ -110,33 +110,34 @@ add_custom_command(	TARGET sodecl_bin
 					COMMENT "Copying support files to build directory"
 					) 
 	
-add_custom_command(TARGET sodecl_tests POST_BUILD 
-                    # Copy OpenCL kernels to the build tests folder
-                    COMMAND ${CMAKE_COMMAND} -E copy_directory 
-					"${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl/kernels" 
-					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/kernels"
-					COMMAND ${CMAKE_COMMAND} -E copy_directory 
-					"${CMAKE_CURRENT_SOURCE_DIR}/src/include/Random123" 
-					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/Random123"
-                    COMMAND ${CMAKE_COMMAND} -E copy
-					"${CMAKE_CURRENT_SOURCE_DIR}/src/tests/kuramoto.cl" 
-					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
-					COMMAND ${CMAKE_COMMAND} -E copy
-					"${CMAKE_CURRENT_SOURCE_DIR}/src/tests/oculomotor.cl"
-					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
-
-                    # Copy test executable to the tests folder
-                    COMMAND ${CMAKE_COMMAND} -E copy 
-					"$<TARGET_FILE:sodecl_tests>" 
-					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
-					COMMAND ${CMAKE_COMMAND} -E copy 
-					"${CMAKE_CURRENT_SOURCE_DIR}/src/tests/sodecl_python_tests.py" 
-					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests"
-					COMMAND ${CMAKE_COMMAND} -E copy
-					"$<TARGET_FILE:sodecl_bin>"
-					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests"
-					
-					COMMENT "Copying support files to build directory"
-)
+#add_custom_command(TARGET sodecl_tests POST_BUILD
+#                    # Copy OpenCL kernels to the build tests folder
+#                    COMMAND ${CMAKE_COMMAND} -E copy_directory
+#					"${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl/kernels"
+#					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/kernels"
+#					COMMAND ${CMAKE_COMMAND} -E copy_directory
+#					"${CMAKE_CURRENT_SOURCE_DIR}/src/include/Random123"
+#					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/Random123"
+#                    COMMAND ${CMAKE_COMMAND} -E copy
+#					"tests/kuramoto.cl"
+#					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
+#					COMMAND ${CMAKE_COMMAND} -E copy
+#					"tests/oculomotor.cl"
+#					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
+#
+#                    # Copy test executable to the tests folder
+#                    COMMAND ${CMAKE_COMMAND} -E copy
+#					"$<TARGET_FILE:sodecl_tests>"
+#					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests/"
+#					COMMAND ${CMAKE_COMMAND} -E copy
+#					"tests/sodecl_python_tests.py"
+#					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests"
+#					COMMAND ${CMAKE_COMMAND} -E copy
+#					"$<TARGET_FILE:sodecl_bin>"
+#					"${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/tests"
+#
+#					COMMENT "Copying support files to build directory"
+#)
 
 add_subdirectory(benchmarks)
+add_subdirectory(tests)
