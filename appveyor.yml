@@ -1,5 +1,5 @@
 
-image: ubuntu
+image: Ubuntu1804
 
 install:
 - sudo apt update -qq
