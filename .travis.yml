@@ -8,6 +8,7 @@ matrix:
       python:
         - "3.6.3"
       before_install:
+        - git submodule update --init
         - sudo apt-get update -qq
         - cd /tmp
         - sudo apt install software-properties-common
@@ -29,9 +30,6 @@ matrix:
         - sudo ./install.sh -s $TRAVIS_BUILD_DIR/travisci/intelOpenCLSilent.cfg
         - sudo ldconfig
         - pip3 install numpy
-        - cd $TRAVIS_BUILD_DIR/interfaces/python
-        - wget https://github.com/pybind/pybind11/archive/v2.2.4.zip
-        - unzip v2.2.4.zip -d pybind11
     # - os: osx
     #   language: generic
     #   python:

@@ -2,6 +2,7 @@
 image: Ubuntu1804
 
 install:
+- git submodule update --init
 - sudo apt update -qq
 - sudo apt install python3-dev -y -qq
 - sudo apt install cmake -y -qq
@@ -18,9 +19,6 @@ install:
 - sudo ldconfig
 - sudo apt install python3-pip -y
 - pip3 install numpy
-- cd $APPVEYOR_BUILD_FOLDER/interfaces/python
-- wget https://github.com/pybind/pybind11/archive/v2.2.4.zip
-- unzip v2.2.4.zip -d pybind11
 
 build: off
 
