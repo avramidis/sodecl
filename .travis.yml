@@ -30,7 +30,8 @@ matrix:
         - sudo ldconfig
         - pip3 install numpy
         - cd $TRAVIS_BUILD_DIR/interfaces/python
-        - git clone https://github.com/pybind/pybind11.git
+        - wget https://github.com/pybind/pybind11/archive/v2.2.4.zip
+        - unzip v2.2.4.zip -d pybind11
     # - os: osx
     #   language: generic
     #   python:

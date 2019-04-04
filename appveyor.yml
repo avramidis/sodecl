@@ -19,7 +19,8 @@ install:
 - sudo apt install python3-pip -y
 - pip3 install numpy
 - cd $APPVEYOR_BUILD_FOLDER/interfaces/python
-- git clone https://github.com/pybind/pybind11.git
+- wget https://github.com/pybind/pybind11/archive/v2.2.4.zip
+- unzip v2.2.4.zip -d pybind11
 
 build: off
 
