@@ -14,12 +14,14 @@ target_include_directories(sodecl_python PUBLIC ${CMAKE_SOURCE_DIR}/external/inc
         ${CMAKE_SOURCE_DIR}/src/sodecl
         ${CMAKE_SOURCE_DIR}/src)
 
-message(STATUS "PYTHON_INCLUDE_DIRS  : " ${PYTHON_INCLUDE_PATH})
-message(STATUS "PYTHON_LIBRARIES  : " ${PYTHON_LIBRARIES})
-
 link_directories(${OpenCL_LIBRARY})
 target_link_libraries(sodecl_python PUBLIC ${OpenCL_LIBRARIES})
 #TARGET_LINK_LIBRARIES(sodecl_python PUBLIC "-lgcov")
+
+get_property(dirs TARGET sodecl_python PROPERTY INCLUDE_DIRECTORIES)
+foreach(dir ${dirs})
+    message(STATUS "dir='${dir}'")
+endforeach()
 
 add_custom_command(TARGET sodecl_python POST_BUILD
 
