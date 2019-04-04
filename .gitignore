@@ -1,5 +1,4 @@
 *.o
 \.idea/
 cmake-*/
-pybind11/
 venv/
