@@ -20,7 +20,7 @@ set(TESTS_FILES
 
 add_custom_command(OUTPUT ${TESTS_FILES}
         COMMAND ${CMAKE_COMMAND} -E copy ${TESTS_SOURCE_FILES} ${CMAKE_CURRENT_BINARY_DIR}/
-        COMMENT "Copy benchmark files"
+        COMMENT "Copy test files"
         VERBATIM
         )
 
