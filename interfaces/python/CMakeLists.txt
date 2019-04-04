@@ -18,11 +18,6 @@ link_directories(${OpenCL_LIBRARY})
 target_link_libraries(sodecl_python PUBLIC ${OpenCL_LIBRARIES})
 #TARGET_LINK_LIBRARIES(sodecl_python PUBLIC "-lgcov")
 
-get_property(dirs TARGET sodecl_python PROPERTY INCLUDE_DIRECTORIES)
-foreach(dir ${dirs})
-    message(STATUS "dir='${dir}'")
-endforeach()
-
 add_custom_command(TARGET sodecl_python POST_BUILD
 
         # Copy pybind11 generated library to the benchmarks fodler
