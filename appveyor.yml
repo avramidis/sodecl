@@ -23,6 +23,7 @@ install:
 build: off
 
 build_script:
+- cd $APPVEYOR_BUILD_FOLDER
 - mkdir build
 - cd build
 - cmake .. && make
