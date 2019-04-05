@@ -35,8 +35,8 @@ git clone https://github.com/avramidis/sodecl.git
 You will need pybind11, to clone the repository in the sodecl folder use the following commands in a terminal
 
 ```
-cd sodecl/interfaces/python
-git clone https://github.com/pybind/pybind11.git
+cd sodecl
+git submodule update --init
 ```
 
 You will need lsb-core, to install it you the following command in a terminal
@@ -68,7 +68,7 @@ sudo apt install cmake
 To use the Python wrapper a number of module must be installed. To install these modules use the following commands in a terminal
 
 ```
-sudo apt-get install python3-numpy
+sudo apt install python3-numpy
 sudo pip3 install numpy
 sudo pip3 install matplotlib
 ```
