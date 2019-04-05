@@ -15,9 +15,9 @@ if __name__ == '__main__':
     nequat_set = [5, 10, 15]
     repetitions = 8
 
-    orbit_set = [512]
-    nequat_set = [15]
-    repetitions = 8
+    # orbit_set = [512]
+    # nequat_set = [15]
+    # repetitions = 8
 
     openclplatform = 0
     opencldevice = 0
@@ -97,6 +97,6 @@ if __name__ == '__main__':
 
     #####################################################
     ## Write the results to files
-    numpy.savetxt('nequat_15.txt', runtimes[0][:][:], fmt='%.4f')
-    # numpy.savetxt('nequat_10.txt', runtimes[1][:][:], fmt='%.4f')
-    # numpy.savetxt('nequat_15.txt', runtimes[2][:][:], fmt='%.4f')
+    numpy.savetxt('nequat_5.txt', runtimes[0][:][:], fmt='%.4f')
+    numpy.savetxt('nequat_10.txt', runtimes[1][:][:], fmt='%.4f')
+    numpy.savetxt('nequat_15.txt', runtimes[2][:][:], fmt='%.4f')
