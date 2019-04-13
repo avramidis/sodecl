@@ -95,8 +95,8 @@ To run an example using the Python wrapper use the following commands in a termi
 
 
 ```
-cd Release\pythonscripts
-python3 kuramotostoch.py
+cd examples\pythonscripts
+python3 kuramoto_euler_stochastic.py
 ```
 
 If the run was successful the output will be similar to the following
