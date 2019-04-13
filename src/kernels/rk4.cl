@@ -14,9 +14,9 @@
 /// <param name="y">The y is the current phase values.</param>
 /// <param name="yout">The yout is the next phase values.</param>
 /// <param name="p">The p is the parameter values.</param>
-inline static void sode_solver(double dt, double t, double y[_numeq_], double yout[_numeq_], double p[_numpar_])
+void sode_solver(double dt, double t, double y[_numeq_], double yout[_numeq_], double p[_numpar_])
 {
-	ode_system(t, y, yout, p);
+	sode_system(t, y, yout, p);
 
 	// k1
 	double k1[_numeq_];

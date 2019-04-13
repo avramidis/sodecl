@@ -5,6 +5,7 @@ project(examples)
 set(EXAMPLE_SOURCE_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/oculomotor_euler.py
         ${CMAKE_CURRENT_SOURCE_DIR}/oculomotor_euler_stochastic.py
+        ${CMAKE_CURRENT_SOURCE_DIR}/oculomotor_rk.py
         ${CMAKE_CURRENT_SOURCE_DIR}/oculomotor.cl
         ${CMAKE_CURRENT_SOURCE_DIR}/kuramoto_euler.py
         ${CMAKE_CURRENT_SOURCE_DIR}/kuramoto_euler_stochastic.py
@@ -13,6 +14,7 @@ set(EXAMPLE_SOURCE_FILES
 set(EXAMPLE_FILES
         ${CMAKE_CURRENT_BINARY_DIR}/oculomotor_euler.py
         ${CMAKE_CURRENT_BINARY_DIR}/oculomotor_euler_stochastic.py
+        ${CMAKE_CURRENT_BINARY_DIR}/oculomotor_rk.py
         ${CMAKE_CURRENT_BINARY_DIR}/oculomotor.cl
         ${CMAKE_CURRENT_BINARY_DIR}/kuramoto_euler.py
         ${CMAKE_CURRENT_BINARY_DIR}/kuramoto_euler_stochastic.py
