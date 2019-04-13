@@ -50,7 +50,7 @@ inline static void solvesystem(double jac[_numeq_][_numeq_], double v[_numeq_], 
 inline static void newton_f(double dt, double t, double initial[_numeq_], double guess[_numeq_], double yout[_numeq_], double p[_numpar_])
 {
 	double detterm[_numeq_];
-	ode_system(t, guess, detterm, p);
+	sode_system(t, guess, detterm, p);
 
 	for (int i = 0; i < _numeq_; i++)
 	{
@@ -104,9 +104,7 @@ inline static void newton(double dt, double t, double initial[_numeq_], double g
 	}
 }
 
-/////////////////////////////////////
-// Implicit euler solver
-inline static void ode_solver(double dt, double t, double y[_numeq_], double yout[_numeq_], double p[_numpar_])
+void sode_solver(double dt, double t, double y[_numeq_], double yout[_numeq_], double p[_numpar_])
 {
 	double guess[_numeq_];
 
