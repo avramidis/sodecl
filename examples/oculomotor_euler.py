@@ -1,5 +1,6 @@
 import numpy
 import sodecl
+import pickle
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
@@ -42,6 +43,8 @@ if __name__ == '__main__':
                             initx, params, solver,
                             orbits, nequat, nnoi,
                             dt, tspan, ksteps, localgroupsize)
+
+    pickle.dump(results, open("oculomotor_euler.pkl", "wb"))
 
     plt.plot(t, results[0, :])
     plt.xlabel('Time')
