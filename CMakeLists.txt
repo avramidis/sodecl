@@ -21,15 +21,15 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
-# Add all warnings compile options
-if (MSVC)
-	add_compile_options(/W4)
-else()
+if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC ")
 	add_compile_options(
-		"$<$<CONFIG:RELASE>:-Wall;-O2>"
-		"$<$<CONFIG:DEBUG>:-Wall;-Wextra;-Wpedantic;-O0;-g>"
-	)
-	#add_compile_options(-Wall -Wextra -Wpedantic -fprofile-arcs -ftest-coverage -fprofile-dir="${CMAKE_CURRENT_SOURCE_DIR}/src/sodecl")
+			"$<$<CONFIG:RELASE>:/O2>"
+			"$<$<CONFIG:DEBUG>:/Od;/Zi>")
+endif()
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+	add_compile_options(
+			"$<$<CONFIG:RELASE>:-O2>"
+			"$<$<CONFIG:DEBUG>:-Wall;-Wextra;-Wpedantic;-Og;-g>")
 endif()
 
 add_subdirectory(benchmarks)
