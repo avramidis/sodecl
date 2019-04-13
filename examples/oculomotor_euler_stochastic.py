@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
 
-    openclplatform = 1
+    openclplatform = 0
     opencldevice = 0
     openclkernel = 'oculomotor.cl'
     solver = 0
