@@ -4,9 +4,64 @@ import numpy
 import random
 import time
 import sodecl
-
+import matplotlib
 
 class TestPythonWrapper(unittest.TestCase):
+
+    def test_oculomotor_euler(self):
+        openclplatform = 0
+        opencldevice = 0
+        openclkernel = 'oculomotor.cl'
+        solver = 1
+        dt = 1e-8
+        tspan = 0.1
+        ksteps = 40000
+        localgroupsize = 0
+
+        orbits = 2
+        nequat = 6
+        nparams = 6
+        nnoi = 0
+
+        # Initialise initial state of the system
+        initx = numpy.ndarray((orbits, nequat))
+        for o in range(orbits):
+            initx[o][0] = 0.0
+            initx[o][1] = 0.0
+            initx[o][2] = 0.0
+            initx[o][3] = 0.0
+            initx[o][4] = 0.0
+            initx[o][5] = 2.0
+
+        # Initialise parameters values of the system
+        params = numpy.ndarray((orbits, nparams))
+        for o in range(orbits):
+            params[o][0] = 120
+            params[o][1] = 1.5
+            params[o][2] = 0.0045
+            params[o][3] = 0.05
+            params[o][4] = 600
+            params[o][5] = 9
+
+        results = sodecl.sodecl(openclplatform, opencldevice, openclkernel,
+                                initx, params, solver,
+                                orbits, nequat, nnoi,
+                                dt, tspan, ksteps, localgroupsize)
+
+        import matplotlib.pyplot as plt
+        plt.plot(results[0, :])
+        plt.xlabel('Time')
+        plt.ylabel('Value')
+        plt.show()
+
+        # if numpy.isnan(len(results)):
+        #     raise RuntimeError("NaN present!")
+        #
+        # # print("Simulation execution time: ", end_time - start_time, " seconds.")
+        # if numpy.isnan(numpy.sum(numpy.sum(results))):
+        #     raise RuntimeError("NaN present!")
+
+        self.assertGreater(results.size, 0)
 
     def kuramoto_stochastic_euler(self):
 
@@ -88,62 +143,6 @@ class TestPythonWrapper(unittest.TestCase):
 
             self.assertGreater(results.size, 0)
 
-    def oculomotor_euler(self):
-
-        openclplatform = 0
-        opencldevice = 0
-        openclkernel = 'oculomotor.cl'
-        solver = 1
-        dt = 1e-8
-        tspan = 1
-        ksteps = 40000
-        localgroupsize = 0
-
-        orbits = 8
-        nequat = 6
-        nparams = 6
-        nnoi = 0
-
-        # Initialise initial state of the system
-        initx = numpy.ndarray((orbits, nequat))
-        for o in range(orbits):
-            initx[o][0] = 0.0
-            initx[o][1] = 0.0
-            initx[o][2] = 0.0
-            initx[o][3] = 0.0
-            initx[o][4] = 0.0
-            initx[o][5] = 2.0
-
-        # Initialise parameters values of the system
-        params = numpy.ndarray((orbits, nparams))
-        for o in range(orbits):
-            params[o][0] = 120
-            params[o][1] = 1.5
-            params[o][2] = 0.0045
-            params[o][3] = 0.05
-            params[o][4] = 600
-            params[o][5] = 9
-
-        results = pythonscripts.sodecl.sodecl(openclplatform, opencldevice, openclkernel,
-                                              initx, params, solver,
-                                              orbits, nequat, nnoi,
-                                              dt, tspan, ksteps, localgroupsize)
-
-        import matplotlib.pyplot as plt
-        plt.plot(results[0, :])
-        plt.xlabel('Time')
-        plt.ylabel('Value')
-        plt.show()
-
-        if numpy.isnan(len(results)):
-            raise RuntimeError("NaN present!")
-
-        # print("Simulation execution time: ", end_time - start_time, " seconds.")
-        if numpy.isnan(numpy.sum(numpy.sum(results))):
-            raise RuntimeError("NaN present!")
-
-        self.assertGreater(results.size, 0)
-
     def oculomotor_stochastic_euler(self):
 
         openclplatform = 0
@@ -183,8 +182,8 @@ class TestPythonWrapper(unittest.TestCase):
         # Initialise noise values of the system
         noise = numpy.ndarray((orbits, 2))
         for o in range(orbits):
-                noise[o][0] = 0.04
-                noise[o][1] = 20.0
+            noise[o][0] = 0.04
+            noise[o][1] = 20.0
 
         params = numpy.concatenate((params, noise), axis=1)
 

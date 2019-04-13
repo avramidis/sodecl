@@ -36,5 +36,13 @@ add_custom_command(TARGET sodecl_python POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/src/kernels ${CMAKE_BINARY_DIR}/tests/kernels
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/include/Random123 ${CMAKE_BINARY_DIR}/tests/Random123
 
+        # Copy pybind11 generated library to the examples fodler
+        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:sodecl_python> ${CMAKE_BINARY_DIR}/examples/
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/sodecl.py ${CMAKE_BINARY_DIR}/examples/
+
+        # Copy OpenCL kernels to the examples folder
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/src/kernels ${CMAKE_BINARY_DIR}/examples/kernels
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/include/Random123 ${CMAKE_BINARY_DIR}/examples/Random123
+
         COMMENT "Copying Python interface files"
         )

@@ -2,3 +2,6 @@
 \.idea/
 cmake-*/
 venv/
+matlabstuff/
+slurm/
+poster*
