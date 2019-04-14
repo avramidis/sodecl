@@ -1,6 +1,6 @@
 
 // The tridiagonal matrix algorithm (Thomas algorithm)
-inline static void solvesystem(double jac[_numeq_][_numeq_], double v[_numeq_], double x[_numeq_])
+void solvesystem(double jac[_numeq_][_numeq_], double v[_numeq_], double x[_numeq_])
 {
 	double a[_numeq_];
 	for (int i = _numeq_ - 2; i < _numeq_; i++)
@@ -40,7 +40,7 @@ inline static void solvesystem(double jac[_numeq_][_numeq_], double v[_numeq_], 
 	}
 }
 
-inline static void newton_f_mid(double dt, double t, double initial[_numeq_], double guess[_numeq_], double detterm[_numeq_], double yout[_numeq_], double p[6])
+void newton_f_mid(double dt, double t, double initial[_numeq_], double guess[_numeq_], double detterm[_numeq_], double yout[_numeq_], double p[6])
 {
 	for (int i = 0; i < _numeq_; i++)
 	{
@@ -48,7 +48,7 @@ inline static void newton_f_mid(double dt, double t, double initial[_numeq_], do
 	}
 }
 
-inline static void newton(double dt, double t, double initial[_numeq_], double detterm[_numeq_], double p[_numpar_])
+void newton(double dt, double t, double initial[_numeq_], double detterm[_numeq_], double p[_numpar_])
 {
 	double jac[_numeq_][_numeq_];
 	double new_out[_numeq_];
@@ -68,7 +68,7 @@ inline static void newton(double dt, double t, double initial[_numeq_], double d
 		{
 			guess2[i] = (initial[i] + guess[i])*0.5;
 		}
-		ode_system(t, guess2, detterm, p);
+		sode_system(t, guess2, detterm, p);
 		newton_f_mid(dt, t, initial, guess, detterm, new_out, p);
 
 		err1 = 0;
@@ -105,9 +105,7 @@ inline static void newton(double dt, double t, double initial[_numeq_], double d
 	}
 }
 
-/////////////////////////////////////
-// Implicit midpoint solver
-inline static void ode_solver(double dt, double t, double y[_numeq_], double yout[_numeq_], double p[_numpar_])
+void sode_solver(double dt, double t, double y[_numeq_], double yout[_numeq_], double p[_numpar_])
 {
 	//double guess[_numeq_];
 
