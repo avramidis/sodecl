@@ -12,7 +12,7 @@ install:
 - sudo sh cmake-3.14.1-Linux-x86_64.sh --skip-license --prefix=/usr/local
 - sudo apt install lsb-core -y -qq
 - sudo apt install ocl-icd-opencl-dev -y -qq
-- wget http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/15365/l_opencl_p_18.1.0.014.tgz
+- wget http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/15532/l_opencl_p_18.1.0.015.tgz
 - tar -xvzf l_opencl_p_18.1.0.014.tgz
 - cd l_opencl_p_18.1.0.014
 - sudo ./install.sh -s $APPVEYOR_BUILD_FOLDER/ci/intelOpenCLSilent.cfg
