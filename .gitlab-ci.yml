@@ -34,4 +34,4 @@ test:
     - docker
   script:
     - cd /builds/$CI_PROJECT_PATH/build/tests
-    - ctest
+    - ctest -V
