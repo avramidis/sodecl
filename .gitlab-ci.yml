@@ -1,6 +1,3 @@
-
-image: ubuntu:rolling
-
 stages:
   - build
   - test
@@ -11,7 +8,7 @@ build:ubuntu:
   tags:
     - docker
   script:
-    - apt-get update && apt-get install -y build-essential cmake git python3-dev python3-numpy wget
+    - apt-get update && apt-get install -y build-essential cmake git python3-dev python3-numpy
     - apt-get install -y lsb-core ocl-icd-opencl-dev pocl-opencl-icd
     - ldconfig
     - cd /builds/$CI_PROJECT_PATH
@@ -30,7 +27,7 @@ test:ubuntu:
   tags:
     - docker
   script:
-    - apt-get update && apt-get install -y build-essential cmake git python3-dev python3-numpy wget
+    - apt-get update && apt-get install -y build-essential cmake git python3-dev python3-numpy
     - apt-get install -y lsb-core ocl-icd-opencl-dev pocl-opencl-icd
     - ldconfig
     - cd /builds/$CI_PROJECT_PATH/build/tests
@@ -42,7 +39,7 @@ build:fedora:
   tags:
     - docker
   script:
-    - dnf install -y redhat-lsb-core dnf-plugins-core git cmake gcc g++ python3-devel.x86_64
+    - dnf install -y redhat-lsb-core dnf-plugins-core git cmake gcc g++ python3-devel.x86_64 python3-numpy
     - dnf -y copr enable jdanecki/intel-opencl
     - dnf install -y intel-opencl
     - dnf install -y ocl-icd ocl-icd-devel
@@ -55,3 +52,16 @@ build:fedora:
   artifacts:
     paths:
       - build
+
+test:fedora:
+  image: fedora:latest
+  stage: test
+  tags:
+    - docker
+  script:
+    - dnf install -y redhat-lsb-core dnf-plugins-core git cmake gcc g++ python3-devel.x86_64 python3-numpy
+    - dnf -y copr enable jdanecki/intel-opencl
+    - dnf install -y intel-opencl
+    - dnf install -y ocl-icd ocl-icd-devel
+    - cd /builds/$CI_PROJECT_PATH/build/tests
+    - ctest -V
