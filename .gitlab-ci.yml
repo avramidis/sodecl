@@ -42,7 +42,7 @@ build:fedora:
   tags:
     - docker
   script:
-    - dnf install -y redhat-lsb-core dnf-plugins-core git cmake gcc g++
+    - dnf install -y redhat-lsb-core dnf-plugins-core git cmake gcc g++ python3-devel.x86_64
     - dnf -y copr enable jdanecki/intel-opencl
     - dnf install -y intel-opencl
     - dnf install -y ocl-icd ocl-icd-devel
