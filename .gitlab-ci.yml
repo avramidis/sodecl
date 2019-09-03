@@ -42,10 +42,10 @@ build:fedora:
   tags:
     - docker
   script:
-    - dnf install redhat-lsb-core dnf-plugins-core
-    - dnf copr enable jdanecki/intel-opencl
-    - dnf install intel-opencl
-    - dnf install ocl-icd ocl-icd-devel
+    - dnf install -y redhat-lsb-core dnf-plugins-core
+    - dnf -y copr enable jdanecki/intel-opencl
+    - dnf install -y intel-opencl
+    - dnf install -y ocl-icd ocl-icd-devel
     - cd /builds/$CI_PROJECT_PATH
     - git submodule update --init
     - mkdir build
