@@ -13,8 +13,8 @@ install:
 - sudo apt install lsb-core -y -qq
 - sudo apt install ocl-icd-opencl-dev -y -qq
 - wget http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/15532/l_opencl_p_18.1.0.015.tgz
-- tar -xvzf l_opencl_p_18.1.0.014.tgz
-- cd l_opencl_p_18.1.0.014
+- tar -xvzf l_opencl_p_18.1.0.015.tgz
+- cd l_opencl_p_18.1.0.015
 - sudo ./install.sh -s $APPVEYOR_BUILD_FOLDER/ci/intelOpenCLSilent.cfg
 - sudo ldconfig
 - sudo apt install python3-pip -y
