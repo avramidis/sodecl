@@ -127,7 +127,7 @@ The local group size is: 8
 Compute results runtime: 0.0690873sec.
 ```
 
-## Currect fixed step solvers
+## Current fixed step solvers
 
 1. Euler
 2. Runge-Kutta
