@@ -24,6 +24,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
 endif()
 
 add_subdirectory(benchmarks)
+enable_testing()
 add_subdirectory(tests)
 add_subdirectory(interfaces)
 add_subdirectory(examples)

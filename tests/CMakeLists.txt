@@ -2,8 +2,6 @@ cmake_minimum_required (VERSION 3.13.4)
 
 project(tests)
 
-enable_testing()
-
 set(TESTS_SOURCE_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/sodecl_tests.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/sodecl_python_tests.py
