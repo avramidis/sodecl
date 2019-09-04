@@ -2,6 +2,7 @@
 #define SODECL_OPENLC_MGR_HPP
 
 #include "../sodecl.hpp"
+#include <CL/cl.hpp>
 
 namespace sodecl {
 

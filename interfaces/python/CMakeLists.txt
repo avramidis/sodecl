@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.13.4)
 
 project(interface_python)
 
-FIND_PACKAGE(OpenCL REQUIRED)
 FIND_PACKAGE(Python3 REQUIRED)
 
 add_subdirectory(pybind11)

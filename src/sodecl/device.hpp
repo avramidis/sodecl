@@ -8,6 +8,8 @@
 #ifndef sodecl_DEVICE_HPP
 #define sodecl_DEVICE_HPP
 
+#include <CL/cl.hpp>
+
 namespace sodecl {
 
     class device {

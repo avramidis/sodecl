@@ -23,6 +23,8 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
 			"$<$<CONFIG:DEBUG>:-Wno-ignored-attributes;-Wall;-Wextra;-Wpedantic;-Wall;-g>")
 endif()
 
+FIND_PACKAGE(OpenCL REQUIRED)
+
 add_subdirectory(benchmarks)
 enable_testing()
 add_subdirectory(tests)

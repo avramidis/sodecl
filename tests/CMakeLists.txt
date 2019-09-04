@@ -31,3 +31,12 @@ add_test(NAME tests_python
         COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/sodecl_python_tests.py)
 
 add_subdirectory(data)
+
+add_executable(unittest_opencl sodecl_tests.cpp)
+target_include_directories(unittest_opencl PRIVATE
+        ${CMAKE_SOURCE_DIR}/src
+        ${CMAKE_SOURCE_DIR}/src/sodecl
+        ${CMAKE_SOURCE_DIR}/external/include)
+target_link_libraries(unittest_opencl PUBLIC ${OpenCL_LIBRARIES})
+add_test(NAME unittest_opencl COMMAND unittest_opencl)
+

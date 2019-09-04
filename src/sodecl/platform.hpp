@@ -9,6 +9,8 @@
 #define sodecl_PLATFORM_HPP
 
 #include <vector>
+#include "../sodecl.hpp"
+#include <CL/cl.hpp>
 
 namespace sodecl {
     class platform {
