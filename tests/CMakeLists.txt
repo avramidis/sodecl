@@ -3,14 +3,12 @@ cmake_minimum_required (VERSION 3.13.4)
 project(tests)
 
 set(TESTS_SOURCE_FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/sodecl_tests.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/sodecl_python_tests.py
         ${CMAKE_CURRENT_SOURCE_DIR}/kuramoto.cl
         ${CMAKE_CURRENT_SOURCE_DIR}/oculomotor.cl
         ${CMAKE_CURRENT_SOURCE_DIR}/data/oculomotor_euler.pkl)
 
 set(TESTS_FILES
-        ${CMAKE_CURRENT_BINARY_DIR}/sodecl_tests.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/sodecl_python_tests.py
         ${CMAKE_CURRENT_BINARY_DIR}/kuramoto.cl
         ${CMAKE_CURRENT_BINARY_DIR}/oculomotor.cl
@@ -31,12 +29,6 @@ add_test(NAME tests_python
         COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/sodecl_python_tests.py)
 
 add_subdirectory(data)
+add_subdirectory(unit)
 
-add_executable(unittest_opencl sodecl_tests.cpp)
-target_include_directories(unittest_opencl PRIVATE
-        ${CMAKE_SOURCE_DIR}/src
-        ${CMAKE_SOURCE_DIR}/src/sodecl
-        ${CMAKE_SOURCE_DIR}/external/include)
-target_link_libraries(unittest_opencl PUBLIC ${OpenCL_LIBRARIES})
-add_test(NAME unittest_opencl COMMAND unittest_opencl)
 
