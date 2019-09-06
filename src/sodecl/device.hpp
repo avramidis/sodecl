@@ -8,101 +8,93 @@
 #ifndef sodecl_DEVICE_HPP
 #define sodecl_DEVICE_HPP
 
-namespace sodecl
-{
+#include <CL/cl.hpp>
 
-	class device
-	{
-		/*
-		VARIABLES SECTION
-		*/
-	public:
+namespace sodecl {
 
-		// Platform ID
-		cl_device_id m_device_id;
+    class device {
+        /*
+        VARIABLES SECTION
+        */
+    public:
 
-		// Device ID
-		cl_device_id m_device;
+        // Platform ID
+        cl_device_id m_device_id;
 
-		// Device type
-		cl_device_type m_device_type;
+        // Device ID
+        cl_device_id m_device;
 
-	private:
+        // Device type
+        cl_device_type m_device_type;
 
-		/*
-		FUNCTIONS SECTION
-		*/
-	public:
+    private:
 
-		// Default constructor
-		device()
-		{
+        /*
+        FUNCTIONS SECTION
+        */
+    public:
 
-		}
+        // Default constructor
+        device() {
 
-		// Default destructor
-		~device()
-		{
+        }
 
-		}
+        // Default destructor
+        ~device() {
 
-		// Costructor with specific platform ID
-		device(cl_device_id m_device_id)
-		{
-			this->m_device_id = m_device_id;
+        }
 
-			//std::cout << "the name is " << name().c_str() << std::endl;
-			//std::cout << "the version is " << version().c_str() << std::endl;
-		}
+        // Costructor with specific platform ID
+        device(cl_device_id m_device_id) {
+            this->m_device_id = m_device_id;
 
-		// get device name
-		std::string name()
-		{
-			return get_info(CL_DEVICE_NAME);
-		}
+            //std::cout << "the name is " << name().c_str() << std::endl;
+            //std::cout << "the version is " << version().c_str() << std::endl;
+        }
 
-		// get device name
-		std::string version()
-		{
-			return get_info(CL_DEVICE_VERSION);
-		}
+        // get device name
+        std::string name() {
+            return get_info(CL_DEVICE_NAME);
+        }
 
-		// get device type
-		std::string type_str()
-		{
-			return get_info(CL_DEVICE_TYPE);
-		}
+        // get device name
+        std::string version() {
+            return get_info(CL_DEVICE_VERSION);
+        }
 
-		cl_device_type type()
-		{
-			// print device name
-			cl_device_type info;
+        // get device type
+        std::string type_str() {
+            return get_info(CL_DEVICE_TYPE);
+        }
 
-			clGetDeviceInfo(m_device_id, CL_DEVICE_TYPE, sizeof(cl_device_type), &info, NULL);
+        cl_device_type type() {
+            // print device name
+            cl_device_type info;
 
-			return info;
-		}
+            clGetDeviceInfo(m_device_id, CL_DEVICE_TYPE, sizeof(cl_device_type), &info, NULL);
 
-		// get platform info based on attribute
-		std::string get_info(cl_device_info cl_pi)
-		{
-			// print device name
-			char* info;
-			size_t infoSize;
+            return info;
+        }
 
-			clGetDeviceInfo(m_device_id, cl_pi, 0, NULL, &infoSize);
+        // get platform info based on attribute
+        std::string get_info(cl_device_info cl_pi) {
+            // print device name
+            char *info;
+            size_t infoSize;
 
-			info = new char[infoSize];
-			clGetDeviceInfo(m_device_id, cl_pi, infoSize, info, NULL);
-			
-			std::string str(info);
-			delete[] info;
-			return str;
-		}
+            clGetDeviceInfo(m_device_id, cl_pi, 0, NULL, &infoSize);
 
-	private:
+            info = new char[infoSize];
+            clGetDeviceInfo(m_device_id, cl_pi, infoSize, info, NULL);
 
-	};
+            std::string str(info);
+            delete[] info;
+            return str;
+        }
+
+    private:
+
+    };
 
 }
 

@@ -1,0 +1,34 @@
+stages:
+  - build
+  - test
+
+build:ubuntu:
+  image: ubuntu:rolling
+  stage: build
+  tags:
+    - docker
+  script:
+    - apt-get update && apt-get install -y build-essential cmake git python3-dev python3-numpy
+    - apt-get install -y lsb-core ocl-icd-opencl-dev pocl-opencl-icd
+    - ldconfig
+    - cd /builds/$CI_PROJECT_PATH
+    - git submodule update --init
+    - mkdir build
+    - cd build
+    - cmake ..
+    - make
+  artifacts:
+    paths:
+      - build
+
+test:ubuntu:
+  image: ubuntu:rolling
+  stage: test
+  tags:
+    - docker
+  script:
+    - apt-get update && apt-get install -y build-essential cmake git python3-dev python3-numpy
+    - apt-get install -y lsb-core ocl-icd-opencl-dev pocl-opencl-icd
+    - ldconfig
+    - cd /builds/$CI_PROJECT_PATH/build
+    - ctest

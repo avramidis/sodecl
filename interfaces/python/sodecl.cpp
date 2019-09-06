@@ -5,25 +5,15 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-//#define _CRTDBG_MAP_ALLOC
-//#include <crtdbg.h>
-//#ifdef _DEBUG
-//#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
-//#define new DEBUG_NEW
-//#endif
-
 #include "iostream"
 #include "sodecl.hpp"
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include <pybind11/complex.h>
-#include <pybind11/functional.h>
 
 using namespace std;
 
-std::vector<cl_double> sodeclcall( std::vector<double> &a_t0,
+std::vector<double> sodeclcall( std::vector<double> &a_t0,
                 std::vector<double> &a_y0,
                 std::vector<double> &a_params,
                 int a_platform, 
@@ -39,7 +29,6 @@ std::vector<cl_double> sodeclcall( std::vector<double> &a_t0,
                 int a_ksteps, 
                 int a_local_group_size)
 {
-    // odesolver - ODE solver
     sodecl::solver_Type a_solver;
     switch (a_solver_type)
     {
@@ -59,8 +48,8 @@ std::vector<cl_double> sodeclcall( std::vector<double> &a_t0,
         a_solver = sodecl::solver_Type::ImplicitMidpoint;
         break;
     default:
-        std::cout << "Unknown SDE solver selection." << std::endl;
-        std::vector<cl_double> myvector(0);
+        std::cout << "Unknown SODE solver selection." << std::endl;
+        std::vector<double> myvector(0);
         return myvector;
     }
 
@@ -96,7 +85,7 @@ std::vector<cl_double> sodeclcall( std::vector<double> &a_t0,
 	int ret = mysodeclmgr->setup_sode_solver();
     if (ret == 0)
     {
-        std::vector<cl_double> myvector(0);
+        std::vector<double> myvector(0);
         return myvector;
     }
     

@@ -8,14 +8,12 @@
 #ifndef sodecl_OUTPUT_TYPE_HPP
 #define sodecl_OUTPUT_TYPE_HPP
 
-namespace sodecl
-{
-	enum class output_Type
-	{
-		None = 0,
-		Array = 1,
-		File = 2
-	};
+namespace sodecl {
+    enum class output_Type {
+        None = 0,
+        Array = 1,
+        File = 2
+    };
 }
 
 
