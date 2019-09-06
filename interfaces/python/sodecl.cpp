@@ -5,21 +5,11 @@
 // See accompanying file LICENSE.txt
 //---------------------------------------------------------------------------//
 
-//#define _CRTDBG_MAP_ALLOC
-//#include <crtdbg.h>
-//#ifdef _DEBUG
-//#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
-//#define new DEBUG_NEW
-//#endif
-
 #include "iostream"
 #include "sodecl.hpp"
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include <pybind11/complex.h>
-#include <pybind11/functional.h>
 
 using namespace std;
 
