@@ -16,7 +16,7 @@
 #include <fstream>
 #include <streambuf>
 
-#include <time.h>
+#include <ctime>
 
 #include <iostream>
 #include <string>
@@ -129,7 +129,7 @@ namespace sodecl {
         sodeclmgr(string kernel_path_str, char *sode_system_str, solver_Type solver, double dt, double int_time,
                   int kernel_steps, int num_equat, int num_params, int num_noi, int list_size,
                   output_Type output_type) {
-            // Initialise the clog object
+
             m_log = clog::getInstance();
 
             // Set ODE Solver parameter values
@@ -167,14 +167,11 @@ namespace sodecl {
             }
             m_outputPattern[0] = 1;
 
-            // Find the host's platforms
-            // get the number of platforms in the system
             m_platform_count = get_platform_count();
             if ((int) m_platform_count == -1) {
                 cerr << "Error getting OpenCL planform number!" << endl;
             }
 
-            // create all sodecl::platform objects, one for each OpenCL platform
             create_platforms();
 
             // Add default OpenCL build options
@@ -645,10 +642,6 @@ namespace sodecl {
         int create_program() {
             const char *srcptr[] = {m_kernel_sources.data()};
 
-            //std::cout << "Size of string is: " << m_source_size << std::endl;
-
-            //cout << "Size of kernel " << m_source_size << endl;
-
             cl_int err;
             cl_program program = clCreateProgramWithSource(m_contexts.at(0), 1, srcptr, (const size_t *) &m_source_size,
                                                            &err);
@@ -893,34 +886,6 @@ namespace sodecl {
             }
 
             return 1;
-        }
-
-        /**
-        * Write the initial ODE solver time steps for each ODE or SDE system orbit.
-        *
-        * @param	commands	OpenCL command queue
-        * @param	list_size	Number of data points to be written in the OpenCL memory buffers
-        *
-        * @return	Returns 1 if the operations were succcessfull or 0 if they were unsuccessful
-        */
-        int write_dt_buffer(cl_command_queue commands, int list_size) {
-            int err = 0;
-            err |= clEnqueueWriteBuffer(commands, m_mem_dt, CL_TRUE, 0, list_size * sizeof(cl_double), m_dts, 0, NULL,
-                                        NULL);
-
-            if (err != CL_SUCCESS) {
-                std::cout << "Error: Failed to write to source array!" << std::endl;
-                return 0;
-            }
-
-            return 1;
-        }
-
-        /**
-        * @todo what is this?
-        */
-        void input_data() {
-
         }
 
         /**
