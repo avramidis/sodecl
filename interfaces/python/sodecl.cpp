@@ -48,7 +48,7 @@ std::vector<double> sodeclcall( std::vector<double> &a_t0,
         a_solver = sodecl::solver_Type::ImplicitMidpoint;
         break;
     default:
-        std::cout << "Unknown SDE solver selection." << std::endl;
+        std::cout << "Unknown SODE solver selection." << std::endl;
         std::vector<double> myvector(0);
         return myvector;
     }
