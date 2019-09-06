@@ -29,7 +29,6 @@ std::vector<double> sodeclcall( std::vector<double> &a_t0,
                 int a_ksteps, 
                 int a_local_group_size)
 {
-    // odesolver - ODE solver
     sodecl::solver_Type a_solver;
     switch (a_solver_type)
     {
