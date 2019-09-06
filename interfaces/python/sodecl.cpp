@@ -23,7 +23,7 @@
 
 using namespace std;
 
-std::vector<cl_double> sodeclcall( std::vector<double> &a_t0,
+std::vector<double> sodeclcall( std::vector<double> &a_t0,
                 std::vector<double> &a_y0,
                 std::vector<double> &a_params,
                 int a_platform, 
@@ -60,7 +60,7 @@ std::vector<cl_double> sodeclcall( std::vector<double> &a_t0,
         break;
     default:
         std::cout << "Unknown SDE solver selection." << std::endl;
-        std::vector<cl_double> myvector(0);
+        std::vector<double> myvector(0);
         return myvector;
     }
 
@@ -96,7 +96,7 @@ std::vector<cl_double> sodeclcall( std::vector<double> &a_t0,
 	int ret = mysodeclmgr->setup_sode_solver();
     if (ret == 0)
     {
-        std::vector<cl_double> myvector(0);
+        std::vector<double> myvector(0);
         return myvector;
     }
     

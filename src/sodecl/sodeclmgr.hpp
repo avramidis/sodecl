@@ -37,7 +37,7 @@ namespace sodecl {
         */
     public:
 
-        std::vector <cl_double> m_output;         /**< Integration output */
+        std::vector <double> m_output;         /**< Integration output */
         int m_output_size;    /**< Output size */
 
     private:
@@ -77,25 +77,25 @@ namespace sodecl {
         cl_mem m_mem_dt;                /**< OpenCL memory buffer which stores the time step for each integration orbit of the ODE system */
         cl_mem m_mem_rcounter;            /**< OpenCL memory buffer which stores the counters for each workitem for the random number generation */
         cl_mem m_mem_noise;            /**< OpenCL memory buffer which stores the noise for each workitem for the random number generation */
-        char *m_outputfile_str;        /**< Path to the results output file */
+        string m_outputfile_str;        /**< Path to the results output file */
 
         /********************************************************************************************
-        ODE SOLVERS SECTION VARIABLES
+        SODE SOLVERS SECTION VARIABLES
         */
 
         char *m_sode_system_string;            /**< ODE or SDE system OpenCL function */
-        solver_Type m_solver;                        /**< ODE solver type */
-        double m_dt;                            /**< Solver (initial) time step in seconds */
-        double m_int_time;                        /**< Time units to integrate the ODE system */
+        solver_Type m_solver;                  /**< ODE solver type */
+        double m_dt;                           /**< Solver (initial) time step in seconds */
+        double m_int_time;                     /**< Time units to integrate the ODE system */
         int m_kernel_steps;                    /**< Number of step the solver with perform in each kernel call */
         int m_num_dt_steps;                    /**< Number of dt steps for the state of the ODE system to be saved */
-        int m_list_size;                    /**< Number of ODE system parameter combinations */
-        int m_num_equat;                    /**< Number of ODE system equations */
-        int m_num_params;                    /**< Number of ODE system parameters */
-        int m_num_noi;                        /**< Number of noise processes */
-        output_Type m_output_type;                    /**< Type of output (binary file or array) */
-        int *m_outputPattern;                /**< Array which holds the output pattern. E.g. if the system has 3 equations the array {1,2,3}
-															 will write to the output file the results of the 1st then 2nd and then 3rd state variable */
+        int m_list_size;                       /**< Number of ODE system parameter combinations */
+        int m_num_equat;                       /**< Number of ODE system equations */
+        int m_num_params;                      /**< Number of ODE system parameters */
+        int m_num_noi;                         /**< Number of noise processes */
+        output_Type m_output_type;             /**< Type of output (binary file or array) */
+        int *m_outputPattern;                  /**< Array which holds the output pattern. E.g. if the system has 3 equations the array {1,2,3}
+													will write to the output file the results of the 1st then 2nd and then 3rd state variable */
 
         // arrays with the state of the system for each parameter combination
         cl_double *m_t0;            /**< Client memory buffer which stores the time value of each integration output step */
@@ -414,7 +414,7 @@ namespace sodecl {
             cl_device_id device = m_platforms[m_selected_platform]->m_devices[m_selected_device]->m_device_id;
 
             cl_int err;
-            cl_command_queue commands = clCreateCommandQueue(context, device, NULL, &err);
+            cl_command_queue commands = clCreateCommandQueue(context, device, 0 , &err);
             if (err != CL_SUCCESS) {
                 std::cout << "Error: Failed to create command queue!" << std::endl;
                 return 0;
@@ -761,10 +761,10 @@ namespace sodecl {
         /// <param name="kernelname">Name of the OpenCL kernel.</param>
         /// <param name="program">OpenCL program.</param>
         /// <returns>Returns 1 if the operations were succcessfull or 0 if they were unsuccessfull.</returns>
-        int create_kernel(char *kernelname, cl_program program) {
+        int create_kernel(string kernelname, cl_program program) {
             cl_int err;
 
-            cl_kernel kernel = clCreateKernel(program, kernelname, &err);
+            cl_kernel kernel = clCreateKernel(program, kernelname.c_str(), &err);
             if (!kernel || err != CL_SUCCESS) {
                 cerr << "Error: Failed to create compute kernel!" << std::endl;
                 return 0;
