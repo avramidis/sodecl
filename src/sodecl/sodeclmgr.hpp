@@ -26,7 +26,7 @@ namespace sodecl {
         */
     public:
 
-        std::vector <double> m_output;         /**< Integration output */
+        std::vector<double> m_output;         /**< Integration output */
         int m_output_size;    /**< Output size */
 
     private:
@@ -45,16 +45,16 @@ namespace sodecl {
         OPENCL SOFTWARE SECTION VARIABLES
         */
 
-        std::vector <cl_context> m_contexts;                /**< OpenCL command contexts vector */
-        std::vector <cl_command_queue> m_command_queues;        /**< OpenCL command queues vector */
+        std::vector<cl_context> m_contexts;                /**< OpenCL command contexts vector */
+        std::vector<cl_command_queue> m_command_queues;        /**< OpenCL command queues vector */
         std::vector<char> m_kernel_sources;        /**< Char vector which stores the OpenCL kernel source string. @todo store multiple kernel source strings */
         std::string m_build_options_str;    /**< Char vector which stores the OpenCL build options string */
-        std::vector <build_Option> m_build_options;        /**< build_Option vector which stores the OpenCL build options selection */
+        std::vector<build_Option> m_build_options;        /**< build_Option vector which stores the OpenCL build options selection */
         char *m_source_str;            /**< OpenCL kernel string */
         string m_kernel_path_str;        /**< OpenCL kernels solvers path */
         size_t m_source_size;            /**< OpenCL kernel string size */
-        std::vector <cl_program> m_programs;                /**< OpenCL programs vector */
-        std::vector <cl_kernel> m_kernels;                /**< OpenCL kernels vector */
+        std::vector<cl_program> m_programs;                /**< OpenCL programs vector */
+        std::vector<cl_kernel> m_kernels;                /**< OpenCL kernels vector */
         int m_local_group_size;        /**< OpenCL device local group size */
 
         // ODE solvers OpenCL buffers
@@ -400,7 +400,7 @@ namespace sodecl {
             cl_device_id device = m_platforms[m_selected_platform]->m_devices[m_selected_device]->m_device_id;
 
             cl_int err;
-            cl_command_queue commands = clCreateCommandQueue(context, device, 0 , &err);
+            cl_command_queue commands = clCreateCommandQueue(context, device, 0, &err);
             if (err != CL_SUCCESS) {
                 std::cout << "Error: Failed to create command queue!" << std::endl;
                 return 0;
@@ -993,7 +993,7 @@ namespace sodecl {
                     if (!textLine.empty()) {
                         istringstream iss(textLine);
 
-                        vector <string> strs;
+                        vector<string> strs;
                         copy(istream_iterator<string>(iss),
                              istream_iterator<string>(),
                              back_inserter(strs));
@@ -1049,7 +1049,6 @@ namespace sodecl {
             cl_int err;
             for (int j = 0; j < (m_int_time / (m_dt * m_kernel_steps)); j++) {
                 //std::cout << "Running kernel.." << std::endl;
-                //// Read buffer g into a local list
                 ////err = clEnqueueReadBuffer(m_command_queues[0], m_mem_t0, CL_TRUE, 0, m_list_size * sizeof(cl_double), t_out, 0, NULL, NULL);
                 err = clEnqueueReadBuffer(m_command_queues[0], m_mem_y0, CL_TRUE, 0,
                                           m_list_size * sizeof(cl_double) * m_num_equat, orbits_out, 0, NULL, NULL);
@@ -1074,7 +1073,6 @@ namespace sodecl {
                     return 0;
                 }
                 clFlush(m_command_queues[0]);
-                //clFinish(m_command_queues[0]);
 
                 // Save data to disk or to data array - all variables
                 for (int jo = 0; jo < m_num_equat; jo++) {
