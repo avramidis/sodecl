@@ -8,21 +8,10 @@
 #ifndef sodecl_system_HPP
 #define sodecl_system_HPP
 
+#include <iostream>
 #include <vector>
-#include <list>
-#include <iostream>
-
 #include <string>
-#include <fstream>
-#include <streambuf>
-
 #include <ctime>
-
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <algorithm>
-#include <iterator>
 #include <random>
 
 using namespace std;
