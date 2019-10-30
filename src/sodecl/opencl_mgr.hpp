@@ -70,7 +70,7 @@ namespace sodecl {
          */
         int get_opencl_platform_count() {
             // get platform count
-            cl_int err = clGetPlatformIDs(0, nullptr, &m_opencl_platform_count);
+            cl_int err = clGetPlatformIDs(0, NULL, &m_opencl_platform_count);
 
             if (err == CL_INVALID_VALUE) {
                 throw std::invalid_argument(std::string("Supplied values to the function for getting the OpenCL platform IDs are invalid.\n"));
@@ -92,7 +92,7 @@ namespace sodecl {
             cl_platform_id *cpPlatform = new cl_platform_id[m_opencl_platform_count];
 
             // get all OpenCL platforms
-            cl_int err = clGetPlatformIDs(m_opencl_platform_count, cpPlatform, nullptr);
+            cl_int err = clGetPlatformIDs(m_opencl_platform_count, cpPlatform, NULL);
 
             if (err == CL_INVALID_VALUE) {
                 std::cerr << "Supplied values to the function for getting the OpenCL platform IDs are invalid."
