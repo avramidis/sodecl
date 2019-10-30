@@ -3,6 +3,7 @@
 
 #include "../sodecl.hpp"
 #include <CL/cl.hpp>
+#include <stdexcept>
 
 namespace sodecl {
 
@@ -72,16 +73,11 @@ namespace sodecl {
             cl_int err = clGetPlatformIDs(0, nullptr, &m_opencl_platform_count);
 
             if (err == CL_INVALID_VALUE) {
-                std::cerr << "Supplied values to the function for getting the OpenCL platform IDs are invalid."
-                          << std::endl;
-                return -1;
+                throw std::invalid_argument(std::string("Supplied values to the function for getting the OpenCL platform IDs are invalid.\n"));
             }
 
             if (err == CL_OUT_OF_HOST_MEMORY) {
-                std::cerr
-                        << "There was a failure to allocate resources required by the OpenCL implementation on the host."
-                        << std::endl;
-                return -1;
+                throw std::runtime_error(std::string("There was a failure to allocate resources required by the OpenCL implementation on the host.\n"));
             }
 
             return (int) m_opencl_platform_count;
