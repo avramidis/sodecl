@@ -73,11 +73,11 @@ namespace sodecl {
             cl_int err = clGetPlatformIDs(0, NULL, &m_opencl_platform_count);
 
             if (err == CL_INVALID_VALUE) {
-                throw std::invalid_argument(std::string("Supplied values to the function for getting the OpenCL platform IDs are invalid.\n"));
+                throw std::invalid_argument("Supplied values to the function for getting the OpenCL platform IDs are invalid.\n");
             }
 
             if (err == CL_OUT_OF_HOST_MEMORY) {
-                throw std::runtime_error(std::string("There was a failure to allocate resources required by the OpenCL implementation on the host.\n"));
+                throw std::runtime_error("There was a failure to allocate resources required by the OpenCL implementation on the host.\n");
             }
 
             return (int) m_opencl_platform_count;
@@ -95,18 +95,11 @@ namespace sodecl {
             cl_int err = clGetPlatformIDs(m_opencl_platform_count, cpPlatform, NULL);
 
             if (err == CL_INVALID_VALUE) {
-                std::cerr << "Supplied values to the function for getting the OpenCL platform IDs are invalid."
-                          << std::endl;
-                delete[] cpPlatform;
-                return -1;
+                throw std::runtime_error("Supplied values to the function for getting the OpenCL platform IDs are invalid.\n");
             }
 
             if (err == CL_OUT_OF_HOST_MEMORY) {
-                std::cerr
-                        << "There was a failure to allocate resources required by the OpenCL implementation on the host."
-                        << std::endl;
-                delete[] cpPlatform;
-                return -1;
+                throw std::runtime_error("There was a failure to allocate resources required by the OpenCL implementation on the host.\n");
             }
 
             for (cl_uint i = 0; i < m_opencl_platform_count; i++) {

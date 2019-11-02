@@ -42,12 +42,10 @@ namespace sodecl {
         */
     public:
 
-        // Default costructor
         platform() {
 
         }
 
-        // Costructor with specific cl_platform_id
         platform(cl_platform_id m_platform_id) {
 
             // Initialise the clog object
@@ -66,11 +64,16 @@ namespace sodecl {
             m_log->write("\n");
 
             m_devices_count = get_device_count();
+            if (m_devices_count == 0) {
+                throw std::runtime_error("No OpenCL device found.\n");
+            }
 
-            create_devices();
+            if (m_devices_count <= 10) {
+                create_devices();
+            }
+
         }
 
-        // Distractor
         ~platform() {
             for (auto i : m_devices) {
                 delete i;
@@ -132,10 +135,6 @@ namespace sodecl {
 
             // get device count
             cl_int err = clGetDeviceIDs(m_platform_id, CL_DEVICE_TYPE_ALL, 0, NULL, &device_count);
-
-            if (err != CL_SUCCESS) {
-                return -1;
-            }
 
             return device_count;
         }
