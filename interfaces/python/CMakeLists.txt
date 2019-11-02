@@ -2,7 +2,14 @@ cmake_minimum_required(VERSION 3.13.4)
 
 project(interface_python)
 
-FIND_PACKAGE(Python3 REQUIRED)
+FIND_PACKAGE(Python3 COMPONENTS Development)
+if (${Python3_FOUND})
+    message(STATUS "PYTHON3 FOUND")
+    message(STATUS ${Python3_INCLUDE_DIRS})
+    message(STATUS ${Python3_LIBRARIES})
+else ()
+    message(FATAL_ERROR "PYTHON3 NOT FOUND")
+endif ()
 
 add_subdirectory(pybind11)
 pybind11_add_module(sodecl_python sodecl.cpp)
