@@ -1,8 +1,5 @@
-cmake_minimum_required(VERSION 3.13.4)
 
-project(interface_python)
-
-FIND_PACKAGE(Python3 COMPONENTS Development)
+find_package(Python3 COMPONENTS Development)
 if (${Python3_FOUND})
     message(STATUS "PYTHON3 FOUND")
     message(STATUS ${Python3_INCLUDE_DIRS})
@@ -17,12 +14,10 @@ set_target_properties(sodecl_python PROPERTIES OUTPUT_NAME sodecl_interface)
 
 # Add include directories for OpenCL and sodecl
 target_include_directories(sodecl_python PUBLIC ${CMAKE_SOURCE_DIR}/external/include
-        ${CMAKE_SOURCE_DIR}/src/sodecl
-        ${CMAKE_SOURCE_DIR}/src)
+        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_BINARY_DIR})
 
-link_directories(${OpenCL_LIBRARY})
-target_link_libraries(sodecl_python PUBLIC ${OpenCL_LIBRARIES})
-#TARGET_LINK_LIBRARIES(sodecl_python PUBLIC "-lgcov")
+target_link_libraries(sodecl_python PUBLIC OpenCL::OpenCL sodecl_lib)
 
 add_custom_command(TARGET sodecl_python POST_BUILD
 
@@ -50,5 +45,4 @@ add_custom_command(TARGET sodecl_python POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/src/kernels ${CMAKE_BINARY_DIR}/examples/kernels
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/include/Random123 ${CMAKE_BINARY_DIR}/examples/Random123
 
-        COMMENT "Copying Python interface files"
-        )
+        COMMENT "Copying Python interface files")

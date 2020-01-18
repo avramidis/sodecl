@@ -7,6 +7,7 @@
 
 include(GNUInstallDirs)
 add_library(sodecl SHARED)
+add_library(sodecl_lib ALIAS sodecl)
 
 target_sources(sodecl PRIVATE
         ${CMAKE_SOURCE_DIR}/src/clog.cpp
@@ -20,7 +21,6 @@ target_include_directories(sodecl PUBLIC
         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-FIND_PACKAGE(OpenCL REQUIRED)
 target_link_libraries(sodecl PRIVATE OpenCL::OpenCL)
 
 set_target_properties(sodecl PROPERTIES
@@ -29,13 +29,8 @@ set_target_properties(sodecl PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-    target_compile_definitions(sodecl PUBLIC cxxplot_EXPORT)
-
-    add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/examples/sodecl.dll
-            COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:sodecl>" "$<TARGET_FILE_DIR:plot_1>"
-            VERBATIM)
-    add_custom_target(copyddlexamples ALL
-            DEPENDS ${CMAKE_BINARY_DIR}/examples/sodecl.dll sodecl
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:sodecl> ${CMAKE_BINARY_DIR}/examples/sodecl.dll
             VERBATIM)
 endif ()
 
