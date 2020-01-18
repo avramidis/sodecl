@@ -26,7 +26,7 @@ target_link_libraries(sodecl_python PUBLIC ${OpenCL_LIBRARIES})
 
 add_custom_command(TARGET sodecl_python POST_BUILD
 
-        # Copy pybind11 generated library to the benchmarks fodler
+        # Copy pybind11 generated library to the benchmarks folder
         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:sodecl_python> ${CMAKE_BINARY_DIR}/benchmarks/
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/sodecl.py ${CMAKE_BINARY_DIR}/benchmarks/
 
@@ -34,7 +34,7 @@ add_custom_command(TARGET sodecl_python POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/src/kernels ${CMAKE_BINARY_DIR}/benchmarks//kernels
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/include/Random123 ${CMAKE_BINARY_DIR}/benchmarks/Random123
 
-        # Copy pybind11 generated library to the tests fodler
+        # Copy pybind11 generated library to the tests folder
         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:sodecl_python> ${CMAKE_BINARY_DIR}/tests/
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/sodecl.py ${CMAKE_BINARY_DIR}/tests/
 
@@ -42,7 +42,7 @@ add_custom_command(TARGET sodecl_python POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/src/kernels ${CMAKE_BINARY_DIR}/tests/kernels
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/include/Random123 ${CMAKE_BINARY_DIR}/tests/Random123
 
-        # Copy pybind11 generated library to the examples fodler
+        # Copy pybind11 generated library to the examples folder
         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:sodecl_python> ${CMAKE_BINARY_DIR}/examples/
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/sodecl.py ${CMAKE_BINARY_DIR}/examples/
 
