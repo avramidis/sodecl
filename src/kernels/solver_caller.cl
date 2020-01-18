@@ -2,7 +2,7 @@
 // Copyright (c) 2015 Eleftherios Avramidis <el.avramidis@gmail.com>
 //
 // Distributed under The MIT License (MIT)
-// See accompanying file LICENSE.txt
+// See accompanying file LICENSE
 //---------------------------------------------------------------------------//
 
 __kernel void solver_caller(__global double *t0,

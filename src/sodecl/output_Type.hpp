@@ -2,7 +2,7 @@
 // Copyright (c) 2015,2016 Eleftherios Avramidis <el.avramidis@gmail.com>
 //
 // Distributed under The MIT License (MIT)
-// See accompanying file LICENSE.txt
+// See accompanying file LICENSE
 //---------------------------------------------------------------------------//
 
 #ifndef sodecl_OUTPUT_TYPE_HPP
