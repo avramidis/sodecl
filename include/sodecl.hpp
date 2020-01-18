@@ -5,8 +5,18 @@
 // See accompanying file LICENSE
 //---------------------------------------------------------------------------//
 
-#ifndef sodecl_KERNLES_HPP
-#define sodecl_KERNLES_HPP
+#ifndef SODECL_SODECL_HPP
+#define SODECL_SODECL_HPP
 
+#include <CL/cl.h>
+#include <clog.hpp>
+#include <timer.hpp>
+#include <build_Option.hpp>
+#include <output_Type.hpp>
+#include <device_Type.hpp>
+#include <solver_Type.hpp>
+#include <device.hpp>
+#include <platform.hpp>
+#include <sodeclmgr.hpp>
 
-#endif // sodecl_KERNLES_HPP
+#endif

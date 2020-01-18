@@ -12,10 +12,12 @@
 #include <sstream>
 #include <fstream>
 
+#include "sodecl_export.h"
+
 using namespace std;
 
 namespace sodecl {
-    class clog {
+    class SODECL_EXPORT clog {
     private:
 
         static bool m_instanceExists;

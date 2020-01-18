@@ -5,7 +5,7 @@
 # See accompanying file LICENSE
 #---------------------------------------------------------------------------//
 
-cmake_minimum_required (VERSION 3.13.4)
+cmake_minimum_required (VERSION 3.15)
 project(sodecl)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -28,10 +28,12 @@ endif ()
 add_compile_options("$<$<CONFIG:DEBUG>:${MY_DEBUG_OPTIONS}>")
 add_compile_options("$<$<CONFIG:RELEASE>:${MY_RELEASE_OPTIONS}>")
 
-FIND_PACKAGE(OpenCL REQUIRED)
+add_subdirectory(src)
+include(GenerateExportHeader)
+generate_export_header(sodecl)
 
-add_subdirectory(benchmarks)
-enable_testing()
-add_subdirectory(tests)
-add_subdirectory(interfaces)
-add_subdirectory(examples)
+#add_subdirectory(benchmarks)
+#enable_testing()
+#add_subdirectory(tests)
+#add_subdirectory(interfaces)
+#add_subdirectory(examples)

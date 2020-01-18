@@ -5,17 +5,19 @@
 // See accompanying file LICENSE
 //---------------------------------------------------------------------------//
 
-#ifndef sodecl_SOLVER_TYPE_HPP
-#define sodecl_SOLVER_TYPE_HPP
+#ifndef SODECL_DEVICE_TYPE_HPP
+#define SODECL_DEVICE_TYPE_HPP
+
+#include "sodecl_export.h"
 
 namespace sodecl {
-    enum class solver_Type {
-        StochasticEuler = 0,
-        Euler = 1,
-        RungeKutta = 2,
-        ImplicitEuler = 3,
-        ImplicitMidpoint = 4
+    enum class SODECL_EXPORT device_Type : uint64_t {
+        ALL = CL_DEVICE_TYPE_ALL,
+        CPU = CL_DEVICE_TYPE_CPU,
+        GPU = CL_DEVICE_TYPE_GPU,
+        ACCELERATOR = CL_DEVICE_TYPE_ACCELERATOR
     };
 }
 
-#endif // sodecl_SOLVER_TYPE_HPP
+
+#endif // SODECL_SOLVER_TYPE_HPP

@@ -5,15 +5,17 @@
 // See accompanying file LICENSE
 //---------------------------------------------------------------------------//
 
-#ifndef sodecl_TIMER_HPP
-#define sodecl_TIMER_HPP
+#ifndef SODECL_TIMER_HPP
+#define SODECL_TIMER_HPP
 
 #include <iostream>
 #include <chrono>
 #include <ctime>
 
+#include "sodecl_export.h"
+
 namespace sodecl {
-    class timer {
+    class SODECL_EXPORT timer {
     public:
         std::chrono::time_point <std::chrono::system_clock> start, end;
 
@@ -36,4 +38,4 @@ namespace sodecl {
 }
 
 
-#endif // sodecl_TIMER_HPP
+#endif // SODECL_TIMER_HPP
