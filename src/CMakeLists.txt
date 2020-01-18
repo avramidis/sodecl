@@ -32,6 +32,10 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:sodecl> ${CMAKE_BINARY_DIR}/examples/sodecl.dll
             VERBATIM)
+
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:sodecl> ${CMAKE_BINARY_DIR}/tests/sodecl.dll
+            VERBATIM)
 endif ()
 
 install(TARGETS sodecl EXPORT sodeclTargets
