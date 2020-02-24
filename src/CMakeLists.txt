@@ -21,7 +21,7 @@ target_include_directories(sodecl PUBLIC
         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-target_link_libraries(sodecl PRIVATE OpenCL::OpenCL)
+target_link_libraries(sodecl PRIVATE project_options OpenCL::OpenCL)
 
 set_target_properties(sodecl PROPERTIES
         ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
