@@ -2,14 +2,16 @@
 // Copyright (c) 2015 Eleftherios Avramidis <el.avramidis@gmail.com>
 //
 // Distributed under The MIT License (MIT)
-// See accompanying file LICENSE.txt
+// See accompanying file LICENSE
 //---------------------------------------------------------------------------//
 
-#ifndef sodecl_SOLVER_TYPE_HPP
-#define sodecl_SOLVER_TYPE_HPP
+#ifndef SODECL_SOLVER_TYPE_HPP
+#define SODECL_SOLVER_TYPE_HPP
+
+#include "sodecl_export.h"
 
 namespace sodecl {
-    enum class solver_Type {
+    enum class SODECL_EXPORT solver_Type {
         StochasticEuler = 0,
         Euler = 1,
         RungeKutta = 2,
@@ -18,4 +20,4 @@ namespace sodecl {
     };
 }
 
-#endif // sodecl_SOLVER_TYPE_HPP
+#endif // SODECL_SOLVER_TYPE_HPP

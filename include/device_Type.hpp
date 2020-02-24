@@ -2,14 +2,16 @@
 // Copyright (c) 2015 Eleftherios Avramidis <el.avramidis@gmail.com>
 //
 // Distributed under The MIT License (MIT)
-// See accompanying file LICENSE.txt
+// See accompanying file LICENSE
 //---------------------------------------------------------------------------//
 
-#ifndef sodecl_DEVICE_TYPE_HPP
-#define sodecl_DEVICE_TYPE_HPP
+#ifndef SODECL_DEVICE_TYPE_HPP
+#define SODECL_DEVICE_TYPE_HPP
+
+#include "sodecl_export.h"
 
 namespace sodecl {
-    enum class device_Type : uint64_t {
+    enum class SODECL_EXPORT device_Type : uint64_t {
         ALL = CL_DEVICE_TYPE_ALL,
         CPU = CL_DEVICE_TYPE_CPU,
         GPU = CL_DEVICE_TYPE_GPU,
@@ -18,4 +20,4 @@ namespace sodecl {
 }
 
 
-#endif // sodecl_SOLVER_TYPE_HPP
+#endif // SODECL_SOLVER_TYPE_HPP

@@ -2,7 +2,7 @@
 
 [![license: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/avramidis/sodecl/blob/master/LICENSE)
 ![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg)
-[![Build Status](https://travis-ci.org/avramidis/sodecl.svg?branch=master)](https://travis-ci.org/avramidis/sodecl)
+[![pipeline status](https://gitlab.com/avramidis/sodecl/badges/master/pipeline.svg)](https://gitlab.com/avramidis/sodecl/-/commits/master)
 [![Build status](https://ci.appveyor.com/api/projects/status/l232dxa64k60onls?svg=true)](https://ci.appveyor.com/project/avramidis/sodecl)
 [![codecov](https://codecov.io/gh/avramidis/sodecl/branch/master/graph/badge.svg)](https://codecov.io/gh/avramidis/sodecl)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/avramidis/sodecl/issues)

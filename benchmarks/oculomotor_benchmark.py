@@ -2,7 +2,7 @@
 #  Copyright (c) 2017 Eleftherios Avramidis <el.avramidis@gmail.com>
 #
 #  Distributed under The MIT License (MIT)
-#  See accompanying file LICENSE.txt
+#  See accompanying file LICENSE
 # ---------------------------------------------------------------------------//
 
 import numpy

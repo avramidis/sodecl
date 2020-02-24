@@ -2,50 +2,30 @@
 // Copyright (c) 2015 Eleftherios Avramidis <el.avramidis@gmail.com>
 //
 // Distributed under The MIT License (MIT)
-// See accompanying file LICENSE.txt
+// See accompanying file LICENSE
 //---------------------------------------------------------------------------//
 
-#ifndef sodecl_DEVICE_HPP
-#define sodecl_DEVICE_HPP
+#include <string>
 
-#include <CL/cl.hpp>
+#include <CL/cl.h>
+#include "sodecl_export.h"
+#include "device.hpp"
 
 namespace sodecl {
 
-    class device {
-        /*
-        VARIABLES SECTION
-        */
-    public:
-
-        // Platform ID
-        cl_device_id m_device_id;
-
-        // Device ID
-        cl_device_id m_device;
-
-        // Device type
-        cl_device_type m_device_type;
-
-    private:
-
-        /*
-        FUNCTIONS SECTION
-        */
-    public:
 
         // Default constructor
-        device() {
+        device::device() {
 
         }
 
         // Default destructor
-        ~device() {
+        device::~device() {
 
         }
 
         // Costructor with specific platform ID
-        device(cl_device_id m_device_id) {
+        device::device(cl_device_id m_device_id) {
             this->m_device_id = m_device_id;
 
             //std::cout << "the name is " << name().c_str() << std::endl;
@@ -53,21 +33,21 @@ namespace sodecl {
         }
 
         // get device name
-        std::string name() {
+        std::string device::name() {
             return get_info(CL_DEVICE_NAME);
         }
 
         // get device name
-        std::string version() {
+        std::string device::version() {
             return get_info(CL_DEVICE_VERSION);
         }
 
         // get device type
-        std::string type_str() {
+        std::string device::type_str() {
             return get_info(CL_DEVICE_TYPE);
         }
 
-        cl_device_type type() {
+        cl_device_type device::type() {
             // print device name
             cl_device_type info;
 
@@ -77,7 +57,7 @@ namespace sodecl {
         }
 
         // get platform info based on attribute
-        std::string get_info(cl_device_info cl_pi) {
+        std::string device::get_info(cl_device_info cl_pi) {
             // print device name
             char *info;
             size_t infoSize;
@@ -92,11 +72,4 @@ namespace sodecl {
             return str;
         }
 
-    private:
-
-    };
-
 }
-
-
-#endif // sodecl_DEVICE_HPP

@@ -29,6 +29,6 @@ add_test(NAME tests_python
         COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/sodecl_python_tests.py)
 
 add_subdirectory(data)
-add_subdirectory(unit)
+#add_subdirectory(unit)
 
 

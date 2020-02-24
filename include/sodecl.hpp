@@ -5,14 +5,18 @@
 // See accompanying file LICENSE
 //---------------------------------------------------------------------------//
 
+#ifndef SODECL_SODECL_HPP
+#define SODECL_SODECL_HPP
 
-// Euler solver
-void sode_solver(double dt, double t, double y[_numeq_], double yout[_numeq_], double p[_numpar_])
-{
-	sode_system(t, y, yout, p);
+#include <CL/cl.h>
+#include <clog.hpp>
+#include <timer.hpp>
+#include <build_Option.hpp>
+#include <output_Type.hpp>
+#include <device_Type.hpp>
+#include <solver_Type.hpp>
+#include <device.hpp>
+#include <platform.hpp>
+#include <sodeclmgr.hpp>
 
-	for (int ieq = 0; ieq < _numeq_; ieq++)
-	{
-		yout[ieq] = y[ieq] + yout[ieq] * dt;
-	}
-}
+#endif
