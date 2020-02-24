@@ -2,19 +2,21 @@
 // Copyright (c) 2015,2016 Eleftherios Avramidis <el.avramidis@gmail.com>
 //
 // Distributed under The MIT License (MIT)
-// See accompanying file LICENSE.txt
+// See accompanying file LICENSE
 //---------------------------------------------------------------------------//
 
-#ifndef SODECL_BUILD_OPTION_HPP
-#define SODECL_BUILD_OPTION_HPP
+#ifndef SODECL_OUTPUT_TYPE_HPP
+#define SODECL_OUTPUT_TYPE_HPP
+
+#include "sodecl_export.h"
 
 namespace sodecl {
-    enum class build_Option {
-        FastRelaxedMath = 1,
-        stdCL20 = 2,
-        stdCL21 = 3
+    enum class SODECL_EXPORT output_Type {
+        None = 0,
+        Array = 1,
+        File = 2
     };
 }
 
 
-#endif // SODECL_BUILD_OPTION_HPP
+#endif // SODECL_OUTPUT_TYPE_HPP

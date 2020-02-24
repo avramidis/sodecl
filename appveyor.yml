@@ -8,8 +8,8 @@ install:
 - sudo apt install cmake -y -qq
 - mkdir temp
 - cd temp
-- wget https://github.com/Kitware/CMake/releases/download/v3.14.1/cmake-3.14.1-Linux-x86_64.sh
-- sudo sh cmake-3.14.1-Linux-x86_64.sh --skip-license --prefix=/usr/local
+- wget https://github.com/Kitware/CMake/releases/download/v3.16.4/cmake-3.16.4-Linux-x86_64.sh
+- sudo sh cmake-3.16.4-Linux-x86_64.sh --skip-license --prefix=/usr/local
 - sudo apt install lsb-core -y -qq
 - sudo apt install ocl-icd-opencl-dev -y -qq
 - wget http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/15532/l_opencl_p_18.1.0.015.tgz

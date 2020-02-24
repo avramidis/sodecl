@@ -3,7 +3,7 @@ stages:
   - test
 
 build:ubuntu:
-  image: ubuntu:rolling
+  image: elavram/ubuntu:latest
   stage: build
   tags:
     - docker
@@ -22,7 +22,7 @@ build:ubuntu:
       - build
 
 test:ubuntu:
-  image: ubuntu:rolling
+  image: elavram/ubuntu:latest
   stage: test
   tags:
     - docker
