@@ -1,7 +1,3 @@
-cmake_minimum_required (VERSION 3.13.4)
-
-project(tests)
-
 set(TESTS_SOURCE_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/sodecl_python_tests.py
         ${CMAKE_CURRENT_SOURCE_DIR}/kuramoto.cl

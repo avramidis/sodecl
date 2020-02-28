@@ -1,7 +1,3 @@
-cmake_minimum_required (VERSION 3.13.4)
-
-project(unit_tests)
-
 add_executable(unittest_opencl sodecl_tests.cpp)
 target_include_directories(unittest_opencl PRIVATE
         ${CMAKE_SOURCE_DIR}/src
