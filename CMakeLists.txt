@@ -5,22 +5,23 @@
 # See accompanying file LICENSE
 #---------------------------------------------------------------------------//
 
-cmake_minimum_required (VERSION 3.15)
+cmake_minimum_required(VERSION 3.15)
 
-project(sodecl CXX)
+project(sodecl
+        LANGUAGES CXX
+        VERSION 1.0.0
+        DESCRIPTION "SODECL is a library of ordinary differential equation (ODE) and stochastic differential equation (SDE) solvers in OpenCL."
+        HOMEPAGE_URL "https://github.com/avramidis/sodecl")
 
-# Project dependences
-include(cmake/ProjectDependences.cmake)
+include(cmake/ProjectDependencies.cmake)
 
-# Project settings
 include(cmake/StandardProjectSettings.cmake)
-add_library(project_options INTERFACE)
-target_compile_features(project_options INTERFACE cxx_std_17)
+add_library(sodecl_project_options INTERFACE)
+target_compile_features(sodecl_project_options INTERFACE cxx_std_17)
 
-# Standard compiler warnings
-add_library(project_warnings INTERFACE)
+add_library(sodecl_project_warnings INTERFACE)
 include(cmake/CompilerWarnings.cmake)
-set_project_warnings(project_warnings)
+set_project_warnings(sodecl_project_warnings)
 
 add_subdirectory(src)
 include(GenerateExportHeader)

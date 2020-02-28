@@ -21,7 +21,7 @@ target_include_directories(sodecl PUBLIC
         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-target_link_libraries(sodecl PRIVATE project_options OpenCL::OpenCL)
+target_link_libraries(sodecl PRIVATE sodecl_project_options OpenCL::OpenCL)
 
 set_target_properties(sodecl PROPERTIES
         ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
@@ -66,7 +66,7 @@ install(EXPORT sodeclTargets
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
         cxxplotConfigVersion.cmake
-        VERSION 1.0.0
+        VERSION ${CMAKE_PROJECT_VERSION}
         COMPATIBILITY SameMajorVersion)
 
 install(FILES ${PROJECT_BINARY_DIR}/source/sodeclConfigVersion.cmake

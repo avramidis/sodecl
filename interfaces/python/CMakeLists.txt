@@ -1,13 +1,3 @@
-
-find_package(Python3 COMPONENTS Development)
-if (${Python3_FOUND})
-    message(STATUS "PYTHON3 FOUND")
-    message(STATUS ${Python3_INCLUDE_DIRS})
-    message(STATUS ${Python3_LIBRARIES})
-else ()
-    message(FATAL_ERROR "PYTHON3 NOT FOUND")
-endif ()
-
 add_subdirectory(pybind11)
 pybind11_add_module(sodecl_python sodecl.cpp)
 set_target_properties(sodecl_python PROPERTIES OUTPUT_NAME sodecl_interface)
