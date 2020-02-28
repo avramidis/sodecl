@@ -12,6 +12,12 @@ FetchContent_Declare(cxxplot
         GIT_TAG origin/master)
 FetchContent_MakeAvailable(cxxplot)
 
+include(FetchContent)
+FetchContent_Declare(pybind11
+        GIT_REPOSITORY https://github.com/pybind/pybind11.git
+        GIT_TAG origin/stable)
+FetchContent_MakeAvailable(pybind11)
+
 FIND_PACKAGE(Python3 COMPONENTS Development NumPy)
 if (${Python3_FOUND})
     message(STATUS "PYTHON3 FOUND")
