@@ -7,98 +7,95 @@
 
 #include "cxxplot.hpp"
 #include "sodecl.hpp"
+#include <iostream>
 
 int
 main()
 {
-    int orbits = 2;
+    int number_of_orbits = 2;
     int number_of_equations = 6;
     int number_of_parameters = 6;
 
-    std::vector<std::vector<double>> y_0(orbits, std::vector<double>(number_of_equations));
-    std::vector<std::vector<double>> params(orbits, std::vector<double>(number_of_parameters));
+    std::vector<double> t_0(number_of_orbits, 0);
+    std::vector<double> y_0;
+    std::vector<double> parameters;
 
-    for (int i = 0; i<16; i++) {
-        y_0[i][0] = 0;
-        y_0[i][1] = 0;
-        y_0[i][2] = 0;
-        y_0[i][3] = 0;
-        y_0[i][4] = 0;
-        y_0[i][5] = 2;
+    for (int i = 0; i<number_of_orbits; i++) {
+        y_0.push_back(0);
+        y_0.push_back(0);
+        y_0.push_back(0);
+        y_0.push_back(0);
+        y_0.push_back(0);
+        y_0.push_back(2);
     }
 
-    return 0;
-}
-
-std::vector<double>
-sodeclcall(std::vector<double>& a_t0,
-        std::vector<double>& a_y0,
-        std::vector<double>& a_params,
-        int a_platform,
-        int a_device,
-        string a_system,
-        int a_solver_type,
-        int a_orbits,
-        int a_equats,
-        int a_nparams,
-        int a_nnoi,
-        double a_dt,
-        double a_tspan,
-        int a_ksteps,
-        int a_local_group_size)
-{
-    sodecl::solver_Type a_solver;
-    switch (a_solver_type) {
-    case 0:a_solver = sodecl::solver_Type::StochasticEuler;
-        break;
-    case 1:a_solver = sodecl::solver_Type::Euler;
-        break;
-    case 2:a_solver = sodecl::solver_Type::RungeKutta;
-        break;
-    case 3:a_solver = sodecl::solver_Type::ImplicitEuler;
-        break;
-    case 4:a_solver = sodecl::solver_Type::ImplicitMidpoint;
-        break;
-    default:std::cout << "Unknown SODE solver selection." << std::endl;
-        std::vector<double> myvector(0);
-        return myvector;
+    for (int i = 0; i<number_of_orbits; i++) {
+        parameters.push_back(120);
+        parameters.push_back(1.5);
+        parameters.push_back(0.0045);
+        parameters.push_back(0.05);
+        parameters.push_back(600);
+        parameters.push_back(9);
     }
+
+    sodecl::solver_Type solver_type = sodecl::solver_Type::Euler;
+
+    double dt = 1e-8;
+    double time_span = 0.1;
+    int number_of_kernel_steps = 4000;
+    int number_of_noise = 0;
 
     sodecl::sodeclmgr* mysodeclmgr = new sodecl::sodeclmgr("kernels",
-            &a_system[0],
-            a_solver,
-            a_dt,
-            a_tspan,
-            a_ksteps,
-            a_equats,
-            a_nparams,
-            a_nnoi,
-            a_orbits,
+            "oculomotor.cl",
+            solver_type,
+            dt,
+            time_span,
+            number_of_kernel_steps,
+            number_of_equations,
+            number_of_parameters,
+            number_of_noise,
+            number_of_orbits,
             sodecl::output_Type::Array);
 
-    int success;
-
     // Choose device
-    success = mysodeclmgr->choose_device(a_platform, sodecl::device_Type::ALL, a_device);
+    int platform_index = 0;
+    int device_index = 0;
+
+    int success = mysodeclmgr->choose_device(platform_index, sodecl::device_Type::ALL, device_index);
     if (success==0) {
         cerr << "Error selecting OpenCL device!" << endl;
     }
 
-    mysodeclmgr->set_t0(a_t0.data());
-    mysodeclmgr->set_y0(a_y0.data());
-    mysodeclmgr->set_params(a_params.data());
+    mysodeclmgr->set_t0(t_0.data());
+    mysodeclmgr->set_y0(y_0.data());
+    mysodeclmgr->set_params(parameters.data());
 
-    // Set the local group size.
-    mysodeclmgr->set_local_group_size(a_local_group_size);
+    // Set the local group size
+    int local_group_size = 0;
+    mysodeclmgr->set_local_group_size(local_group_size);
 
     // Setup and run the SODE solver
     int ret = mysodeclmgr->setup_sode_solver();
     if (ret==0) {
-        std::vector<double> myvector(0);
-        return myvector;
+        return -1;
     }
 
     mysodeclmgr->run_sode_solver();
 
-    return mysodeclmgr->m_output;
+    std::cout << mysodeclmgr->m_output.size() << std::endl;
+
+    std::vector<double> y_out_0;
+    for (int i = 0; i<mysodeclmgr->m_output.size(); i += number_of_orbits) {
+        for (int j = 0; i<mysodeclmgr->m_output.size(); j += 6) {
+            y_out_0.push_back(mysodeclmgr->m_output[i*6+j]);
+        }
+    }
+
+    //std::vector<double> y_1{5.0, 3.2, 10.0, 12.4, 39.2};
+    cxxplot::Plot<double> plot_1(y_out_0);
+    plot_1.set_xlabel("x label");
+    plot_1.set_ylabel("y label");
+    plot_1.show();
+
+    return 0;
 }

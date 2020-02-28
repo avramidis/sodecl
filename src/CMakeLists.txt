@@ -29,11 +29,11 @@ set_target_properties(sodecl PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:sodecl> ${CMAKE_BINARY_DIR}/examples/sodecl.dll
+    add_custom_command(TARGET sodecl POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:sodecl> ${CMAKE_BINARY_DIR}/examples/python/sodecl.dll
             VERBATIM)
 
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    add_custom_command(TARGET sodecl POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:sodecl> ${CMAKE_BINARY_DIR}/tests/sodecl.dll
             VERBATIM)
 endif ()
