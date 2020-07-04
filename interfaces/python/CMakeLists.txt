@@ -7,8 +7,8 @@ if (${Python3_FOUND})
 else ()
     message(FATAL_ERROR "PYTHON3 NOT FOUND")
 endif ()
-
-add_subdirectory(pybind11)
+#
+#add_subdirectory(pybind11)
 pybind11_add_module(sodecl_python sodecl.cpp)
 set_target_properties(sodecl_python PROPERTIES OUTPUT_NAME sodecl_interface)
 
